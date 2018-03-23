@@ -1,0 +1,32 @@
+default:
+  data:
+    england_la: "data/England_ct_2011/england_ct_2011.shp"
+    england_region: "data/England_gor_2011_gen_clipped/england_gor_2011_gen_clipped.shp"
+    send_db:
+      # NOTE: currently we could not use odbc SQLite3 driver
+      # driver: "SQLite3"
+      db: "data/send-db/send.db"
+      tbl: "SEND"
+      vars: [
+      # ID vars
+      "ID", "Year",
+      # Info vars
+      "URN", "SchoolName",
+      "LACode", "LAName",
+      "RegionCode", "RegionName",
+      # Vars of interests -- Academisation
+      "IsAcademy",
+      # Vars of interests -- SEN
+      "TotalPupils", "SEN_Support", "Statement_EHC_Plan",
+      # Classification vars
+      "TypeGeneral", "TypeAcademy", "Phase"
+      ]
+  params:
+    maps_gen:
+      height: 1000
+    maps_sen:
+      breaks: [0.00, 0.06, 0.10, 0.12, 0.15, 0.18, 1.00]
+      palette: "Spectral"
+    maps_academ:
+      breaks: [0.00, 0.20, 0.40, 0.60, 0.80, 1.00]
+      palette: "Oranges"
