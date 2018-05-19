@@ -1,3 +1,4 @@
+# ==== Global components ====
 controls_global <- p(
   checkboxGroupInput(
     inputId = "global_phase", label = "Education phase",
@@ -10,6 +11,7 @@ controls_global <- p(
     selected = cand_sen_type,
     width = "100%"))
 
+# ==== Primary components ====
 panel_primary_output <- fluidRow(
   plotlyOutput("primary_plot"))
 controls_primary <- p(
@@ -19,6 +21,7 @@ controls_primary <- p(
     selected = 2011L:2015L,
     width = "100%"))
 
+# ==== tseries components ===
 panel_tseries_output <- fluidRow(
   plotlyOutput("tseries_plot"))
 controls_tseries <- p(
@@ -32,38 +35,53 @@ controls_tseries <- p(
     selected = 2011L:2015L,
     width = "100%"))
 
-widget_maps_output_a <- leafletOutput("maps_a",
-                                      height = params$maps_gen$height)
-widget_maps_output_b <- leafletOutput("maps_b",
-                                      height = params$maps_gen$height)
-panel_maps <- fluidRow(
-  box(verticalLayout(titlePanel("Map A"),
-                     widget_maps_output_a)),
-  box(verticalLayout(titlePanel("Map B"),
-                     widget_maps_output_b)))
+# ==== maps components ====
 maps_input <- function(prefix = "maps_a", name = "A",
-                       selected_year = 2015L, selected_type = "Academisation") {
-  p(
-    h4(glue("Map {name}:")),
-    selectInput(
-      inputId = glue("{prefix}_type"), label = "Choose map type",
-      choices = cand_types,
-      selected = selected_type),
-    selectInput(
-      inputId = glue("{prefix}_region"), label = "Choose region(s)",
-      choices = cand_region,
-      selected = region,
-      multiple = TRUE),
-    selectInput(
-      inputId = glue("{prefix}_year"), label = "Select year to show",
-      choices = cand_years,
-      selected = selected_year),
-    actionButton(glue("{prefix}_render"), glue("Render map {name}"),
-                 icon = icon("map")),
-    width = 12)
+                       selected_type = "Academisation",
+                       selected_region = "E12000009",
+                       selected_year = 2015L) {
+  box(title = "Settings", width = 12, collapsible = TRUE,
+      column(4,
+             actionButton(
+               inputId = glue("{prefix}_render"),
+               label = glue("Render map"),
+               icon = icon("map")),
+             selectInput(
+               inputId = glue("{prefix}_type"),
+               label = "Choose map type",
+               choices = cand_types,
+               selected = selected_type)),
+      column(4,
+             selectInput(
+               inputId = glue("{prefix}_region"),
+               label = "Choose region(s)",
+               choices = cand_region,
+               selected = selected_region,
+               multiple = TRUE),
+             checkboxInput(
+               inputId = glue("{prefix}_whole_country"),
+               label = "Show whole England (slow)",
+               value = FALSE)),
+      column(4,
+             selectInput(
+               inputId = glue("{prefix}_year"),
+               label = "Select year to show",
+               choices = cand_years,
+               selected = selected_year)))
 }
-controls_maps <- p(
-  br(),
-  maps_input("maps_a", "A", selected_type = "Academisation"),
-  br(),
-  maps_input("maps_b", "B", selected_type = "SEN"))
+
+panel_maps <- fluidRow(
+  box(title = "Map A", solidHeader = TRUE,
+      status = "primary",
+      verticalLayout(
+        maps_input("maps_a", "A",
+                   selected_type = "Academisation"),
+        leafletOutput("maps_a",
+                      height = params$maps_gen$height))),
+  box(title = "Map B", solidHeader = TRUE,
+      status = "warning",
+      verticalLayout(
+        maps_input("maps_b", "B",
+                   selected_type = "SEN"),
+        leafletOutput("maps_b",
+                      height = params$maps_gen$height))))

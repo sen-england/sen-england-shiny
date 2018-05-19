@@ -97,8 +97,9 @@ server <- function(input, output) {
   # ---- maps components ----
   get_params_maps <- function(prefix) {
     list(year = input[[glue("{prefix}_year")]],
-         region = input[[glue("{prefix}_region")]],
          type = input[[glue("{prefix}_type")]],
+         region = input[[glue("{prefix}_region")]],
+         whole_country = input[[glue("{prefix}_whole_country")]],
          shape = england_la,
          df_send = df_send(),
          sen_type = input$global_sen_type)

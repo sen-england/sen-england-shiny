@@ -1,11 +1,16 @@
 # ==== renderer by type ====
-render_map_academ <- function(year, shape, df_send, region) {
+render_map_academ <- function(year, shape, df_send, region, whole_country) {
   message(glue("{Sys.time()}, start rendering `map_academ`"))
   shape@data <- shape@data %>%
     left_join(
       df_send %>%
         filter(Year == year) %>%
-        filter(RegionCode %in% region) %>%
+        (function(df)
+          if (!whole_country) {
+            df %>% filter(RegionCode %in% region)
+          } else {
+            df
+          }) %>%
         select(Year, LACode, IsAcademy) %>%
         collect() %>%
         summarise_academ(by = "LACode", multiplier = FALSE),
@@ -22,17 +27,20 @@ render_map_academ <- function(year, shape, df_send, region) {
 
 }
 
-render_map_sen <- function(year, shape, df_send, sen_type, region) {
+render_map_sen <- function(year, shape, df_send, sen_type, region, whole_country) {
 
   message(glue("{Sys.time()}, start rendering `map_sen`"))
   shape@data <- shape@data %>%
     left_join(
       df_send %>%
         filter(Year == year) %>%
-        filter(RegionCode %in% region) %>%
+        (function(df)
+          if (!whole_country) {
+            df %>% filter(RegionCode %in% region)
+          } else {
+            df
+          }) %>%
         select(Year, LACode,
-               # TODO: add input to select
-               #       SEN_Support and Statement_EHC_Plan
                SEN_Support, Statement_EHC_Plan, TotalPupils) %>%
         collect() %>%
         summarise_sen(sen_type, by = "LACode", multiplier = FALSE),
@@ -66,17 +74,19 @@ render_tseries_academ <- function(year, df_send) {
 
 # ==== main renderer ====
 
-render_map <- function(year, shape, df_send, type = c("Academisation", "SEN"),
+render_map <- function(year, shape, df_send,
+                       type = c("Academisation", "SEN"),
                        sen_type = c("SEN_Support",
                                     "Statement_EHC_Plan"),
                        region = c("E12000007", "E12000003", "E12000009",
                                   "E12000006", "E12000005", "E12000002",
-                                  "E12000008", "E12000001", "E12000004")) {
+                                  "E12000008", "E12000001", "E12000004"),
+                       whole_country = FALSE) {
   type <- match.arg(type)
   if (type == "Academisation") {
-    render_map_academ(year, shape, df_send, region)
+    render_map_academ(year, shape, df_send, region, whole_country)
   } else {
-    render_map_sen(year, shape, df_send, sen_type, region)
+    render_map_sen(year, shape, df_send, sen_type, region, whole_country)
   }
 }
 

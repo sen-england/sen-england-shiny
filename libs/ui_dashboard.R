@@ -30,10 +30,7 @@ dsb_sidebar <- dashboardSidebar(
       controls_primary),
     conditionalPanel(
       glue("input.tabs == '{dsb_id_tseries}'"),
-      controls_tseries),
-    conditionalPanel(
-      glue("input.tabs == '{dsb_id_maps}'"),
-      controls_maps)))
+      controls_tseries)))
 
 # ==== Main tabs ====
 
