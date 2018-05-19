@@ -95,6 +95,15 @@ server <- function(input, output) {
   })
 
   # ---- maps components ----
+  get_status_color <- function(type) {
+    if (type == "Academisation") {
+      "warning"
+    } else if (type == "SEN") {
+      "success"
+    } else {
+      "primary"
+    }
+  }
   get_params_maps <- function(prefix) {
     list(year = input[[glue("{prefix}_year")]],
          type = input[[glue("{prefix}_type")]],
@@ -104,18 +113,24 @@ server <- function(input, output) {
          df_send = df_send(),
          sen_type = input$global_sen_type)
   }
-  params_maps_a <- eventReactive(input$maps_a_render,
-                                 get_params_maps("maps_a"))
-  params_maps_b <- eventReactive(input$maps_b_render,
-                                 get_params_maps("maps_b"))
-  output$maps_a <- renderLeaflet({
-    req(input$maps_a_render)
-    do.call(render_map, params_maps_a())
-  })
-  output$maps_b <- renderLeaflet({
-    req(input$maps_b_render)
-    do.call(render_map, params_maps_b())
-  })
+  spawn_maps <- function(prefix) {
+    eventReactive(input[[glue("{prefix}_render")]], {
+      if (input[[glue("{prefix}_render")]] > 0) {
+        do.call(render_map, get_params_maps(prefix))
+      } else {
+        leaflet() %>% addTiles()
+      }
+    }, ignoreNULL = FALSE)
+  }
+
+  maps_a_ui_status <- reactiveVal("primary")
+  maps_b_ui_status <- reactiveVal("primary")
+  output$maps_a <- renderLeaflet(spawn_maps("maps_a")())
+  output$maps_b <- renderLeaflet(spawn_maps("maps_b")())
+  output$maps_a_ui <- renderUI(maps_ui("maps_a", "A", "Academisation",
+                                       maps_a_ui_status()))
+  output$maps_b_ui <- renderUI(maps_ui("maps_b", "B", "SEN",
+                                       maps_b_ui_status()))
 
 }
 

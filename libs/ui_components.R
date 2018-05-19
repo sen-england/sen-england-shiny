@@ -36,11 +36,12 @@ controls_tseries <- p(
     width = "100%"))
 
 # ==== maps components ====
-maps_input <- function(prefix = "maps_a", name = "A",
-                       selected_type = "Academisation",
-                       selected_region = "E12000009",
-                       selected_year = 2015L) {
+maps_controls <- function(prefix = "maps_a", name = "A",
+                          selected_type = "Academisation",
+                          selected_region = "E12000009",
+                          selected_year = 2015L) {
   box(title = "Settings", width = 12, collapsible = TRUE,
+      solidHeader = TRUE,
       column(4,
              actionButton(
                inputId = glue("{prefix}_render"),
@@ -60,7 +61,7 @@ maps_input <- function(prefix = "maps_a", name = "A",
                multiple = TRUE),
              checkboxInput(
                inputId = glue("{prefix}_whole_country"),
-               label = "Show whole England (slow)",
+               label = "Show all England (slow)",
                value = FALSE)),
       column(4,
              selectInput(
@@ -70,18 +71,15 @@ maps_input <- function(prefix = "maps_a", name = "A",
                selected = selected_year)))
 }
 
-panel_maps <- fluidRow(
-  box(title = "Map A", solidHeader = TRUE,
-      status = "primary",
+maps_ui <- function(prefix = "maps_a", name = "A",
+                    selected_type = "Academisation",
+                    box_status = "primary") {
+  box(title = glue("Map {name}"), solidHeader = TRUE,
+      status = box_status,
       verticalLayout(
-        maps_input("maps_a", "A",
-                   selected_type = "Academisation"),
-        leafletOutput("maps_a",
-                      height = params$maps_gen$height))),
-  box(title = "Map B", solidHeader = TRUE,
-      status = "warning",
-      verticalLayout(
-        maps_input("maps_b", "B",
-                   selected_type = "SEN"),
-        leafletOutput("maps_b",
-                      height = params$maps_gen$height))))
+        maps_controls(prefix, name, selected_type = selected_type),
+        leafletOutput(prefix, height = params$maps_gen$height)))
+}
+
+panel_maps <- fluidRow(uiOutput("maps_a_ui"),
+                       uiOutput("maps_b_ui"))
