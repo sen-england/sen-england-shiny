@@ -1,4 +1,11 @@
 # ==== Global components ====
+docs_global <- div()
+docs_info <- div(
+  h6("Project website: ", a(href = "", "Github Pages")),
+  h6("Developed: ", a(href = "https://github.com/YiLiu6240", "Dr Yi Liu")),
+  h6("Data sources: ",
+     a(href = "", "SEND"),
+     a(href = "", "UK data service")))
 controls_global <- p(
   checkboxGroupInput(
     inputId = "global_phase", label = "Education phase",
@@ -10,6 +17,13 @@ controls_global <- p(
     width = "100%"))
 
 # ==== Primary components ====
+docs_primary <- div(
+  h4("Primary Dashboard:"),
+  fmt_html(
+    "Mauris ac felis vel velit tristique imperdiet.",
+    "Nunc porta vulputate tellus.  ",
+    "Sed bibendum.  ",
+    "Nam a sapien.  "))
 panel_primary_output <- box(
   plotlyOutput("primary_plot"))
 controls_primary <- box(
@@ -17,13 +31,17 @@ controls_primary <- box(
   status = "warning",
   checkboxGroupInput(
     inputId = "primary_years", label = "Select Years",
-    choices = cand_years,
-    selected = cand_years,
+    choices = cand_years, selected = cand_years,
     width = "100%"))
 panel_primary <- fluidPage(panel_primary_output,
                            controls_primary)
 
 # ==== tseries components ===
+docs_tseries <- div(
+  h4("Time series trends:"),
+  fmt_html(
+    "Cum sociis natoque penatibus et",
+    "magnis dis parturient montes, nascetur ridiculus mus."))
 panel_tseries_output <- box(
   plotlyOutput("tseries_plot"))
 controls_tseries <- box(
@@ -41,6 +59,10 @@ panel_tseries <- fluidPage(panel_tseries_output,
                            controls_tseries)
 
 # ==== maps components ====
+docs_maps <- div(
+  h4("Compare maps:"),
+  fmt_html(
+    "Press the \"Render map\" button to (re-)generate a map"))
 maps_controls <- function(prefix = "maps_a", name = "A",
                           selected_type = "Academisation",
                           selected_region = "E12000009",

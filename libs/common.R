@@ -36,3 +36,8 @@ summarise_sen <- function(df, sen_type = c("SEN_Support", "Statement_EHC_Plan"),
   }
   return(res)
 }
+
+fmt_html <- function(..., width = 30) {
+  paste0(...) %>% str_wrap(width = width) %>%
+    str_replace_all("\\n", "<br/>") %>% HTML()
+}

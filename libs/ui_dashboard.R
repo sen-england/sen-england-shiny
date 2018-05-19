@@ -23,7 +23,20 @@ dsb_sidebar <- dashboardSidebar(
       "Compare maps", tabName = dsb_id_maps,
       icon = icon("map")),
     h3(icon("cog", lib = "glyphicon"), "Global settings"),
-    controls_global))
+    controls_global,
+    br(),
+    docs_global,
+    conditionalPanel(
+      glue("input.tabs == '{dsb_id_primary}'"),
+      docs_primary),
+    conditionalPanel(
+      glue("input.tabs == '{dsb_id_tseries}'"),
+      docs_tseries),
+    conditionalPanel(
+      glue("input.tabs == '{dsb_id_maps}'"),
+      docs_maps),
+    br(),
+    docs_info))
 
 # ==== Main tabs ====
 
