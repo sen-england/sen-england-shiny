@@ -94,51 +94,19 @@ server <- function(input, output) {
       sen_type = input$global_sen_type))
   })
 
-  # ---- maps components (region) ----
-  params_maps_a_region <- eventReactive(
-    input$maps_a_region_render,
-    list(
-      year = input$maps_a_region_year,
-      shape = england_la,
-      region = input$maps_a_region_region,
-      df_send = df_send(),
-      type = input$maps_a_region_type,
-      sen_type = input$global_sen_type))
-  params_maps_b_region <- eventReactive(
-    input$maps_b_region_render,
-    list(
-      year = input$maps_b_region_year,
-      shape = england_la,
-      region = input$maps_b_region_region,
-      df_send = df_send(),
-      type = input$maps_b_region_type,
-      sen_type = input$global_sen_type))
-  output$maps_a_region <- renderLeaflet({
-    req(input$maps_a_region_render)
-    do.call(render_map, params_maps_a_region())
-  })
-  output$maps_b_region <- renderLeaflet({
-    req(input$maps_b_region_render)
-    do.call(render_map, params_maps_b_region())
-  })
-
   # ---- maps components ----
-  params_maps_a <- eventReactive(
-    input$maps_a_render,
-    list(
-      year = input$maps_a_year,
-      shape = england_la,
-      df_send = df_send(),
-      type = input$maps_a_type,
-      sen_type = input$global_sen_type))
-  params_maps_b <- eventReactive(
-    input$maps_b_render,
-    list(
-      year = input$maps_b_year,
-      shape = england_la,
-      df_send = df_send(),
-      type = input$maps_b_type,
-      sen_type = input$global_sen_type))
+  get_params_maps <- function(prefix) {
+    list(year = input[[glue("{prefix}_year")]],
+         region = input[[glue("{prefix}_region")]],
+         type = input[[glue("{prefix}_type")]],
+         shape = england_la,
+         df_send = df_send(),
+         sen_type = input$global_sen_type)
+  }
+  params_maps_a <- eventReactive(input$maps_a_render,
+                                 get_params_maps("maps_a"))
+  params_maps_b <- eventReactive(input$maps_b_render,
+                                 get_params_maps("maps_b"))
   output$maps_a <- renderLeaflet({
     req(input$maps_a_render)
     do.call(render_map, params_maps_a())
