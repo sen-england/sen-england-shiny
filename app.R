@@ -1,5 +1,3 @@
-# MAYBE: tmap_leaflet, how to make it render faster?
-
 library("tidyverse")
 library("glue")
 library("DBI")
