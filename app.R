@@ -65,7 +65,6 @@ source("libs/ui_dashboard.R", local = TRUE)
 
 server <- function(input, output) {
   # ---- global params ----
-  # TODO: df_send by global params
   df_send <- reactive({
     req(input$global_phase, input$global_sen_type)
     df_send_lazy %>%
