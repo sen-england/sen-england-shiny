@@ -2,38 +2,43 @@
 controls_global <- p(
   checkboxGroupInput(
     inputId = "global_phase", label = "Education phase",
-    choices = cand_phases,
-    selected = cand_phases,
+    choices = cand_phases, selected = cand_phases,
     width = "100%"),
   checkboxGroupInput(
     inputId = "global_sen_type", label = "SEN type",
-    choices = cand_sen_type,
-    selected = cand_sen_type,
+    choices = cand_sen_type, selected = cand_sen_type,
     width = "100%"))
 
 # ==== Primary components ====
-panel_primary_output <- fluidRow(
+panel_primary_output <- box(
   plotlyOutput("primary_plot"))
-controls_primary <- p(
+controls_primary <- box(
+  title = "Settings", collapsible = TRUE, solidHeader = TRUE,
+  status = "warning",
   checkboxGroupInput(
     inputId = "primary_years", label = "Select Years",
     choices = cand_years,
-    selected = 2011L:2015L,
+    selected = cand_years,
     width = "100%"))
+panel_primary <- fluidPage(panel_primary_output,
+                           controls_primary)
 
 # ==== tseries components ===
-panel_tseries_output <- fluidRow(
+panel_tseries_output <- box(
   plotlyOutput("tseries_plot"))
-controls_tseries <- p(
+controls_tseries <- box(
+  title = "Settings", collapsible = TRUE, solidHeader = TRUE,
+  status = "warning",
   selectInput(
     inputId = glue("tseries_type"), label = "Choose type",
     choices = cand_types,
     selected = "Academisation"),
   checkboxGroupInput(
     inputId = "tseries_years", label = "Select Years",
-    choices = cand_years,
-    selected = 2011L:2015L,
+    choices = cand_years, selected = cand_years,
     width = "100%"))
+panel_tseries <- fluidPage(panel_tseries_output,
+                           controls_tseries)
 
 # ==== maps components ====
 maps_controls <- function(prefix = "maps_a", name = "A",
@@ -81,5 +86,5 @@ maps_ui <- function(prefix = "maps_a", name = "A",
         leafletOutput(prefix, height = params$maps_gen$height)))
 }
 
-panel_maps <- fluidRow(uiOutput("maps_a_ui"),
-                       uiOutput("maps_b_ui"))
+panel_maps <- fluidPage(uiOutput("maps_a_ui"),
+                        uiOutput("maps_b_ui"))
