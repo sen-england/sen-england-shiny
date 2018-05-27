@@ -16,14 +16,16 @@ dsb_sidebar <- dashboardSidebar(
     menuItem(
       "Primary dashboard", tabName = dsb_id_primary,
       icon = icon("tachometer")),
-    dsb_sidebar_tseries <- menuItem(
+    menuItem(
       "Time series trends", tabName = dsb_id_tseries,
       icon = icon("line-chart")),
     menuItem(
       "Compare maps", tabName = dsb_id_maps,
       icon = icon("map")),
-    h3(icon("cog", lib = "glyphicon"), "Global settings"),
-    controls_global,
+    menuItem(
+      "Global settings", icon = icon("cog", lib = "glyphicon"),
+      startExpanded = TRUE,
+      controls_global),
     br(),
     docs_global,
     conditionalPanel(

@@ -19,6 +19,21 @@ controls_global <- p(
     inputId = "global_type_sen", label = "SEN type",
     choices = cand_type_sen, selected = cand_type_sen,
     width = "100%"))
+controls_global_box <- box(
+  title = "Settings", collapsible = TRUE, width = 12,
+  solidHeader = FALSE, background = "black",
+  checkboxGroupInput(
+    inputId = "global_phase", label = "Education phase",
+    choices = cand_phases, selected = cand_phases,
+    width = "100%"),
+  checkboxGroupInput(
+    inputId = "global_type_academy", label = "Academies and other schools",
+    choices = cand_type_academy, selected = cand_type_academy,
+    width = "100%"),
+  checkboxGroupInput(
+    inputId = "global_type_sen", label = "SEN type",
+    choices = cand_type_sen, selected = cand_type_sen,
+    width = "100%"))
 
 # ==== Primary components ====
 docs_primary <- div(
