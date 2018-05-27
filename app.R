@@ -38,6 +38,11 @@ cand_phases <- df_send_lazy %>% pull(Phase) %>% unique() %>%
   set_names(str_to_title(.))
 cand_type_sen <- c("SEN_Support", "Statement_EHC_Plan") %>%
   set_names(str_replace_all(., "_", " "))
+cand_type_academy <- df_send_lazy %>% pull(TypeAcademy) %>% unique() %>%
+  fct_relevel("converter academy", "sponsored academy", "maintained school",
+              "free school",  "others") %>%
+  sort() %>% as.character() %>%
+  set_names(str_to_title(.))
 cand_la_tbl <- df_send_lazy %>%
   select(RegionCode, LACode) %>% distinct() %>% collect() %>%
   left_join(england_region@data %>%
@@ -66,7 +71,8 @@ server <- function(input, output) {
   df_send <- reactive({
     req(input$global_phase, input$global_type_sen)
     df_send_lazy %>%
-      filter(Phase %in% input$global_phase)
+      filter(Phase %in% input$global_phase) %>%
+      filter(TypeAcademy %in% input$global_type_academy)
   })
 
   # ---- primary components ----
