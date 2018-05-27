@@ -13,8 +13,8 @@ controls_global <- p(
     width = "100%"),
   # TODO: checkboxGroupInput, academy route
   checkboxGroupInput(
-    inputId = "global_sen_type", label = "SEN type",
-    choices = cand_sen_type, selected = cand_sen_type,
+    inputId = "global_type_sen", label = "SEN type",
+    choices = cand_type_sen, selected = cand_type_sen,
     width = "100%"))
 
 # ==== Primary components ====

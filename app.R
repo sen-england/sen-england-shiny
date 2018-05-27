@@ -36,7 +36,7 @@ cand_years <- df_send_lazy %>% pull(Year) %>% unique()
 cand_types <- c("Academisation", "SEN")
 cand_phases <- df_send_lazy %>% pull(Phase) %>% unique() %>%
   set_names(str_to_title(.))
-cand_sen_type <- c("SEN_Support", "Statement_EHC_Plan") %>%
+cand_type_sen <- c("SEN_Support", "Statement_EHC_Plan") %>%
   set_names(str_replace_all(., "_", " "))
 cand_la_tbl <- df_send_lazy %>%
   select(RegionCode, LACode) %>% distinct() %>% collect() %>%
@@ -64,7 +64,7 @@ source("libs/ui_dashboard.R", local = TRUE)
 server <- function(input, output) {
   # ---- global params ----
   df_send <- reactive({
-    req(input$global_phase, input$global_sen_type)
+    req(input$global_phase, input$global_type_sen)
     df_send_lazy %>%
       filter(Phase %in% input$global_phase)
   })
@@ -89,7 +89,7 @@ server <- function(input, output) {
       year = input$tseries_years,
       df_send = df_send(),
       type = input$tseries_type,
-      sen_type = input$global_sen_type))
+      sen_type = input$global_type_sen))
   })
 
   # ---- maps components ----
@@ -109,7 +109,7 @@ server <- function(input, output) {
          whole_country = input[[glue("{prefix}_whole_country")]],
          shape = england_la,
          df_send = df_send(),
-         sen_type = input$global_sen_type)
+         sen_type = input$global_type_sen)
   }
   spawn_maps <- function(prefix) {
     eventReactive(input[[glue("{prefix}_render")]], {
