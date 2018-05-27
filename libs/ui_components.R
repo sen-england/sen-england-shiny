@@ -12,26 +12,11 @@ controls_global <- p(
     choices = cand_phases, selected = cand_phases,
     width = "100%"),
   checkboxGroupInput(
-    inputId = "global_type_academy", label = "Academies and other schools",
-    choices = cand_type_academy, selected = cand_type_academy,
+    inputId = "global_type_schools", label = "Type of schools",
+    choices = cand_type_schools, selected = cand_type_schools,
     width = "100%"),
   checkboxGroupInput(
-    inputId = "global_type_sen", label = "SEN type",
-    choices = cand_type_sen, selected = cand_type_sen,
-    width = "100%"))
-controls_global_box <- box(
-  title = "Settings", collapsible = TRUE, width = 12,
-  solidHeader = FALSE, background = "black",
-  checkboxGroupInput(
-    inputId = "global_phase", label = "Education phase",
-    choices = cand_phases, selected = cand_phases,
-    width = "100%"),
-  checkboxGroupInput(
-    inputId = "global_type_academy", label = "Academies and other schools",
-    choices = cand_type_academy, selected = cand_type_academy,
-    width = "100%"),
-  checkboxGroupInput(
-    inputId = "global_type_sen", label = "SEN type",
+    inputId = "global_type_sen", label = "Type of special educational needs",
     choices = cand_type_sen, selected = cand_type_sen,
     width = "100%"))
 
@@ -61,25 +46,28 @@ docs_tseries <- div(
   fmt_html(
     "Cum sociis natoque penatibus et",
     "magnis dis parturient montes, nascetur ridiculus mus."))
-panel_tseries_output <- box(
-  plotlyOutput("tseries_plot"))
 controls_tseries <- box(
   title = "Settings", collapsible = TRUE, solidHeader = TRUE,
-  status = "warning",
+  status = "warning", width = 4,
   selectInput(
-    inputId = glue("tseries_type"), label = "Choose type",
-    choices = cand_types,
-    selected = "Academisation"),
-  checkboxGroupInput(
+    inputId = "tseries_regions", label = "Choose region(s)",
+    choices = cand_region,
+    selected = cand_region,
+    multiple = TRUE),
+  sliderInput(
     inputId = "tseries_years", label = "Select Years",
-    choices = cand_years, selected = cand_years,
-    width = "100%"))
-panel_tseries <- fluidPage(panel_tseries_output,
-                           controls_tseries)
+    round = TRUE, step = 1L,
+    min = min(cand_years), max = max(cand_years),
+    value = c(min(cand_years), max(cand_years))))
+panel_tseries <- fluidRow(
+  box(plotlyOutput("tseries_a"),
+      plotlyOutput("tseries_b"),
+      width = 8),
+  controls_tseries)
 
 # ==== maps components ====
 docs_maps <- div(
-  h4("Compare maps:"),
+  h4("Regional breakdowns:"),
   fmt_html(
     "Press the \"Render map\" button to (re-)generate a map"))
 maps_controls <- function(prefix = "maps_a", name = "A",

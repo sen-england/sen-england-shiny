@@ -38,9 +38,8 @@ cand_phases <- df_send_lazy %>% pull(Phase) %>% unique() %>%
   set_names(str_to_title(.))
 cand_type_sen <- c("SEN_Support", "Statement_EHC_Plan") %>%
   set_names(str_replace_all(., "_", " "))
-cand_type_academy <- df_send_lazy %>% pull(TypeAcademy) %>% unique() %>%
-  fct_relevel("converter academy", "sponsored academy", "maintained school",
-              "free school",  "others") %>%
+cand_type_schools <- df_send_lazy %>% pull(TypeGeneral) %>% unique() %>%
+  fct_relevel("others", after = Inf) %>%
   sort() %>% as.character() %>%
   set_names(str_to_title(.))
 cand_la_tbl <- df_send_lazy %>%
@@ -72,7 +71,7 @@ server <- function(input, output) {
     req(input$global_phase, input$global_type_sen)
     df_send_lazy %>%
       filter(Phase %in% input$global_phase) %>%
-      filter(TypeAcademy %in% input$global_type_academy)
+      filter(TypeGeneral %in% input$global_type_schools)
   })
 
   # ---- primary components ----
@@ -90,13 +89,19 @@ server <- function(input, output) {
   })
 
   # ---- tseries components ----
-  output$tseries_plot <- renderPlotly({
+  spawn_tseries <- function(prefix = "tseries_a", type = "Academisation") {
     ggplotly(render_tseries(
-      year = input$tseries_years,
+      # years = input[[glue("{prefix}_years")]],
+      years = input$tseries_years,
       df_send = df_send(),
-      type = input$tseries_type,
-      sen_type = input$global_type_sen))
-  })
+      type = type,
+      sen_type = input$global_type_sen,
+      regions = input$tseries_regions))
+  }
+  output$tseries_a <- renderPlotly(spawn_tseries("tseries_a",
+                                                 "Academisation"))
+  output$tseries_b <- renderPlotly(spawn_tseries("tseries_b",
+                                                 "SEN"))
 
   # ---- maps components ----
   get_status_color <- function(type) {
