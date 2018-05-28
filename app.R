@@ -96,6 +96,8 @@ server <- function(input, output) {
       df_send = df_send(),
       type = type,
       sen_type = input$global_type_sen,
+      scales_free = input$tseries_scales_free,
+      facetted = input$tseries_facetted,
       regions = input$tseries_regions))
   }
   output$tseries_a <- renderPlotly(spawn_tseries("tseries_a",

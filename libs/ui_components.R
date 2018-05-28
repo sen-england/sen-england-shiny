@@ -48,12 +48,17 @@ docs_tseries <- div(
     "magnis dis parturient montes, nascetur ridiculus mus."))
 controls_tseries <- box(
   title = "Settings", collapsible = TRUE, solidHeader = TRUE,
-  status = "warning", width = 4,
-  selectInput(
+  status = "warning", width = 2,
+  checkboxInput(
+    inputId = "tseries_facetted", label = "Factted by school types",
+    value = TRUE),
+  checkboxInput(
+    inputId = "tseries_scales_free", label = "Flexible scales",
+    value = FALSE),
+  checkboxGroupInput(
     inputId = "tseries_regions", label = "Choose region(s)",
     choices = cand_region,
-    selected = cand_region,
-    multiple = TRUE),
+    selected = cand_region),
   sliderInput(
     inputId = "tseries_years", label = "Select Years",
     round = TRUE, step = 1L,
@@ -62,7 +67,7 @@ controls_tseries <- box(
 panel_tseries <- fluidRow(
   box(plotlyOutput("tseries_a"),
       plotlyOutput("tseries_b"),
-      width = 8),
+      width = 10),
   controls_tseries)
 
 # ==== maps components ====
