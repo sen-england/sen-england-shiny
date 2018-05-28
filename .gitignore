@@ -12,3 +12,4 @@ vspd-data
 TODO.org
 packrat/lib*/
 packrat/src/
+packrat/snapshot.lock
