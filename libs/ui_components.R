@@ -28,8 +28,17 @@ docs_primary <- div(
     "Nunc porta vulputate tellus.  ",
     "Sed bibendum.  ",
     "Nam a sapien.  "))
-panel_primary <- fluidPage(
-  box(leafletOutput("primary_map")))
+panel_primary_output <- box(
+  plotlyOutput("primary_plot"))
+controls_primary <- box(
+  title = "Settings", collapsible = TRUE, solidHeader = TRUE,
+  status = "warning",
+  checkboxGroupInput(
+    inputId = "primary_years", label = "Select Years",
+    choices = cand_years, selected = cand_years,
+    width = "100%"))
+panel_primary <- fluidPage(panel_primary_output,
+                           controls_primary)
 
 # ==== tseries components ===
 docs_tseries <- div(

@@ -75,9 +75,18 @@ server <- function(input, output) {
   })
 
   # ---- primary components ----
-  output$primary_map <- renderLeaflet(
-    render_map_primary(shape = england_la, df_send = df_send(),
-                       sen_type = input$global_type_sen))
+  df_primary <- reactive({
+    req(input$primary_years)
+    df_send() %>% filter(Year %in% input$primary_years) %>%
+      count(Year) %>% collect()
+  })
+  output$primary_plot <- renderPlotly({
+    p <- df_primary() %>%
+      ggplot(aes(y = Year, x = n)) +
+      geom_line() +
+      geom_point()
+    ggplotly(p)
+  })
 
   # ---- tseries components ----
   spawn_tseries <- function(prefix = "tseries_a", type = "Academisation") {

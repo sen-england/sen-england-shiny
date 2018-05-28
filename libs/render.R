@@ -1,35 +1,3 @@
-# ==== primary ====
-render_map_primary <- function(shape, df_send, sen_type) {
-  shape@data <- shape@data %>%
-    left_join(
-      df_send %>%
-        filter(Year == 2017L) %>%
-        select(Year, LACode,
-               SEN_Support, Statement_EHC_Plan, TotalPupils) %>%
-        collect() %>%
-        summarise_sen(sen_type = sen_type,
-                      by = c("Year", "LACode"), multiplier = FALSE),
-      by = c("code" = "LACode")) %>%
-    left_join(
-      df_send %>%
-        filter(Year == 2017L) %>%
-        select(Year, LACode,
-               IsAcademy) %>%
-        collect() %>%
-        summarise_academ(by = c("Year", "LACode"), multiplier = FALSE),
-      by = c("code" = "LACode",
-             "Year" = "Year"))
-  map_plot <- tm_shape(shape) +
-    tm_polygons("SEN", id = "name",
-                palette = params$maps_sen$palette,
-                breaks = params$maps_sen$breaks) +
-    tm_symbols("Academies", id = "name",
-               col = "#fe8019",
-               alpha = 0.6) +
-    tm_legend(legend.format = list(fun = prop_to_pct))
-  tmap_leaflet(map_plot, mode = "view", show = TRUE)
-}
-
 # ==== renderer by type ====
 render_map_academ <- function(year, shape, df_send, region, whole_country) {
   message(glue("{Sys.time()}, start rendering `map_academ`"))
