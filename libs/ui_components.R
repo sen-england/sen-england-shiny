@@ -23,6 +23,7 @@ controls_global <- p(
 # ==== Primary components ====
 docs_primary <- div(
   h4("Primary Dashboard:"),
+  fmt_html("User instructions goes here"),
   fmt_html(
     "Mauris ac felis vel velit tristique imperdiet.",
     "Nunc porta vulputate tellus.  ",
@@ -61,6 +62,7 @@ panel_primary <- fluidRow(
 # ==== tseries components ===
 docs_tseries <- div(
   h4("Time series trends:"),
+  fmt_html("User instructions goes here"),
   fmt_html(
     "Cum sociis natoque penatibus et",
     "magnis dis parturient montes, nascetur ridiculus mus."))
