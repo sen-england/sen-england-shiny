@@ -23,12 +23,9 @@ controls_global <- p(
 # ==== Primary components ====
 docs_primary <- div(
   h4("Primary Dashboard:"),
-  fmt_html("User instructions goes here"),
   fmt_html(
-    "Mauris ac felis vel velit tristique imperdiet.",
-    "Nunc porta vulputate tellus.  ",
-    "Sed bibendum.  ",
-    "Nam a sapien.  "))
+    "General overview regarding the academisation of English schools",
+    "and the inclusion of pupils of special educational needs."))
 panel_primary <- fluidRow(
   column(width = 8,
          box(
@@ -66,10 +63,9 @@ panel_primary <- fluidRow(
 # ==== tseries components ===
 docs_tseries <- div(
   h4("Time series trends:"),
-  fmt_html("User instructions goes here"),
   fmt_html(
-    "Cum sociis natoque penatibus et",
-    "magnis dis parturient montes, nascetur ridiculus mus."))
+    "Trends of academistion and educational inclusiveness.",
+    "Adjust the settings to your preference."))
 controls_tseries <- box(
   title = "Settings", collapsible = TRUE, solidHeader = TRUE,
   status = "warning", width = 2,
