@@ -111,6 +111,9 @@ render_primary_academ <- function(df_send,
     facet_wrap(~ TypeAcademy, scales = "fixed", ncol = 1) +
     geom_line() +
     scale_color_brewer(palette = palette) +
+    theme(legend.position = "none",
+          axis.title.y = element_blank(),
+          axis.title.x = element_blank()) +
     labs(title = "Percentage of academised schools")
 }
 
@@ -128,6 +131,9 @@ render_primary_sen <- function(df_send, sen_type,
     facet_wrap(~ TypeSEN, scales = "fixed", ncol = 1) +
     geom_line() +
     scale_color_brewer(palette = palette) +
+    theme(legend.position = "none",
+          axis.title.y = element_blank(),
+          axis.title.x = element_blank()) +
     labs(title = "Percentage of pupils with SEN")
 }
 
@@ -157,7 +163,7 @@ render_primary_composition <- function(df_send, pct = FALSE,
     mutate_at(vars(TypeGeneral), fct_rev) %>%
     mutate(
       Group = if_else(TypeGeneral == "mainstream school",
-                      "Group 1", "Group 2"))
+                      "Mainstream", "Non-mainstream"))
   if (pct) {
     p <- df %>% ggplot(aes(x = TypeGeneral, y = Percentage))
   } else {
@@ -167,7 +173,10 @@ render_primary_composition <- function(df_send, pct = FALSE,
     facet_wrap(~ Group, scales = "free", nrow = 1) +
     geom_col(aes(fill = TypeAcademy)) +
     coord_flip() +
-    theme(axis.text.x = element_text(angle = 25, hjust = 1)) +
+    theme(
+      axis.title.y = element_blank(),
+      axis.title.x = element_blank(),
+      axis.text.y = element_text(angle = 270)) +
     scale_fill_brewer(palette = palette) +
     labs(title = "Composition of schools in England, academic year 2016/2017")
   p

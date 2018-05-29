@@ -30,7 +30,23 @@ docs_primary <- div(
     "Sed bibendum.  ",
     "Nam a sapien.  "))
 panel_primary <- fluidRow(
-  column(width = 6,
+  column(width = 8,
+         box(
+           width = NULL,
+           column(width = 6,
+                  valueBoxOutput("primary_box_total_pupils",
+                                 width = NULL),
+                  valueBoxOutput("primary_box_total_sen",
+                                 width = NULL),
+                  valueBoxOutput("primary_box_pct_sen",
+                                 width = NULL)) ,
+           column(width = 6,
+                  valueBoxOutput("primary_box_total_schools",
+                                 width = NULL),
+                  valueBoxOutput("primary_box_ca",
+                                 width = NULL),
+                  valueBoxOutput("primary_box_sa",
+                                 width = NULL))),
          tabBox(
            title = "Composition of schools",
            tabPanel(
@@ -44,20 +60,8 @@ panel_primary <- fluidRow(
          box(plotlyOutput("primary_academ"),
              width = NULL),
          box(plotlyOutput("primary_sen"),
-             width = NULL)),
-  column(width = 2,
-         valueBoxOutput("primary_box_total_pupils",
-                        width = NULL),
-         valueBoxOutput("primary_box_total_sen",
-                        width = NULL),
-         valueBoxOutput("primary_box_pct_sen",
-                        width = NULL),
-         valueBoxOutput("primary_box_total_schools",
-                        width = NULL),
-         valueBoxOutput("primary_box_ca",
-                        width = NULL),
-         valueBoxOutput("primary_box_sa",
-                        width = NULL)))
+             width = NULL))
+)
 
 # ==== tseries components ===
 docs_tseries <- div(
