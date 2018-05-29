@@ -75,18 +75,21 @@ server <- function(input, output) {
   })
 
   # ---- primary components ----
-  df_primary <- reactive({
-    req(input$primary_years)
-    df_send() %>% filter(Year %in% input$primary_years) %>%
-      count(Year) %>% collect()
-  })
-  output$primary_plot <- renderPlotly({
-    p <- df_primary() %>%
-      ggplot(aes(y = Year, x = n)) +
-      geom_line() +
-      geom_point()
-    ggplotly(p)
-  })
+  output$primary_academ <- renderPlotly(
+    ggplotly(render_primary_academ(df_send = df_send(),
+                                   palette = params$academ$palette)))
+  output$primary_sen <- renderPlotly(
+    ggplotly(render_primary_sen(df_send = df_send(),
+                                sen_type = input$global_type_sen,
+                                palette = params$sen$palette)))
+  output$primary_composition_n <- renderPlotly(
+    ggplotly(render_primary_composition(df_send = df_send(),
+                                        pct = FALSE,
+                                        palette = params$academ$palette)))
+  output$primary_composition_pct <- renderPlotly(
+    ggplotly(render_primary_composition(df_send = df_send(),
+                                        pct = TRUE,
+                                        palette = params$academ$palette)))
 
   # ---- tseries components ----
   spawn_tseries <- function(prefix = "tseries_a", type = "Academisation") {

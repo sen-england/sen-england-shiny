@@ -28,17 +28,23 @@ docs_primary <- div(
     "Nunc porta vulputate tellus.  ",
     "Sed bibendum.  ",
     "Nam a sapien.  "))
-panel_primary_output <- box(
-  plotlyOutput("primary_plot"))
-controls_primary <- box(
-  title = "Settings", collapsible = TRUE, solidHeader = TRUE,
-  status = "warning",
-  checkboxGroupInput(
-    inputId = "primary_years", label = "Select Years",
-    choices = cand_years, selected = cand_years,
-    width = "100%"))
-panel_primary <- fluidPage(panel_primary_output,
-                           controls_primary)
+panel_primary <- fluidRow(
+  column(width = 6,
+         tabBox(
+           title = "Composition of schools",
+           tabPanel(
+             title = "Relative percentages",
+             plotlyOutput("primary_composition_pct")),
+           tabPanel(
+             title = "Absolute numbers",
+             plotlyOutput("primary_composition_n")),
+           width = NULL)),
+  column(width = 4,
+         box(plotlyOutput("primary_academ"),
+             width = NULL),
+         box(plotlyOutput("primary_sen"),
+             width = NULL)),
+  column(width = 2))
 
 # ==== tseries components ===
 docs_tseries <- div(

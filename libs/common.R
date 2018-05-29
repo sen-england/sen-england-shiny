@@ -30,13 +30,13 @@ summarise_sen_tseries <- function(df, sen_type = c("SEN_Support", "Statement_EHC
       ungroup()
   } else if (sen_type == c("Statement_EHC_Plan")) {
     res <- df %>% group_by(!!!rlang::syms(by)) %>%
-      summarise(SEN = sum(Statement_EHC_Plan, na.rm = TRUE)
+      summarise(`Statement EHC Plan` = sum(Statement_EHC_Plan, na.rm = TRUE)
                 / sum(TotalPupils, na.rm = TRUE)) %>%
       gather(TypeSEN, SEN, `Statement EHC Plan`) %>%
       ungroup()
   } else {
     res <- df %>% group_by(!!!rlang::syms(by)) %>%
-      summarise(SEN = sum(SEN_Support, na.rm = TRUE)
+      summarise(`SEN Support` = sum(SEN_Support, na.rm = TRUE)
                 / sum(TotalPupils, na.rm = TRUE)) %>%
       gather(TypeSEN, SEN, `SEN Support`) %>%
       ungroup()

@@ -57,7 +57,8 @@ render_map_sen <- function(year, shape, df_send, sen_type, region, whole_country
 }
 
 render_tseries_sen <- function(years, df_send, sen_type, regions,
-                               scales_free, facetted) {
+                               scales_free, facetted,
+                               palette = "Set1") {
   p <- df_send %>% filter(between(Year, years[1], years[2])) %>%
     filter(RegionCode %in% regions) %>%
     collect() %>%
@@ -68,7 +69,7 @@ render_tseries_sen <- function(years, df_send, sen_type, regions,
     ggplot(aes(x = Year, y = SEN,
                group = TypeSEN, color = TypeSEN)) +
     geom_line() + geom_point() +
-    scale_color_brewer(palette = "Set1") +
+    scale_color_brewer(palette = palette) +
     labs(title = "Percentage of inclusion of pupils with SEN")
   if (facetted)
     p <- p +
@@ -78,7 +79,8 @@ render_tseries_sen <- function(years, df_send, sen_type, regions,
 }
 
 render_tseries_academ <- function(years, df_send, regions,
-                                  scales_free, facetted) {
+                                  scales_free, facetted,
+                                  palette = "Set2") {
   p <- df_send %>% filter(between(Year, years[1], years[2])) %>%
     filter(RegionCode %in% regions) %>%
     collect() %>%
@@ -88,12 +90,86 @@ render_tseries_academ <- function(years, df_send, regions,
     ggplot(aes(x = Year, y = Academies,
                group = TypeAcademy, color = TypeAcademy)) +
     geom_line() + geom_point() +
-    scale_color_brewer(palette = "Set2") +
+    scale_color_brewer(palette = palette) +
     labs(title = "Percentage of academisation")
   if (facetted)
     p <- p +
       facet_wrap(~ TypeGeneral,
                  scales = ifelse(scales_free, "free_y", "fixed"))
+  p
+}
+
+render_primary_academ <- function(df_send,
+                                  palette = "Set2") {
+  df_send %>%
+    select(Year, IsAcademy, TypeAcademy) %>%
+    collect() %>%
+    summarise_academ_tseries(
+      by = "Year", TRUE) %>%
+    ggplot(aes(x = Year, y = Academies,
+               group = TypeAcademy, color = TypeAcademy)) +
+    facet_wrap(~ TypeAcademy, scales = "fixed", ncol = 1) +
+    geom_line() +
+    scale_color_brewer(palette = palette) +
+    labs(title = "Percentage of academised schools")
+}
+
+render_primary_sen <- function(df_send, sen_type,
+                               palette = "Set1") {
+  df_send %>%
+    select(Year, TotalPupils,
+           SEN_Support, Statement_EHC_Plan) %>%
+    collect() %>%
+    summarise_sen_tseries(
+      sen_type = sen_type,
+      by = "Year", TRUE) %>%
+    ggplot(aes(x = Year, y = SEN,
+               group = TypeSEN, color = TypeSEN)) +
+    facet_wrap(~ TypeSEN, scales = "fixed", ncol = 1) +
+    geom_line() +
+    scale_color_brewer(palette = palette) +
+    labs(title = "Percentage of pupils with SEN")
+}
+
+render_primary_composition <- function(df_send, pct = FALSE,
+                                       palette = "Set2") {
+  df <- df_send %>% filter(Year == 2017L) %>% count(TypeAcademy, TypeGeneral) %>%
+    collect() %>% ungroup()
+  if (pct) {
+    df <- df %>% group_by(TypeGeneral) %>%
+      mutate(n_group = sum(n, na.rm = TRUE)) %>%
+      ungroup() %>%
+      group_by(TypeGeneral, TypeAcademy) %>%
+      summarise(Percentage = n / n_group * 100) %>%
+      ungroup()
+  }
+  df <- df %>%
+    mutate_at(
+      vars(TypeAcademy), fct_relevel,
+      "maintained school",
+      "converter academy", "sponsored academy",
+      "free school") %>%
+    mutate_at(
+      vars(TypeGeneral), fct_relevel,
+      "mainstream school", "special school", "pupil referral unit") %>%
+    mutate_at(vars(TypeAcademy, TypeGeneral), fct_drop) %>%
+    # Use with coord_flip
+    mutate_at(vars(TypeGeneral), fct_rev) %>%
+    mutate(
+      Group = if_else(TypeGeneral == "mainstream school",
+                      "Group 1", "Group 2"))
+  if (pct) {
+    p <- df %>% ggplot(aes(x = TypeGeneral, y = Percentage))
+  } else {
+    p <- df %>% ggplot(aes(x = TypeGeneral, y = n))
+  }
+  p <- p +
+    facet_wrap(~ Group, scales = "free", nrow = 1) +
+    geom_col(aes(fill = TypeAcademy)) +
+    coord_flip() +
+    theme(axis.text.x = element_text(angle = 25, hjust = 1)) +
+    scale_fill_brewer(palette = palette) +
+    labs(title = "Composition of schools in England, academic year 2016/2017")
   p
 }
 

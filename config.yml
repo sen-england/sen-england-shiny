@@ -22,6 +22,10 @@ default:
       "TypeGeneral", "TypeAcademy", "Phase"
       ]
   params:
+    sen:
+      palette: "Set1"
+    academ:
+      palette: "Set2"
     maps_gen:
       height: 1000
     maps_sen:
