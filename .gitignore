@@ -5,11 +5,11 @@
 # Trash generated either by tmap or R
 Rplots.pdf
 
-# TODO: remove these after prototype
-vspd-data
-
 # I use this as a symlink
 TODO.org
 packrat/lib*/
 packrat/src/
 packrat/snapshot.lock
+
+# Junks
+foobar.R
