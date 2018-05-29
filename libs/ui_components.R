@@ -44,7 +44,19 @@ panel_primary <- fluidRow(
              width = NULL),
          box(plotlyOutput("primary_sen"),
              width = NULL)),
-  column(width = 2))
+  column(width = 2,
+         valueBoxOutput("primary_box_total_pupils",
+                        width = NULL),
+         valueBoxOutput("primary_box_total_sen",
+                        width = NULL),
+         valueBoxOutput("primary_box_pct_sen",
+                        width = NULL),
+         valueBoxOutput("primary_box_total_schools",
+                        width = NULL),
+         valueBoxOutput("primary_box_ca",
+                        width = NULL),
+         valueBoxOutput("primary_box_sa",
+                        width = NULL)))
 
 # ==== tseries components ===
 docs_tseries <- div(

@@ -90,6 +90,103 @@ server <- function(input, output) {
     ggplotly(render_primary_composition(df_send = df_send(),
                                         pct = TRUE,
                                         palette = params$academ$palette)))
+  output$primary_box_total_pupils <- renderValueBox(valueBox(
+    value = df_send() %>%
+      filter(Year == 2017) %>%
+      pull(TotalPupils) %>% sum(na.rm = TRUE) %>%
+      format(big.mark = ","),
+    "Total number of pupils, 2017",
+    icon = icon("users"),
+    color = "blue"))
+  output$primary_box_total_sen <- renderValueBox(valueBox(
+    value = df_send() %>%
+      filter(Year == 2017) %>%
+      select(SEN_Support, Statement_EHC_Plan) %>%
+      collect() %>%
+      (function(df){
+        if (identical(input$global_type_sen,
+                      c("SEN_Support", "Statement_EHC_Plan"))) {
+          df %>% gather(Type, Value,
+                        SEN_Support,
+                        Statement_EHC_Plan) %>%
+            pull(Value)
+        } else if (input$global_type_sen == "Statement_EHC_Plan") {
+          df %>% pull(Statement_EHC_Plan)
+        } else {
+          df %>% pull(SEN_Support)
+        }
+      }) %>%
+      sum(na.rm = TRUE) %>%
+      format(big.mark = ","),
+    "Total number of pupils with SEN, 2017",
+    icon = icon("users"),
+    color = "green"))
+  output$primary_box_pct_sen <- renderValueBox(valueBox(
+    value = df_send() %>%
+      filter(Year == 2017) %>%
+      select(SEN_Support, Statement_EHC_Plan, TotalPupils) %>%
+      collect() %>%
+      (function(df){
+        if (identical(input$global_type_sen,
+                      c("SEN_Support", "Statement_EHC_Plan"))) {
+          df %>% gather(Type, Value,
+                        SEN_Support,
+                        Statement_EHC_Plan) %>%
+            summarise(pct = sum(Value, na.rm = TRUE) /
+                        sum(TotalPupils, na.rm = TRUE) * 100)
+        } else if (input$global_type_sen == "Statement_EHC_Plan") {
+          df %>%
+            summarise(pct = sum(Statement_EHC_Plan, na.rm = TRUE) /
+                        sum(TotalPupils, na.rm = TRUE) * 100)
+        } else {
+          df %>%
+            summarise(pct = sum(SEN_Support, na.rm = TRUE) /
+                        sum(TotalPupils, na.rm = TRUE) * 100)
+        }
+      }) %>% pull(pct) %>%
+      sprintf("%.1f%%", .),
+    "Percentage of pupils with SEN, 2017",
+    icon = icon("users"),
+    color = "green"))
+
+  output$primary_box_total_schools <- renderValueBox(valueBox(
+    value = df_send() %>%
+      filter(Year == 2017) %>%
+      summarise(n = n()) %>% pull(n) %>%
+      format(big.mark = ","),
+    "Total number of schools, 2017",
+    icon = icon("building"),
+    color = "orange"))
+  output$primary_box_ca <- renderValueBox(valueBox(
+    value = df_send() %>%
+      filter(Year == 2017) %>%
+      select(TypeAcademy) %>% collect() %>%
+      summarise(
+        n = sum(TypeAcademy == "converter academy"),
+        pct = n / n() * 100) %>%
+      mutate(value = sprintf("%s (%.1f%%)",
+                             format(n, big.mark = ","),
+                             pct)) %>%
+      pull(value),
+    "Academised to converter academies, 2017",
+    icon = icon("building"),
+    color = "yellow"))
+  output$primary_box_sa <- renderValueBox(valueBox(
+    value = df_send() %>%
+      filter(Year == 2017) %>%
+      select(TypeAcademy) %>% collect() %>%
+      summarise(
+        n = sum(TypeAcademy == "sponsored academy"),
+        pct = n / n() * 100) %>%
+      mutate(value = sprintf("%s (%.1f%%)",
+                             format(n, big.mark = ","),
+                             pct)) %>%
+      pull(value),
+    "Academised to sponsored academies, 2017",
+    icon = icon("building"),
+    color = "yellow"))
+
+
 
   # ---- tseries components ----
   spawn_tseries <- function(prefix = "tseries_a", type = "Academisation") {
