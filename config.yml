@@ -28,6 +28,8 @@ default:
       palette: "Set2"
     maps_gen:
       height: 1000
+      multi-region: true
+      render-england: true
     maps_sen:
       breaks: [0.00, 0.06, 0.10, 0.12, 0.15, 0.18, 1.00]
       palette: "Spectral"

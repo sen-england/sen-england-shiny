@@ -76,7 +76,8 @@ controls_tseries <- box(
     inputId = "tseries_scales_free", label = "Flexible scales",
     value = FALSE),
   checkboxGroupInput(
-    inputId = "tseries_regions", label = "Choose region(s)",
+    inputId = "tseries_regions",
+    label = "Choose region(s)",
     choices = cand_region,
     selected = cand_region),
   sliderInput(
@@ -114,14 +115,18 @@ maps_controls <- function(prefix = "maps_a", name = "A",
       column(4,
              selectInput(
                inputId = glue("{prefix}_region"),
-               label = "Choose region(s)",
+               label = "Choose region",
                choices = cand_region,
                selected = selected_region,
-               multiple = TRUE),
-             checkboxInput(
-               inputId = glue("{prefix}_whole_country"),
-               label = "Show all England (slow)",
-               value = FALSE)),
+               multiple = params$maps_gen$`multi-region`),
+             if (params$maps_gen$`render-england`) {
+               checkboxInput(
+                 inputId = glue("{prefix}_whole_country"),
+                 label = "Show all England (slow)",
+                 value = FALSE)
+             } else {
+               NULL
+             }),
       column(4,
              selectInput(
                inputId = glue("{prefix}_year"),
