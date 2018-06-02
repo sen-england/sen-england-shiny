@@ -21,7 +21,7 @@ controls_global <- p(
     width = "100%"),
   checkboxInput(
     inputId = "global_maps_dual", label = "Render a second map",
-    value = TRUE))
+    value = FALSE))
 
 # ==== Primary components ====
 docs_primary <- div(
