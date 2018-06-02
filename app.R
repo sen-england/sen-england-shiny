@@ -162,10 +162,15 @@ server <- function(input, output) {
   maps_b_ui_status <- reactiveVal("primary")
   output$maps_a <- renderLeaflet(spawn_maps("maps_a")())
   output$maps_b <- renderLeaflet(spawn_maps("maps_b")())
-  output$maps_a_ui <- renderUI(maps_ui("maps_a", "A", "Academisation",
-                                       maps_a_ui_status()))
-  output$maps_b_ui <- renderUI(maps_ui("maps_b", "B", "SEN",
-                                       maps_b_ui_status()))
+  output$maps_a_ui <- renderUI(maps_ui_single(
+    "maps_a", "A", "Academisation",
+    box_status = maps_a_ui_status(),
+    dual_map = input$global_maps_dual))
+  output$maps_b_ui <- renderUI(maps_ui_single(
+    "maps_b", "B", "SEN",
+    box_status = maps_b_ui_status(),
+    dual_map = input$global_maps_dual))
+  output$maps <- renderUI(maps_ui(input$global_maps_dual))
 
 }
 

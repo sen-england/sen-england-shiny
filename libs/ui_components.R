@@ -18,7 +18,10 @@ controls_global <- p(
   checkboxGroupInput(
     inputId = "global_type_sen", label = "Type of special educational needs",
     choices = cand_type_sen, selected = cand_type_sen,
-    width = "100%"))
+    width = "100%"),
+  checkboxInput(
+    inputId = "global_maps_dual", label = "Render a second map",
+    value = TRUE))
 
 # ==== Primary components ====
 docs_primary <- div(
@@ -99,51 +102,100 @@ docs_maps <- div(
 maps_controls <- function(prefix = "maps_a", name = "A",
                           selected_type = "Academisation",
                           selected_region = "E12000009",
-                          selected_year = 2015L) {
-  box(title = "Settings", width = 12, collapsible = TRUE,
-      solidHeader = TRUE,
-      column(4,
-             actionButton(
-               inputId = glue("{prefix}_render"),
-               label = glue("Render map"),
-               icon = icon("map")),
-             selectInput(
-               inputId = glue("{prefix}_type"),
-               label = "Choose map type",
-               choices = cand_types,
-               selected = selected_type)),
-      column(4,
-             selectInput(
-               inputId = glue("{prefix}_region"),
-               label = "Choose region",
-               choices = cand_region,
-               selected = selected_region,
-               multiple = params$maps_gen$`multi-region`),
-             if (params$maps_gen$`render-england`) {
-               checkboxInput(
-                 inputId = glue("{prefix}_whole_country"),
-                 label = "Show all England (slow)",
-                 value = FALSE)
-             } else {
-               NULL
-             }),
-      column(4,
-             selectInput(
-               inputId = glue("{prefix}_year"),
-               label = "Select year to show",
-               choices = cand_years,
-               selected = selected_year)))
+                          selected_year = 2015L,
+                          dual_map = TRUE,
+                          whole_country = FALSE,
+                          width = 12) {
+  widget_button <- actionButton(
+    inputId = glue("{prefix}_render"),
+    label = glue("Render map"),
+    icon = icon("map"))
+  widget_type <- selectInput(
+    inputId = glue("{prefix}_type"),
+    label = "Choose map type",
+    choices = cand_types,
+    selected = selected_type)
+  widget_region <- selectInput(
+    inputId = glue("{prefix}_region"),
+    label = "Choose region",
+    choices = cand_region,
+    selected = selected_region,
+    multiple = params$maps_gen$`multi-region`)
+  widget_whole_country <- checkboxInput(
+    inputId = glue("{prefix}_whole_country"),
+    label = "Show all England (slow)",
+    value = FALSE)
+  widget_year <- selectInput(
+    inputId = glue("{prefix}_year"),
+    label = "Select year to show",
+    choices = cand_years,
+    selected = selected_year)
+  layout_wide <- box(
+    title = "Settings", width = width, collapsible = TRUE,
+    solidHeader = TRUE,
+    column(4, widget_button, widget_type),
+    column(4, widget_region,
+           if (whole_country) {
+             widget_whole_country
+           } else {
+             NULL
+           }),
+    column(4, widget_year))
+  layout_long <- box(
+    title = "Settings", width = width, collapsible = FALSE,
+    solidHeader = TRUE,
+    widget_button, widget_type, widget_region,
+    if (whole_country) {
+      widget_whole_country
+    } else {
+      NULL
+    },
+    widget_year
+  )
+
+  if (dual_map) {
+    layout_wide
+  } else {
+    layout_long
+  }
 }
 
-maps_ui <- function(prefix = "maps_a", name = "A",
-                    selected_type = "Academisation",
-                    box_status = "primary") {
-  box(title = glue("Map {name}"), solidHeader = TRUE,
-      status = box_status,
-      verticalLayout(
-        maps_controls(prefix, name, selected_type = selected_type),
-        leafletOutput(prefix, height = params$maps_gen$height)))
+maps_ui_single <- function(prefix = "maps_a", name = "A",
+                           selected_type = "Academisation",
+                           box_status = "primary",
+                           dual_map = TRUE) {
+  if (dual_map) {
+    box(title = glue("Map {name}"), solidHeader = TRUE,
+        status = box_status,
+        if (dual_map)
+          verticalLayout(
+            maps_controls(prefix, name,
+                          selected_type = selected_type,
+                          dual_map = TRUE,
+                          whole_country = params$maps_gen$`render-england`),
+            leafletOutput(prefix, height = params$maps_gen$height)))
+  } else {
+    fluidRow(
+      column(
+        width = 8,
+        leafletOutput(prefix, height = params$maps_gen$height)),
+      column(
+        width = 4,
+        maps_controls(prefix, name,
+                      selected_type = selected_type,
+                      dual_map = FALSE,
+                      whole_country = params$maps_gen$`render-england`,
+                      width = NULL)))
+  }
 }
 
-panel_maps <- fluidPage(uiOutput("maps_a_ui"),
-                        uiOutput("maps_b_ui"))
+maps_ui <- function(dual_map = TRUE) {
+  if (dual_map) {
+    fluidPage(uiOutput("maps_a_ui"),
+              uiOutput("maps_b_ui"))
+  } else {
+    fluidPage(uiOutput("maps_a_ui"))
+  }
+}
+
+panel_maps <- uiOutput("maps")

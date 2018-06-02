@@ -36,3 +36,9 @@ default:
     maps_academ:
       breaks: [0.00, 0.20, 0.40, 0.60, 0.80, 1.00]
       palette: "Oranges"
+
+shinyapps:
+  params:
+    maps_gen:
+      multi-region: true
+      render-england: true
