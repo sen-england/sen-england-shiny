@@ -20,7 +20,7 @@ dsb_sidebar <- dashboardSidebar(
       "Time series trends", tabName = dsb_id_tseries,
       icon = icon("line-chart")),
     menuItem(
-      "Compare maps", tabName = dsb_id_maps,
+      "Breakdown by region", tabName = dsb_id_maps,
       icon = icon("map")),
     menuItem(
       "Global settings", icon = icon("cog", lib = "glyphicon"),
