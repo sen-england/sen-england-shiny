@@ -27,7 +27,7 @@ controls_global <- p(
 
 # ==== Primary components ====
 docs_primary <- div(
-  h4("Primary Dashboard:"),
+  h4(params$tabs$primary),
   fmt_html(
     "General overview regarding the academisation of English schools",
     "and the inclusion of pupils of special educational needs."))
@@ -67,7 +67,7 @@ panel_primary <- fluidRow(
 
 # ==== tseries components ===
 docs_tseries <- div(
-  h4("Time series trends:"),
+  h4(params$tabs$tseries),
   fmt_html(
     "Trends of academistion and educational inclusiveness.",
     "Adjust the settings to your preference."))
@@ -98,7 +98,7 @@ panel_tseries <- fluidRow(
 
 # ==== maps components ====
 docs_maps <- div(
-  h4("Regional breakdowns:"),
+  h4(params$tabs$maps),
   fmt_html(
     "Press the \"Render map\" button to (re-)generate a map"))
 maps_controls <- function(prefix = "maps_a", name = "A",

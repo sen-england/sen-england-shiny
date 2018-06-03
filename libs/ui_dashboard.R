@@ -36,19 +36,18 @@ dsb_sidebar <- dashboardSidebar(
     id = "tabs",
     h3(icon("list-alt", lib = "glyphicon"), "Topics"),
     menuItem(
-      "Primary dashboard", tabName = dsb_id_primary,
+      params$tabs$primary, tabName = dsb_id_primary,
       icon = icon("tachometer")),
     menuItem(
-      "Time series trends", tabName = dsb_id_tseries,
+      params$tabs$tseries, tabName = dsb_id_tseries,
       icon = icon("line-chart")),
     menuItem(
-      "Breakdown by region", tabName = dsb_id_maps,
+      params$tabs$maps, tabName = dsb_id_maps,
       icon = icon("map")),
     menuItem(
-      "Global settings", icon = icon("cog", lib = "glyphicon"),
+      params$tabs$global, icon = icon("cog", lib = "glyphicon"),
       startExpanded = TRUE,
       controls_global),
-    br(),
     docs_global,
     conditionalPanel(
       glue("input.tabs == '{dsb_id_primary}'"),
@@ -59,7 +58,6 @@ dsb_sidebar <- dashboardSidebar(
     conditionalPanel(
       glue("input.tabs == '{dsb_id_maps}'"),
       docs_maps),
-    br(),
     docs_info))
 
 # ==== Main tabs ====
