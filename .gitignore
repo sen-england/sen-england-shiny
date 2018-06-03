@@ -4,12 +4,15 @@
 .Ruserdata
 # Trash generated either by tmap or R
 Rplots.pdf
-
-# I use this as a symlink
-TODO.org
+# packrat
 packrat/lib*/
 packrat/src/
 packrat/snapshot.lock
+# rsconnect
+rsconnect
+
+# I use this as a symlink
+TODO.org
 
 # Junks
 foobar.R
