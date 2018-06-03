@@ -1,8 +1,10 @@
 # ==== Global components ====
 docs_global <- div()
 docs_info <- div(
-  h6("Project website: ", a(href = "", "Github Pages")),
-  h6("Developed: ", a(href = "https://github.com/YiLiu6240", "Dr Yi Liu")),
+  h6("Project website: ", a(href = "https://sen-england.github.io",
+                            "Github Pages")),
+  h6("Developed: ", a(href = "https://github.com/YiLiu6240",
+                      "Dr Yi Liu")),
   h6("Data sources: ",
      a(href = "", "SEND"),
      a(href = "", "UK data service")))
