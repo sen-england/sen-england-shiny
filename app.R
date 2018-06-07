@@ -153,7 +153,11 @@ server <- function(input, output) {
       if (input[[glue("{prefix}_render")]] > 0) {
         do.call(render_map, get_params_maps(prefix))
       } else {
-        leaflet() %>% addTiles()
+        leaflet() %>% addTiles() %>%
+          # Q-Step Building
+          setView(lng = -3.53969072947711,
+                  lat = 50.7328249200541,
+                  zoom = 13)
       }
     }, ignoreNULL = FALSE)
   }

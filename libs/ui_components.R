@@ -104,7 +104,7 @@ docs_maps <- div(
 maps_controls <- function(prefix = "maps_a", name = "A",
                           selected_type = "Academisation",
                           selected_region = "E12000009",
-                          selected_year = 2015L,
+                          selected_year = 2017L,
                           dual_map = TRUE,
                           whole_country = FALSE,
                           width = 12) {
