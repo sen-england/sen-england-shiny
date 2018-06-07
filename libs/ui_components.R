@@ -146,6 +146,7 @@ maps_controls <- function(prefix = "maps_a", name = "A",
   layout_long <- box(
     title = "Settings", width = width, collapsible = FALSE,
     solidHeader = TRUE,
+    status = "warning",
     widget_button, widget_type, widget_region,
     if (whole_country) {
       widget_whole_country
