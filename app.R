@@ -29,8 +29,8 @@ send_db_conn <- dbConnect(
 df_send_lazy <- send_db_conn %>% tbl(send_db_conf$tbl) %>%
   select(one_of(send_db_conf$vars))
 # Shapefiles, LA level and region level
-england_la <- data_conf$england_la %>% readOGR(verbose = TRUE)
-england_region <- data_conf$england_region %>% readOGR(verbose = TRUE)
+england_la <- data_conf$england_la %>% readOGR(verbose = FALSE)
+england_region <- data_conf$england_region %>% readOGR(verbose = FALSE)
 
 # Candidates
 cand_years <- df_send_lazy %>% pull(Year) %>% unique()
