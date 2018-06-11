@@ -80,11 +80,22 @@ controls_tseries <- box(
   checkboxInput(
     inputId = "tseries_scales_free", label = "Flexible scales",
     value = FALSE),
+  radioButtons(
+    inputId = "tseries_geo_type",
+    label = "Choose geological level",
+    choices = c("England" = "whole_country",
+                "Region level" = "region",
+                "Local Authority level" = "la")),
   checkboxGroupInput(
     inputId = "tseries_regions",
     label = "Choose region(s)",
     choices = cand_region,
     selected = cand_region),
+  selectInput(
+    inputId = "tseries_la",
+    label = "Choose local authority",
+    choices = cand_la,
+    multiple = FALSE),
   sliderInput(
     inputId = "tseries_years", label = "Select Years",
     round = TRUE, step = 1L,

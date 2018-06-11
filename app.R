@@ -41,6 +41,8 @@ cand_type_schools <- df_send_lazy %>% pull(TypeGeneral) %>% unique() %>%
   sort() %>% as.character() %>%
   set_names(str_to_title(.))
 cand_la_tbl <- read_csv("data/region-info/region-info.csv")
+cand_la <- cand_la_tbl %>%
+  select(LAName, LACode) %>% distinct() %>% deframe()
 cand_region <- cand_la_tbl %>%
   select(RegionName, RegionCode) %>% distinct() %>% deframe()
 
@@ -110,7 +112,9 @@ server <- function(input, output) {
       sen_type = input$global_type_sen,
       scales_free = input$tseries_scales_free,
       facetted = input$tseries_facetted,
-      regions = input$tseries_regions))
+      geo_type = input$tseries_geo_type,
+      regions = input$tseries_regions,
+      LA = input$tseries_la))
   }
   output$tseries_a <- renderPlotly(spawn_tseries("tseries_a",
                                                  "Academisation"))
@@ -128,16 +132,17 @@ server <- function(input, output) {
     }
   }
   get_params_maps <- function(prefix) {
+    whole_country <- input[[glue("{prefix}_whole_country")]]
+    whole_country_enabled <- !is.null(whole_country) && whole_country == TRUE
     list(year = input[[glue("{prefix}_year")]],
          shape = england_la,
          df_send = df_send(),
          type = input[[glue("{prefix}_type")]],
          sen_type = input$global_type_sen,
-         region = input[[glue("{prefix}_region")]],
-         whole_country = if (params$maps_gen$`render-england`) {
-           input[[glue("{prefix}_whole_country")]]
+         region = if (whole_country_enabled) {
+           cand_region
          } else {
-           FALSE
+           input[[glue("{prefix}_region")]]
          },
          auto_breaks = input[[glue("{prefix}_auto_breaks")]])
   }

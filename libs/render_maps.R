@@ -1,17 +1,11 @@
 render_map_academ <- function(year, shape, df_send, region,
-                              whole_country = FALSE,
                               auto_breaks = FALSE) {
   message(glue("{Sys.time()}, start rendering `map_academ`"))
   shape@data <- shape@data %>%
     left_join(
       df_send %>%
         filter(Year == year) %>%
-        (function(df)
-          if (!whole_country) {
-            df %>% filter(RegionCode %in% region)
-          } else {
-            df
-          }) %>%
+        filter(RegionCode %in% region) %>%
         select(Year, LACode, IsAcademy) %>%
         collect() %>%
         summarise_academ(by = "LACode", multiplier = FALSE),
@@ -33,7 +27,6 @@ render_map_academ <- function(year, shape, df_send, region,
 }
 
 render_map_sen <- function(year, shape, df_send, sen_type, region,
-                           whole_country = FALSE,
                            auto_breaks = FALSE) {
 
   message(glue("{Sys.time()}, start rendering `map_sen`"))
@@ -41,12 +34,7 @@ render_map_sen <- function(year, shape, df_send, sen_type, region,
     left_join(
       df_send %>%
         filter(Year == year) %>%
-        (function(df)
-          if (!whole_country) {
-            df %>% filter(RegionCode %in% region)
-          } else {
-            df
-          }) %>%
+        filter(RegionCode %in% region) %>%
         select(Year, LACode,
                SEN_Support, Statement_EHC_Plan, TotalPupils) %>%
         collect() %>%
@@ -74,14 +62,13 @@ render_map <- function(year, shape, df_send,
                        region = c("E12000007", "E12000003", "E12000009",
                                   "E12000006", "E12000005", "E12000002",
                                   "E12000008", "E12000001", "E12000004"),
-                       whole_country = FALSE,
                        auto_breaks = FALSE) {
   type <- match.arg(type)
   if (type == "Academisation") {
     render_map_academ(year, shape, df_send, region,
-                      whole_country, auto_breaks)
+                      auto_breaks)
   } else {
     render_map_sen(year, shape, df_send, sen_type, region,
-                   whole_country, auto_breaks)
+                   auto_breaks)
   }
 }

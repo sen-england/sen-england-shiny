@@ -1,9 +1,8 @@
-render_tseries_sen <- function(years, df_send, sen_type, regions,
+render_tseries_sen <- function(years, df_send, sen_type,
+                               geo_type, LA, regions,
                                scales_free, facetted,
                                palette = "Set1") {
-  p <- df_send %>% filter(between(Year, years[1], years[2])) %>%
-    filter(RegionCode %in% regions) %>%
-    collect() %>%
+  p <- df_send %>%
     summarise_sen_tseries(
       sen_type = sen_type,
       by = if (facetted) c("Year", "TypeGeneral") else c("Year"),
@@ -20,12 +19,11 @@ render_tseries_sen <- function(years, df_send, sen_type, regions,
   p
 }
 
-render_tseries_academ <- function(years, df_send, regions,
+render_tseries_academ <- function(years, df_send,
+                                  geo_type, LA, regions,
                                   scales_free, facetted,
                                   palette = "Set2") {
-  p <- df_send %>% filter(between(Year, years[1], years[2])) %>%
-    filter(RegionCode %in% regions) %>%
-    collect() %>%
+  p <- df_send %>%
     summarise_academ_tseries(
       by = if (facetted) c("Year", "TypeGeneral") else c("Year"),
       multiplier = TRUE) %>%
@@ -43,6 +41,8 @@ render_tseries_academ <- function(years, df_send, regions,
 
 
 render_tseries <- function(years, df_send,
+                           LA,
+                           geo_type = "whole_country",
                            type = c("Academisation", "SEN"),
                            scales_free = FALSE,
                            facetted = FALSE,
@@ -51,14 +51,27 @@ render_tseries <- function(years, df_send,
                                        "E12000006", "E12000005", "E12000002",
                                        "E12000008", "E12000001", "E12000004")) {
   type <- match.arg(type)
+  df_send <- df_send %>% filter(between(Year, years[1], years[2])) %>%
+    (function(df) {
+      if (geo_type == "whole_country") {
+        df
+      } else if (geo_type == "region") {
+        df %>% filter(RegionCode %in% regions)
+      } else if (geo_type == "la") {
+        df %>% filter(LACode %in% LA)
+      }
+    }) %>%
+    collect()
   if (type == "Academisation") {
-    render_tseries_academ(years, df_send,
-                          regions = regions, scales_free = scales_free,
-                          facetted = facetted)
+    render_tseries_academ(
+      years, df_send,
+      geo_type = geo_type, LA = LA, regions = regions,
+      scales_free = scales_free, facetted = facetted)
   } else {
-    render_tseries_sen(years, df_send,
-                       sen_type = sen_type, regions = regions,
-                       scales_free = scales_free,
-                       facetted = facetted)
+    render_tseries_sen(
+      years, df_send,
+      sen_type = sen_type,
+      geo_type = geo_type, LA = LA, regions = regions,
+      scales_free = scales_free, facetted = facetted)
   }
 }
