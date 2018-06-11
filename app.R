@@ -11,8 +11,10 @@ library("tmap")
 options(stringsAsFactors = FALSE)
 
 source("libs/common.R", local = TRUE)
-source("libs/render.R", local = TRUE)
 source("libs/render_value_box.R", local = TRUE)
+source("libs/render_primary.R", local = TRUE)
+source("libs/render_tseries.R", local = TRUE)
+source("libs/render_maps.R", local = TRUE)
 
 # ==== Assets ====
 message(glue("{Sys.time()}, start loading assets"))
