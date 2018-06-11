@@ -132,6 +132,10 @@ maps_controls <- function(prefix = "maps_a", name = "A",
     label = "Select year to show",
     choices = cand_years,
     selected = selected_year)
+  widget_breaks <- checkboxInput(
+    inputId = glue("{prefix}_auto_breaks"),
+    label = "Optimal scales",
+    value = FALSE)
   layout_wide <- box(
     title = "Settings", width = width, collapsible = TRUE,
     solidHeader = TRUE,
@@ -142,7 +146,7 @@ maps_controls <- function(prefix = "maps_a", name = "A",
            } else {
              NULL
            }),
-    column(4, widget_year))
+    column(4, widget_year, widget_breaks))
   layout_long <- box(
     title = "Settings", width = width, collapsible = FALSE,
     solidHeader = TRUE,
@@ -153,7 +157,7 @@ maps_controls <- function(prefix = "maps_a", name = "A",
     } else {
       NULL
     },
-    widget_year
+    widget_year, widget_breaks
   )
 
   if (dual_map) {

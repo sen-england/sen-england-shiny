@@ -137,16 +137,17 @@ server <- function(input, output) {
   }
   get_params_maps <- function(prefix) {
     list(year = input[[glue("{prefix}_year")]],
+         shape = england_la,
+         df_send = df_send(),
          type = input[[glue("{prefix}_type")]],
+         sen_type = input$global_type_sen,
          region = input[[glue("{prefix}_region")]],
          whole_country = if (params$maps_gen$`render-england`) {
            input[[glue("{prefix}_whole_country")]]
          } else {
            FALSE
          },
-         shape = england_la,
-         df_send = df_send(),
-         sen_type = input$global_type_sen)
+         auto_breaks = input[[glue("{prefix}_auto_breaks")]])
   }
   spawn_maps <- function(prefix) {
     eventReactive(input[[glue("{prefix}_render")]], {
