@@ -36,6 +36,9 @@ default:
       height: 1000
       multi-region: true
       render-england: true
+      default_lng: -3.53969072947711
+      default_lat: 50.7328249200541
+      default_zoom: 13
     maps_sen:
       breaks: [0.00, 0.06, 0.10, 0.12, 0.15, 0.18, 1.00]
       palette: "Spectral"

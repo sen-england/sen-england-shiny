@@ -156,11 +156,12 @@ server <- function(input, output) {
       } else {
         leaflet() %>% addTiles() %>%
           # Q-Step Building
-          setView(lng = -3.53969072947711,
-                  lat = 50.7328249200541,
-                  zoom = 13)
+          setView(lng = params$maps_gen$default_lng,
+                  lat = params$maps_gen$default_lat,
+                  zoom = params$maps_gen$default_zoom)
       }
-    }, ignoreNULL = FALSE)
+    },
+    ignoreNULL = FALSE)
   }
 
   maps_a_ui_status <- reactiveVal("primary")
