@@ -28,9 +28,6 @@ send_db_conn <- dbConnect(
   dbname = send_db_conf$db)
 df_send_lazy <- send_db_conn %>% tbl(send_db_conf$tbl) %>%
   select(one_of(send_db_conf$vars))
-# Shapefiles, LA level and region level
-england_la <- data_conf$england_la %>% readOGR(verbose = FALSE)
-england_region <- data_conf$england_region %>% readOGR(verbose = FALSE)
 
 # Candidates
 cand_years <- df_send_lazy %>% pull(Year) %>% unique()
@@ -43,20 +40,9 @@ cand_type_schools <- df_send_lazy %>% pull(TypeGeneral) %>% unique() %>%
   fct_relevel("others", after = Inf) %>%
   sort() %>% as.character() %>%
   set_names(str_to_title(.))
-cand_la_tbl <- df_send_lazy %>%
-  select(RegionCode, LACode) %>% distinct() %>% collect() %>%
-  left_join(england_region@data %>%
-              select(code, name) %>%
-              rename(RegionName = name),
-            by = c("RegionCode" = "code")) %>%
-  left_join(england_la@data %>%
-              select(code, name) %>%
-              rename(LAName = name),
-            by = c("LACode" = "code"))
-cand_region_tbl <- cand_la_tbl %>%
-  select(RegionCode, RegionName) %>% distinct()
-cand_region <- cand_region_tbl %>% select(RegionName, RegionCode) %>%
-  deframe()
+cand_la_tbl <- read_csv("data/region-info/region-info.csv")
+cand_region <- cand_la_tbl %>%
+  select(RegionName, RegionCode) %>% distinct() %>% deframe()
 
 message(glue("{Sys.time()}, finished loading assets"))
 
@@ -67,6 +53,12 @@ source("libs/ui_dashboard.R", local = TRUE)
 # ==== Server ====
 
 server <- function(input, output) {
+
+  # ---- Deferred loading of assets ----
+  # Shapefiles, LA level and region level
+  england_la <- data_conf$england_la %>% readOGR(verbose = FALSE)
+  england_region <- data_conf$england_region %>% readOGR(verbose = FALSE)
+
   # ---- global params ----
   df_send <- reactive({
     req(input$global_phase, input$global_type_sen)
