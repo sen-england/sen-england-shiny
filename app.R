@@ -25,8 +25,6 @@ params <- config::get("params")
 # Load the datasets
 send_db_conn <- dbConnect(
   RSQLite::SQLite(),
-  # odbc::odbc(),
-  # driver = send_db_conf$driver,
   dbname = send_db_conf$db)
 df_send_lazy <- send_db_conn %>% tbl(send_db_conf$tbl) %>%
   select(one_of(send_db_conf$vars))
