@@ -9,6 +9,7 @@ docs_info <- div(
      a(href = "", "SEND"),
      a(href = "", "UK data service")))
 controls_global <- p(
+  fmt_html("Global settings that will affect all widgets."),
   checkboxGroupInput(
     inputId = "global_phase", label = "Education phase",
     choices = cand_phases, selected = cand_phases,
