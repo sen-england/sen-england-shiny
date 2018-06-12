@@ -128,7 +128,7 @@ server <- function(input, output) {
     } else if (type == "SEN") {
       "success"
     } else {
-      "primary"
+      "warning"
     }
   }
   get_params_maps <- function(prefix) {

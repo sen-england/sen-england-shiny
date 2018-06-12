@@ -49,15 +49,6 @@ dsb_sidebar <- dashboardSidebar(
       startExpanded = TRUE,
       controls_global),
     docs_global,
-    conditionalPanel(
-      glue("input.tabs == '{dsb_id_primary}'"),
-      docs_primary),
-    conditionalPanel(
-      glue("input.tabs == '{dsb_id_tseries}'"),
-      docs_tseries),
-    conditionalPanel(
-      glue("input.tabs == '{dsb_id_maps}'"),
-      docs_maps),
     docs_info))
 
 # ==== Main tabs ====

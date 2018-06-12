@@ -27,15 +27,20 @@ controls_global <- p(
     value = FALSE))
 
 # ==== Primary components ====
-docs_primary <- div(
-  h4(params$tabs$primary),
+docs_primary <- box(
+  title = params$tabs$primary,
+  collapsible = TRUE, solidHeader = TRUE, collapsed = FALSE,
+  status = "success", width = NULL,
   fmt_html(
+    width = 45,
     "General overview regarding the academisation of English schools",
     "and the inclusion of pupils of special educational needs."))
 panel_primary <- fluidRow(
   column(width = 8,
          box(
-           width = NULL,
+           title = "Statistics as of Year 2017",
+           width = NULL, collapsible = TRUE,
+           solidHeader = TRUE, status = "primary",
            column(width = 6,
                   valueBoxOutput("primary_box_total_pupils",
                                  width = NULL),
@@ -60,21 +65,29 @@ panel_primary <- fluidRow(
              plotlyOutput("primary_composition_n")),
            width = NULL)),
   column(width = 4,
-         box(plotlyOutput("primary_academ"),
-             width = NULL),
-         box(plotlyOutput("primary_sen"),
-             width = NULL))
+         docs_primary,
+         box(width = NULL, collapsible = TRUE,
+             solidHeader = TRUE, status = "primary",
+             title = "Percentage of academised schools",
+             plotlyOutput("primary_academ")),
+         box(width = NULL, collapsible = TRUE,
+             solidHeader = TRUE, status = "primary",
+             title = "Percentage of pupils with SEN",
+             plotlyOutput("primary_sen")))
 )
 
 # ==== tseries components ===
-docs_tseries <- div(
-  h4(params$tabs$tseries),
+docs_tseries <- box(
+  title = params$tabs$tseries,
+  collapsible = TRUE, solidHeader = TRUE, collapsed = FALSE,
+  status = "success", width = NULL,
   fmt_html(
+    width = 45,
     "Trends of academistion and educational inclusiveness.",
     "Adjust the settings to your preference."))
 controls_tseries <- box(
-  title = "Settings", collapsible = TRUE, solidHeader = TRUE,
-  status = "warning", width = 4,
+  title = "Settings", collapsible = FALSE, solidHeader = TRUE,
+  status = "warning", width = NULL,
   checkboxInput(
     inputId = "tseries_facetted", label = "Factted by school types",
     value = TRUE),
@@ -103,16 +116,22 @@ controls_tseries <- box(
     min = min(cand_years), max = max(cand_years),
     value = c(min(cand_years), max(cand_years))))
 panel_tseries <- fluidRow(
-  box(plotlyOutput("tseries_a"),
-      plotlyOutput("tseries_b"),
-      width = 8),
-  controls_tseries)
+  column(width = 8,
+         box(plotlyOutput("tseries_a"),
+             plotlyOutput("tseries_b"),
+             width = NULL)),
+  column(width = 4,
+         docs_tseries,
+         controls_tseries))
 
 # ==== maps components ====
-docs_maps <- div(
-  h4(params$tabs$maps),
+docs_maps <- box(
+  title = params$tabs$maps,
+  collapsible = TRUE, solidHeader = TRUE, collapsed = FALSE,
+  status = "success", width = NULL,
   fmt_html(
-    "Press the \"Render map\" button to (re-)generate a map"))
+    width = 45,
+    "Press the \"Render map\" button to (re-)generate a map."))
 maps_controls <- function(prefix = "maps_a", name = "A",
                           selected_type = "Academisation",
                           selected_region = "E12000009",
@@ -200,6 +219,7 @@ maps_ui_single <- function(prefix = "maps_a", name = "A",
         leafletOutput(prefix, height = params$maps_gen$height)),
       column(
         width = 4,
+        docs_maps,
         maps_controls(prefix, name,
                       selected_type = selected_type,
                       dual_map = FALSE,

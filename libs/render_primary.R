@@ -12,8 +12,7 @@ render_primary_academ <- function(df_send,
     scale_color_brewer(palette = palette) +
     theme(legend.position = "none",
           axis.title.y = element_blank(),
-          axis.title.x = element_blank()) +
-    labs(title = "Percentage of academised schools")
+          axis.title.x = element_blank())
 }
 
 render_primary_sen <- function(df_send, sen_type,
@@ -32,8 +31,7 @@ render_primary_sen <- function(df_send, sen_type,
     scale_color_brewer(palette = palette) +
     theme(legend.position = "none",
           axis.title.y = element_blank(),
-          axis.title.x = element_blank()) +
-    labs(title = "Percentage of pupils with SEN")
+          axis.title.x = element_blank())
 }
 
 render_primary_composition <- function(df_send, pct = FALSE,
