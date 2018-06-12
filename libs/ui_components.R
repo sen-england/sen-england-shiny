@@ -73,7 +73,7 @@ docs_tseries <- div(
     "Adjust the settings to your preference."))
 controls_tseries <- box(
   title = "Settings", collapsible = TRUE, solidHeader = TRUE,
-  status = "warning", width = 2,
+  status = "warning", width = 4,
   checkboxInput(
     inputId = "tseries_facetted", label = "Factted by school types",
     value = TRUE),
@@ -104,7 +104,7 @@ controls_tseries <- box(
 panel_tseries <- fluidRow(
   box(plotlyOutput("tseries_a"),
       plotlyOutput("tseries_b"),
-      width = 10),
+      width = 8),
   controls_tseries)
 
 # ==== maps components ====

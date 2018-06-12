@@ -17,7 +17,9 @@ summarise_academ_tseries <- function(df, by = "Year", multiplier = TRUE) {
   return(res)
 }
 
-summarise_sen_tseries <- function(df, sen_type = c("SEN_Support", "Statement_EHC_Plan"),
+summarise_sen_tseries <- function(df,
+                                  sen_type = c("SEN_Support",
+                                               "Statement_EHC_Plan"),
                                   by = "LACode", multiplier = TRUE) {
   if (sen_type == c("SEN_Support", "Statement_EHC_Plan")) {
     res <- df %>% group_by(!!!rlang::syms(by)) %>%
@@ -83,7 +85,7 @@ summarise_sen <- function(df, sen_type = c("SEN_Support", "Statement_EHC_Plan"),
   return(res)
 }
 
-fmt_html <- function(..., width = 30) {
-  paste0(...) %>% str_wrap(width = width) %>%
+fmt_html <- function(..., width = 40) {
+  paste(..., sep = " ") %>% str_wrap(width = width) %>%
     str_replace_all("\\n", "<br/>") %>% HTML()
 }
