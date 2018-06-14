@@ -11,7 +11,7 @@ render_tseries_sen <- function(years, df_send, sen_type,
                group = TypeSEN, color = TypeSEN)) +
     geom_line() + geom_point() +
     scale_color_brewer(palette = palette) +
-    labs(title = "Percentage of inclusion of pupils with SEN")
+    labs(title = "Percentage of pupils with SEN")
   if (facetted)
     p <- p +
       facet_wrap(~ TypeGeneral,

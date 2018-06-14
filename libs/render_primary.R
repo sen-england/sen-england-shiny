@@ -8,7 +8,7 @@ render_primary_academ <- function(df_send,
     ggplot(aes(x = Year, y = Academies,
                group = TypeAcademy, color = TypeAcademy)) +
     facet_wrap(~ TypeAcademy, scales = "fixed", ncol = 1) +
-    geom_line() +
+    geom_line() + geom_point() +
     scale_color_brewer(palette = palette) +
     theme(legend.position = "none",
           axis.title.y = element_blank(),
@@ -27,7 +27,7 @@ render_primary_sen <- function(df_send, sen_type,
     ggplot(aes(x = Year, y = SEN,
                group = TypeSEN, color = TypeSEN)) +
     facet_wrap(~ TypeSEN, scales = "fixed", ncol = 1) +
-    geom_line() +
+    geom_line() + geom_point() +
     scale_color_brewer(palette = palette) +
     theme(legend.position = "none",
           axis.title.y = element_blank(),

@@ -31,7 +31,8 @@ df_send_lazy <- send_db_conn %>% tbl(send_db_conf$tbl) %>%
 
 # Candidates
 cand_years <- df_send_lazy %>% pull(Year) %>% unique()
-cand_types <- c("Academisation", "SEN")
+cand_types <- c("% academised schools" = "Academisation",
+                "% pupils with SEN" = "SEN")
 cand_phases <- df_send_lazy %>% pull(Phase) %>% unique() %>%
   set_names(str_to_title(.))
 cand_type_sen <- c("SEN_Support", "Statement_EHC_Plan") %>%

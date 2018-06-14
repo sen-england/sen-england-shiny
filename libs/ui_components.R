@@ -9,7 +9,7 @@ docs_info <- div(
      a(href = "", "SEND"),
      a(href = "", "UK data service")))
 controls_global <- p(
-  fmt_html("Global settings that will affect all widgets."),
+  fmt_html("Global settings that affect all widgets."),
   checkboxGroupInput(
     inputId = "global_phase", label = "Education phase",
     choices = cand_phases, selected = cand_phases,
@@ -19,7 +19,7 @@ controls_global <- p(
     choices = cand_type_schools, selected = cand_type_schools,
     width = "100%"),
   checkboxGroupInput(
-    inputId = "global_type_sen", label = "Type of special educational needs",
+    inputId = "global_type_sen", label = "Type of SEN",
     choices = cand_type_sen, selected = cand_type_sen,
     width = "100%"),
   checkboxInput(
@@ -28,17 +28,19 @@ controls_global <- p(
 
 # ==== Primary components ====
 docs_primary <- box(
-  title = params$tabs$primary,
+  title = tagList(icon("tachometer"), params$tabs$primary),
   collapsible = TRUE, solidHeader = TRUE, collapsed = FALSE,
   status = "success", width = NULL,
-  fmt_html(
-    width = 45,
-    "General overview regarding the academisation of English schools",
-    "and the inclusion of pupils of special educational needs."))
+  format_markdown("
+General overview regarding the academisation of English schools
+and the inclusion of pupils of special educational needs.
+
+Change options in `Global settings` to update the charts.
+"))
 panel_primary <- fluidRow(
   column(width = 8,
          box(
-           title = "Statistics as of Year 2017",
+           title = "Statistics as of year 2017",
            width = NULL, collapsible = TRUE,
            solidHeader = TRUE, status = "primary",
            column(width = 6,
@@ -78,13 +80,14 @@ panel_primary <- fluidRow(
 
 # ==== tseries components ===
 docs_tseries <- box(
-  title = params$tabs$tseries,
+  title = tagList(icon("line-chart"), params$tabs$tseries),
   collapsible = TRUE, solidHeader = TRUE, collapsed = FALSE,
   status = "success", width = NULL,
-  fmt_html(
-    width = 45,
-    "Trends of academistion and educational inclusiveness.",
-    "Adjust the settings to your preference."))
+  format_markdown("
+Trends of academistion and educational inclusiveness.
+
+Adjust the seetings to your preference.
+"))
 controls_tseries <- box(
   title = "Settings", collapsible = FALSE, solidHeader = TRUE,
   status = "warning", width = NULL,
@@ -109,6 +112,8 @@ controls_tseries <- box(
     inputId = "tseries_la",
     label = "Choose local authority",
     choices = cand_la,
+    # Devon
+    selected = "E10000008",
     multiple = FALSE),
   sliderInput(
     inputId = "tseries_years", label = "Select Years",
@@ -126,12 +131,15 @@ panel_tseries <- fluidRow(
 
 # ==== maps components ====
 docs_maps <- box(
-  title = params$tabs$maps,
+  title = tagList(icon("map"), params$tabs$maps),
   collapsible = TRUE, solidHeader = TRUE, collapsed = FALSE,
   status = "success", width = NULL,
-  fmt_html(
-    width = 45,
-    "Press the \"Render map\" button to (re-)generate a map."))
+  format_markdown("
+Press the `Render map` button to (re-)generate a map.
+
+Option `Optimal scales` will select scales best suited for the individual map,
+otherwise common scales will be set to better track changes between maps.
+"))
 maps_controls <- function(prefix = "maps_a", name = "A",
                           selected_type = "Academisation",
                           selected_region = "E12000009",
@@ -143,7 +151,7 @@ maps_controls <- function(prefix = "maps_a", name = "A",
     inputId = glue("{prefix}_render"),
     label = glue("Render map"),
     icon = icon("map"))
-  widget_type <- selectInput(
+  widget_type <- radioButtons(
     inputId = glue("{prefix}_type"),
     label = "Choose map type",
     choices = cand_types,

@@ -1,6 +1,13 @@
 prop_to_pct <- function(x)
   paste0(sprintf("%2.0f", x * 100), " %")
 
+format_markdown <- function(...) {
+
+  html <- markdown::markdownToHTML(text = paste(..., sep = " "), fragment.only = TRUE)
+  Encoding(html) <- "UTF-8"
+  HTML(html)
+}
+
 summarise_academ_tseries <- function(df, by = "Year", multiplier = TRUE) {
   res <- df %>% group_by(!!!rlang::syms(by)) %>%
     summarise(
