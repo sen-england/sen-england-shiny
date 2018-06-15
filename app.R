@@ -33,14 +33,15 @@ df_send_lazy <- send_db_conn %>% tbl(send_db_conf$tbl) %>%
 cand_years <- df_send_lazy %>% pull(Year) %>% unique()
 cand_types <- c("% academised schools" = "Academisation",
                 "% pupils with SEN" = "SEN")
-cand_phases <- df_send_lazy %>% pull(Phase) %>% unique() %>%
-  set_names(str_to_title(.))
+cand_phases <- c("Primary schools" = "primary",
+                 "Secondary schools" = "secondary",
+                 "Others (e.g. nursery, 16 Plus, etc)" = "others")
 cand_type_sen <- c("SEN_Support", "Statement_EHC_Plan") %>%
   set_names(str_replace_all(., "_", " "))
-cand_type_schools <- df_send_lazy %>% pull(TypeGeneral) %>% unique() %>%
-  fct_relevel("others", after = Inf) %>%
-  sort() %>% as.character() %>%
-  set_names(str_to_title(.))
+cand_type_schools <- c("Mainstream School" = "mainstream school",
+                       "Pupil Referral Unit" = "pupil referral unit",
+                       "Special School" = "special school",
+                       "Others (e.g. independent school)" = "others")
 cand_la_tbl <- read_csv("data/region-info/region-info.csv")
 cand_la <- cand_la_tbl %>%
   select(LAName, LACode) %>% distinct() %>% deframe()

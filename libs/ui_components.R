@@ -86,7 +86,7 @@ docs_tseries <- box(
   format_markdown("
 Trends of academistion and educational inclusiveness.
 
-Adjust the seetings to your preference.
+Adjust the settings to your preference.
 "))
 controls_tseries <- box(
   title = "Settings", collapsible = FALSE, solidHeader = TRUE,
