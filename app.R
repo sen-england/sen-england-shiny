@@ -1,8 +1,6 @@
 library("tidyverse")
 library("glue")
-library("DBI")
 library("shiny")
-library("shinythemes")
 library("shinydashboard")
 library("leaflet")
 library("plotly")
@@ -23,7 +21,7 @@ send_db_conf <- data_conf$send_db
 params <- config::get("params")
 
 # Load the datasets
-send_db_conn <- dbConnect(
+send_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
   dbname = send_db_conf$db)
 df_send_lazy <- send_db_conn %>% tbl(send_db_conf$tbl) %>%
