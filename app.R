@@ -59,7 +59,6 @@ server <- function(input, output) {
   # ---- Deferred loading of assets ----
   # Shapefiles, LA level and region level
   england_la <- data_conf$england_la %>% readOGR(verbose = FALSE)
-  england_region <- data_conf$england_region %>% readOGR(verbose = FALSE)
 
   # ---- global params ----
   df_send <- reactive({
