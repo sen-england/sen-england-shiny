@@ -50,4 +50,4 @@ shinyapps:
   params:
     maps_gen:
       multi-region: false
-      render-england: false
+      render-england: true
