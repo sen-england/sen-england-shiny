@@ -1,11 +1,17 @@
-library("tidyverse")
+message(sprintf("%s, start loading packages", Sys.time()))
+library("dplyr")
+library("purrr")
+library("readr")
+library("tidyr")
+library("tibble")
+library("ggplot2")
+library("forcats")
+library("stringr")
 library("glue")
 library("shiny")
 library("shinydashboard")
 library("leaflet")
 library("plotly")
-library("rgdal")
-library("tmap")
 options(stringsAsFactors = FALSE)
 
 source("libs/common.R", local = TRUE)
@@ -21,14 +27,9 @@ send_db_conf <- data_conf$send_db
 params <- config::get("params")
 
 # Load the datasets
-send_db_conn <- DBI::dbConnect(
-  RSQLite::SQLite(),
-  dbname = send_db_conf$db)
-df_send_lazy <- send_db_conn %>% tbl(send_db_conf$tbl) %>%
-  select(one_of(send_db_conf$vars))
 
 # Candidates
-cand_years <- df_send_lazy %>% pull(Year) %>% unique()
+cand_years <- 2011L:2017L
 cand_types <- c("% academised schools" = "Academisation",
                 "% pupils with SEN" = "SEN")
 cand_phases <- c("Primary schools" = "primary",
@@ -40,7 +41,8 @@ cand_type_schools <- c("Mainstream School" = "mainstream school",
                        "Pupil Referral Unit" = "pupil referral unit",
                        "Special School" = "special school",
                        "Others (e.g. independent school)" = "others")
-cand_la_tbl <- read_csv("data/region-info/region-info.csv")
+cand_la_tbl <- read_csv("data/region-info/region-info.csv",
+                        col_types = c("cccc"))
 cand_la <- cand_la_tbl %>%
   select(LAName, LACode) %>% distinct() %>% deframe()
 cand_region <- cand_la_tbl %>%
@@ -55,10 +57,18 @@ source("libs/ui_dashboard.R", local = TRUE)
 # ==== Server ====
 
 server <- function(input, output) {
+  library("rgdal")
+  library("tmap")
 
   # ---- Deferred loading of assets ----
-  # Shapefiles, LA level and region level
-  england_la <- data_conf$england_la %>% readOGR(verbose = FALSE)
+  send_db_conn <- DBI::dbConnect(
+    RSQLite::SQLite(),
+    dbname = send_db_conf$db)
+  df_send_lazy <- send_db_conn %>%
+    tbl(send_db_conf$tbl) %>%
+    select(one_of(send_db_conf$vars))
+    # Shapefiles, LA level and region level
+    england_la <- data_conf$england_la %>% readOGR(verbose = FALSE)
 
   # ---- global params ----
   df_send <- reactive({
