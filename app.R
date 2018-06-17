@@ -1,5 +1,6 @@
 message(sprintf("%s, start loading packages", Sys.time()))
 library("dplyr")
+library("dbplyr")
 library("purrr")
 library("readr")
 library("tidyr")
