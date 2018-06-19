@@ -28,7 +28,7 @@ summarise_sen_tseries <- function(df,
                                   sen_type = c("SEN_Support",
                                                "Statement_EHC_Plan"),
                                   by = "LACode", multiplier = TRUE) {
-  if (sen_type == c("SEN_Support", "Statement_EHC_Plan")) {
+  if (identical(sen_type, c("SEN_Support", "Statement_EHC_Plan"))) {
     res <- df %>% group_by(!!!rlang::syms(by)) %>%
       summarise(
         `SEN Support` = sum(SEN_Support, na.rm = TRUE)
@@ -68,7 +68,7 @@ summarise_academ <- function(df, by = "Year", multiplier = TRUE) {
 
 summarise_sen <- function(df, sen_type = c("SEN_Support", "Statement_EHC_Plan"),
                           by = "LACode", multiplier = TRUE) {
-  if (sen_type == c("SEN_Support", "Statement_EHC_Plan")) {
+  if (identical(sen_type, c("SEN_Support", "Statement_EHC_Plan"))) {
     res <- df %>% group_by(!!!rlang::syms(by)) %>%
       summarise(SEN =
                   (sum(SEN_Support, na.rm = TRUE) +
