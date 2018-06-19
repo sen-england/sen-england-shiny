@@ -10,18 +10,18 @@ render_map_academ <- function(year, shape, df_send, region,
         collect() %>%
         summarise_academ(by = "LACode", multiplier = FALSE),
       by = c("code" = "LACode"))
-  map_academ_plot <- tm_shape(shape[!is.na(shape$Academies), ]) +
-    tm_polygons("Academies", id = "name",
+  map_academ_plot <- tmap::tm_shape(shape[!is.na(shape$Academies), ]) +
+    tmap::tm_polygons("Academies", id = "name",
                 palette = params$maps_academ$palette,
                 breaks = if (auto_breaks) {
                   NULL
                 } else {
                   params$maps_academ$breaks
                 }) +
-    tm_legend(legend.format = list(fun = prop_to_pct))
+    tmap::tm_legend(legend.format = list(fun = prop_to_pct))
   message(glue("{Sys.time()}, finished rendering `map_academ`"))
   withProgress(
-    tmap_leaflet(map_academ_plot, mode = "view", show = TRUE),
+    tmap::tmap_leaflet(map_academ_plot, mode = "view", show = TRUE),
     message = "Rendering maps... Please wait")
 
 }
@@ -40,18 +40,18 @@ render_map_sen <- function(year, shape, df_send, sen_type, region,
         collect() %>%
         summarise_sen(sen_type, by = "LACode", multiplier = FALSE),
       by = c("code" = "LACode"))
-  map_sen_plot <- tm_shape(shape[!is.na(shape$SEN), ]) +
-    tm_polygons("SEN", id = "name",
+  map_sen_plot <- tmap::tm_shape(shape[!is.na(shape$SEN), ]) +
+    tmap::tm_polygons("SEN", id = "name",
                 palette = params$maps_sen$palette,
                 breaks = if (auto_breaks) {
                   NULL
                 } else {
                   params$maps_sen$breaks
                 }) +
-    tm_legend(legend.format = list(fun = prop_to_pct))
+    tmap::tm_legend(legend.format = list(fun = prop_to_pct))
   message(glue("{Sys.time()}, finished rendering `map_sen`"))
   withProgress(
-    tmap_leaflet(map_sen_plot, mode = "view", show = TRUE),
+    tmap::tmap_leaflet(map_sen_plot, mode = "view", show = TRUE),
     message = "Rendering maps... Please wait")
 }
 

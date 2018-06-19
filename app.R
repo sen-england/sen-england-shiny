@@ -28,6 +28,12 @@ send_db_conf <- data_conf$send_db
 params <- config::get("params")
 
 # Load the datasets
+send_db_conn <- DBI::dbConnect(
+  RSQLite::SQLite(),
+  dbname = send_db_conf$db)
+df_send_lazy <- send_db_conn %>%
+  tbl(send_db_conf$tbl) %>%
+  select(one_of(send_db_conf$vars))
 
 # Candidates
 cand_years <- 2011L:2017L
@@ -58,18 +64,12 @@ source("libs/ui_dashboard.R", local = TRUE)
 # ==== Server ====
 
 server <- function(input, output) {
-  library("rgdal")
-  library("tmap")
 
   # ---- Deferred loading of assets ----
-  send_db_conn <- DBI::dbConnect(
-    RSQLite::SQLite(),
-    dbname = send_db_conf$db)
-  df_send_lazy <- send_db_conn %>%
-    tbl(send_db_conf$tbl) %>%
-    select(one_of(send_db_conf$vars))
-    # Shapefiles, LA level and region level
-    england_la <- data_conf$england_la %>% readOGR(verbose = FALSE)
+  england_la <- eventReactive(input$tabs == dsb_id_maps, {
+      print(glue("{Sys.time()}, loading shape file"))
+      data_conf$england_la %>% rgdal::readOGR(verbose = FALSE)
+    })
 
   # ---- global params ----
   df_send <- reactive({
@@ -145,7 +145,7 @@ server <- function(input, output) {
     whole_country <- input[[glue("{prefix}_whole_country")]]
     whole_country_enabled <- !is.null(whole_country) && whole_country == TRUE
     list(year = input[[glue("{prefix}_year")]],
-         shape = england_la,
+         shape = england_la(),
          df_send = df_send(),
          type = input[[glue("{prefix}_type")]],
          sen_type = input$global_type_sen,
