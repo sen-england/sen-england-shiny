@@ -36,6 +36,8 @@ General overview regarding the academisation of English schools
 and the inclusion of pupils of special educational needs.
 
 Change options in `Global settings` to update the charts.
+
+**Please be patient when the dashboard is initialising.**
 "))
 panel_primary <- fluidRow(
   column(width = 8,
@@ -139,6 +141,8 @@ Press the `Render map` button to (re-)generate a map.
 
 Option `Optimal scales` will select scales best suited for the individual map,
 otherwise common scales will be set to better track changes between maps.
+
+By default the only one region is displayed (override with `Show all England`).
 "))
 maps_controls <- function(prefix = "maps_a", name = "A",
                           selected_type = "Academisation",
@@ -164,7 +168,7 @@ maps_controls <- function(prefix = "maps_a", name = "A",
     multiple = params$maps_gen$`multi-region`)
   widget_whole_country <- checkboxInput(
     inputId = glue("{prefix}_whole_country"),
-    label = "Show all England (slow)",
+    label = "Show all England",
     value = FALSE)
   widget_year <- selectInput(
     inputId = glue("{prefix}_year"),
