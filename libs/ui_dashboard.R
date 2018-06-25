@@ -25,9 +25,6 @@ dashboardHeaderHack <- function (..., title = NULL, longtitle = NULL,
 dsb_header <- dashboardHeaderHack(
   title = "SEN & academisation",
   longtitle = "Inclusion and the academisation of English schools")
-dsb_id_primary <- "primary"
-dsb_id_tseries <- "tseries"
-dsb_id_maps <- "maps"
 
 # ==== Sidebar ====
 

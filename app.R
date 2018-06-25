@@ -35,7 +35,10 @@ df_send_lazy <- send_db_conn %>%
   tbl(send_db_conf$tbl) %>%
   select(one_of(send_db_conf$vars))
 
-# Candidates
+# Variables and candidates
+dsb_id_primary <- "primary"
+dsb_id_tseries <- "tseries"
+dsb_id_maps <- "maps"
 cand_years <- 2011L:2017L
 cand_types <- c("% academised schools" = "Academisation",
                 "% pupils with SEN" = "SEN")
