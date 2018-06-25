@@ -163,7 +163,6 @@ maps_controls <- function(prefix = "maps_a", name = "A",
                           selected_region = "E12000009",
                           selected_year = 2017L,
                           dual_map = TRUE,
-                          whole_country = FALSE,
                           width = 12) {
   # Widgets
   widget_button <- actionButton(
@@ -175,16 +174,6 @@ maps_controls <- function(prefix = "maps_a", name = "A",
     label = "Choose map type",
     choices = cand_types,
     selected = selected_type)
-  widget_region <- selectInput(
-    inputId = glue("{prefix}_region"),
-    label = "Choose region",
-    choices = cand_region,
-    selected = selected_region,
-    multiple = params$maps_gen$`multi-region`)
-  widget_whole_country <- checkboxInput(
-    inputId = glue("{prefix}_whole_country"),
-    label = "Show all England",
-    value = FALSE)
   widget_year <- selectInput(
     inputId = glue("{prefix}_year"),
     label = "Select year to show",
@@ -206,23 +195,13 @@ maps_controls <- function(prefix = "maps_a", name = "A",
     title = "Settings", width = width, collapsible = TRUE,
     solidHeader = TRUE,
     column(4, widget_button, widget_type),
-    column(4, widget_region, widget_level),
-    column(4, widget_year, widget_breaks,
-           if (whole_country) {
-             widget_whole_country
-           } else {
-             NULL
-           }))
+    column(4, widget_level),
+    column(4, widget_year, widget_breaks))
   layout_long <- box(
     title = "Settings", width = width, collapsible = FALSE,
     solidHeader = TRUE,
     status = "warning",
-    widget_button, widget_type, widget_region, widget_level,
-    if (whole_country) {
-      widget_whole_country
-    } else {
-      NULL
-    },
+    widget_button, widget_type, widget_level,
     widget_year, widget_breaks
   )
 
@@ -244,8 +223,7 @@ maps_ui_single <- function(prefix = "maps_a", name = "A",
           verticalLayout(
             maps_controls(prefix, name,
                           selected_type = selected_type,
-                          dual_map = TRUE,
-                          whole_country = params$maps_gen$`render-england`),
+                          dual_map = TRUE),
             leafletOutput(prefix, height = params$maps_gen$height)))
   } else {
     fluidRow(
@@ -258,7 +236,6 @@ maps_ui_single <- function(prefix = "maps_a", name = "A",
         maps_controls(prefix, name,
                       selected_type = selected_type,
                       dual_map = FALSE,
-                      whole_country = params$maps_gen$`render-england`,
                       width = NULL)))
   }
 }

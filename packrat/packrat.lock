@@ -656,6 +656,12 @@ Version: 1.7
 Hash: bfcd0d830736f625a557addf8742d566
 Requires: Rcpp, jsonlite
 
+Package: pryr
+Source: CRAN
+Version: 0.1.4
+Hash: ce7b1a2ab14b0352c61f00aa76d4d14e
+Requires: Rcpp, codetools, stringr
+
 Package: psych
 Source: CRAN
 Version: 1.8.4

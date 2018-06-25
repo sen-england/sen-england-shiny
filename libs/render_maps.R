@@ -1,7 +1,6 @@
-summarise_map_df <- function(df_send, shape, year, type, region, sen_type) {
+summarise_map_df <- function(df_send, shape, year, type, sen_type) {
   df <- df_send %>%
-    filter(Year == year) %>%
-    filter(RegionCode %in% region)
+    filter(Year == year)
 
   if (type == "Academisation") {
     df <- df %>% select(Year, LACode, IsAcademy) %>%
@@ -60,15 +59,12 @@ render_map <- function(year, shape, df_send,
                        region_type = c("LA", "ParlCon"),
                        sen_type = c("SEN_Support",
                                     "Statement_EHC_Plan"),
-                       region = c("E12000007", "E12000003", "E12000009",
-                                  "E12000006", "E12000005", "E12000002",
-                                  "E12000008", "E12000001", "E12000004"),
                        auto_breaks = FALSE) {
   type <- match.arg(type)
   region_type <- match.arg(region_type)
 
   shape <- withProgress(
-    summarise_map_df(df_send, shape, year, type, region, sen_type),
+    summarise_map_df(df_send, shape, year, type, sen_type),
     message = "Collecting data...")
 
   if (type == "Academisation") {

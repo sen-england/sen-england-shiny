@@ -152,11 +152,6 @@ server <- function(input, output) {
          df_send = df_send(),
          type = input[[glue("{prefix}_type")]],
          sen_type = input$global_type_sen,
-         region = if (whole_country_enabled) {
-           cand_region
-         } else {
-           input[[glue("{prefix}_region")]]
-         },
          auto_breaks = input[[glue("{prefix}_auto_breaks")]])
   }
   spawn_maps <- function(prefix) {

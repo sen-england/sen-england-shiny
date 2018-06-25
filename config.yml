@@ -34,8 +34,6 @@ default:
       palette: "Set2"
     maps_gen:
       height: 1000
-      multi-region: true
-      render-england: true
       default_lng: -3.53969072947711
       default_lat: 50.7328249200541
       default_zoom: 13
@@ -47,7 +45,3 @@ default:
       palette: "Oranges"
 
 shinyapps:
-  params:
-    maps_gen:
-      multi-region: false
-      render-england: true
