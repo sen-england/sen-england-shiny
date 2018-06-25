@@ -117,7 +117,8 @@ controls_tseries <- box(
     label = "Choose geological level",
     choices = c("England" = "whole_country",
                 "Region level" = "region",
-                "Local Authority level" = "la")),
+                "Local Authority level" = "la"),
+    selected = "whole_country"),
   checkboxGroupInput(
     inputId = "tseries_regions",
     label = "Choose region(s)",
@@ -164,6 +165,7 @@ maps_controls <- function(prefix = "maps_a", name = "A",
                           dual_map = TRUE,
                           whole_country = FALSE,
                           width = 12) {
+  # Widgets
   widget_button <- actionButton(
     inputId = glue("{prefix}_render"),
     label = glue("Render map"),
@@ -192,22 +194,30 @@ maps_controls <- function(prefix = "maps_a", name = "A",
     inputId = glue("{prefix}_auto_breaks"),
     label = "Optimal scales",
     value = FALSE)
+  widget_level <- radioButtons(
+    inputId = glue("{prefix}_level"),
+    label = "Choose breakdown level",
+    choices = c("Local authority level" = "LA",
+                "Parliamentary constituency level" = "ParlCon"),
+    selected = "LA")
+
+  # Layouts
   layout_wide <- box(
     title = "Settings", width = width, collapsible = TRUE,
     solidHeader = TRUE,
     column(4, widget_button, widget_type),
-    column(4, widget_region,
+    column(4, widget_region, widget_level),
+    column(4, widget_year, widget_breaks,
            if (whole_country) {
              widget_whole_country
            } else {
              NULL
-           }),
-    column(4, widget_year, widget_breaks))
+           }))
   layout_long <- box(
     title = "Settings", width = width, collapsible = FALSE,
     solidHeader = TRUE,
     status = "warning",
-    widget_button, widget_type, widget_region,
+    widget_button, widget_type, widget_region, widget_level,
     if (whole_country) {
       widget_whole_country
     } else {
