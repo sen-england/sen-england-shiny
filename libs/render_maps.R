@@ -1,21 +1,25 @@
-summarise_map_df <- function(df_send, shape, year, type, sen_type) {
+summarise_map_df <- function(df_send, shape, year, type, level, sen_type) {
   df <- df_send %>%
     filter(Year == year)
-
-  if (type == "Academisation") {
-    df <- df %>% select(Year, LACode, IsAcademy) %>%
-      collect() %>%
-      summarise_academ(by = "LACode", multiplier = FALSE)
+  if (level == "LA") {
+    by_var = "LACode"
   } else {
-    df <- df %>%
-      select(Year, LACode,
-             SEN_Support, Statement_EHC_Plan, TotalPupils) %>%
-      collect() %>%
-      summarise_sen(sen_type, by = "LACode", multiplier = FALSE)
+    by_var = "ParlConCode"
   }
 
-  shape@data <- shape@data %>%
-    left_join(df, by = c("code" = "LACode"))
+  if (type == "Academisation") {
+    df <- df %>% select(Year, one_of(by_var), IsAcademy) %>%
+      collect() %>%
+      summarise_academ(by = by_var, multiplier = FALSE)
+  } else {
+    df <- df %>%
+      select(Year, one_of(by_var),
+             SEN_Support, Statement_EHC_Plan, TotalPupils) %>%
+      collect() %>%
+      summarise_sen(sen_type, by = by_var, multiplier = FALSE)
+  }
+
+  shape@data <- shape@data %>% left_join(df, by = c("code" = by_var))
   shape
 }
 
@@ -54,15 +58,15 @@ render_map_sen <- function(year, shape, sen_type, auto_breaks = FALSE) {
 
 render_map <- function(year, shape, df_send,
                        type = c("Academisation", "SEN"),
-                       region_type = c("LA", "ParlCon"),
+                       level = c("LA", "ParlCon"),
                        sen_type = c("SEN_Support",
                                     "Statement_EHC_Plan"),
                        auto_breaks = FALSE) {
   type <- match.arg(type)
-  region_type <- match.arg(region_type)
+  level <- match.arg(level)
 
   shape <- withProgress(
-    summarise_map_df(df_send, shape, year, type, sen_type),
+    summarise_map_df(df_send, shape, year, type, level, sen_type),
     message = "Collecting data...")
 
   if (type == "Academisation") {

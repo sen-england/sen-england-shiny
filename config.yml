@@ -2,6 +2,7 @@ default:
   data:
     england_la: "data/England_ct_2011/england_ct_2011_simple.shp"
     england_region: "data/England_gor_2011_gen_clipped/england_gor_2011_gen_clipped.shp"
+    england_parlcon: "data/England_parl_2011_gen_clipped/england_parl_2011_gen_clipped.shp"
     send_db:
       # NOTE: currently we could not use odbc SQLite3 driver
       # driver: "SQLite3"
@@ -14,6 +15,7 @@ default:
       "URN", "SchoolName",
       "LACode", "LAName",
       "RegionCode", "RegionName",
+      "ParlConCode", "ParlConName",
       # Vars of interests -- Academisation
       "IsAcademy",
       # Vars of interests -- SEN

@@ -70,8 +70,12 @@ server <- function(input, output) {
 
   # ---- Deferred loading of assets ----
   england_la <- eventReactive(input$tabs == dsb_id_maps, {
-      print(glue("{Sys.time()}, loading shape file"))
-      data_conf$england_la %>% rgdal::readOGR(verbose = FALSE)
+    print(glue("{Sys.time()}, loading shape file for LA"))
+    data_conf$england_la %>% rgdal::readOGR(verbose = FALSE)
+  })
+  england_parlcon <- eventReactive(input$tabs == dsb_id_maps, {
+      print(glue("{Sys.time()}, loading shape file for ParlCon"))
+      data_conf$england_parlcon %>% rgdal::readOGR(verbose = FALSE)
     })
 
   # ---- global params ----
@@ -148,9 +152,14 @@ server <- function(input, output) {
     whole_country <- input[[glue("{prefix}_whole_country")]]
     whole_country_enabled <- !is.null(whole_country) && whole_country == TRUE
     list(year = input[[glue("{prefix}_year")]],
-         shape = england_la(),
+         shape = if(input[[glue("{prefix}_level")]] == "LA") {
+           england_la()
+         } else {
+           england_parlcon()
+         },
          df_send = df_send(),
          type = input[[glue("{prefix}_type")]],
+         level = input[[glue("{prefix}_level")]],
          sen_type = input$global_type_sen,
          auto_breaks = input[[glue("{prefix}_auto_breaks")]])
   }
