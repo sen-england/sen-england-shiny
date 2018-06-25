@@ -31,9 +31,8 @@ render_map_academ <- function(year, shape, auto_breaks = FALSE) {
                       }) +
     tmap::tm_legend(legend.format = list(fun = prop_to_pct))
   message(glue("{Sys.time()}, finished rendering `map_academ`"))
-  withProgress(
-    tmap::tmap_leaflet(map_academ_plot, mode = "view", show = TRUE),
-    message = "Rendering maps...")
+
+  tmap::tmap_leaflet(map_academ_plot, mode = "view", show = TRUE)
 }
 
 render_map_sen <- function(year, shape, sen_type, auto_breaks = FALSE) {
@@ -49,9 +48,8 @@ render_map_sen <- function(year, shape, sen_type, auto_breaks = FALSE) {
                       }) +
     tmap::tm_legend(legend.format = list(fun = prop_to_pct))
   message(glue("{Sys.time()}, finished rendering `map_sen`"))
-  withProgress(
-    tmap::tmap_leaflet(map_sen_plot, mode = "view", show = TRUE),
-    message = "Rendering maps...")
+
+  tmap::tmap_leaflet(map_sen_plot, mode = "view", show = TRUE)
 }
 
 render_map <- function(year, shape, df_send,
@@ -68,8 +66,12 @@ render_map <- function(year, shape, df_send,
     message = "Collecting data...")
 
   if (type == "Academisation") {
-    render_map_academ(year, shape, auto_breaks)
+    withProgress(
+      render_map_academ(year, shape, auto_breaks),
+      message = "Rendering maps...")
   } else {
-    render_map_sen(year, shape, sen_type, auto_breaks)
+    withProgress(
+      render_map_sen(year, shape, sen_type, auto_breaks),
+      message = "Rendering maps...")
   }
 }
