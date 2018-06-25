@@ -35,10 +35,23 @@ docs_primary <- box(
 General overview regarding the academisation of English schools
 and the inclusion of pupils of special educational needs.
 
-Change options in `Global settings` to update the charts.
+Change options in `Global settings` in the sidebar to update the charts.
 
-**Please be patient when the dashboard is initialising.**
-"))
+"),
+"For time series trends, go to",
+a(glue("{params$tabs$tseries};\n"),
+  onclick = glue("openTab('{dsb_id_tseries}')")),
+"For distribution by maps, go to",
+a(glue("{params$tabs$maps}."), onclick = glue("openTab('{dsb_id_maps}')")),
+tags$script(HTML("
+        var openTab = function(tabName){
+          $('a', $('.sidebar')).each(function() {
+            if(this.getAttribute('data-value') == tabName) {
+              this.click()
+            };
+          });
+        }
+      ")))
 panel_primary <- fluidRow(
   column(width = 8,
          box(
