@@ -3,6 +3,8 @@ docs_global <- div()
 docs_info <- div(
   h6("Project website: ", a(href = "https://sen-england.github.io",
                             "Github Pages")),
+  h6("Usage tutorials: ", a(href = "https://sen-england.github.io/post/2018-06-26-shiny-prototype/",
+                            "Blog post")),
   h6("Developed: ", a(href = "https://github.com/YiLiu6240",
                       "Dr Yi Liu")),
   h6("Data sources: ",
@@ -37,21 +39,10 @@ and the inclusion of pupils of special educational needs.
 
 Change options in `Global settings` in the sidebar to update the charts.
 
-"),
-"For time series trends, go to",
-a(glue("{params$tabs$tseries};\n"),
-  onclick = glue("openTab('{dsb_id_tseries}')")),
-"For distribution by maps, go to",
-a(glue("{params$tabs$maps}."), onclick = glue("openTab('{dsb_id_maps}')")),
-tags$script(HTML("
-        var openTab = function(tabName){
-          $('a', $('.sidebar')).each(function() {
-            if(this.getAttribute('data-value') == tabName) {
-              this.click()
-            };
-          });
-        }
-      ")))
+For tutorials please see the [blog post](https://sen-england.github.io/post/2018-06-26-shiny-prototype/).
+
+Press the ` - ` button in the upper right hand to collapse this widget.
+"))
 panel_primary <- fluidRow(
   column(width = 8,
          box(
