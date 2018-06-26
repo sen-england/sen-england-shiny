@@ -1,7 +1,7 @@
-summarise_map_df <- function(df_send, shape, year, type, level, sen_type) {
+summarise_map_df <- function(df_send, shape, year, type, geo_level, sen_type) {
   df <- df_send %>%
     filter(Year == year)
-  if (level == "LA") {
+  if (geo_level == "LA") {
     by_var = "LACode"
   } else {
     by_var = "ParlConCode"
@@ -58,14 +58,14 @@ render_map_sen <- function(year, shape, sen_type, auto_breaks = FALSE) {
 
 render_map <- function(year, shape, df_send,
                        type = c("Academisation", "SEN"),
-                       level = c("LA", "ParlCon"),
+                       geo_level = c("LA", "ParlCon"),
                        sen_type = c("SEN_Support",
                                     "Statement_EHC_Plan"),
                        auto_breaks = FALSE) {
   type <- match.arg(type)
-  level <- match.arg(level)
+  geo_level <- match.arg(geo_level)
 
-  shape <- summarise_map_df(df_send, shape, year, type, level, sen_type)
+  shape <- summarise_map_df(df_send, shape, year, type, geo_level, sen_type)
 
   if (type == "Academisation") {
     render_map_academ(year, shape, auto_breaks)

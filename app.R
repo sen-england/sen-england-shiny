@@ -129,7 +129,7 @@ server <- function(input, output) {
       sen_type = input$global_type_sen,
       scales_free = input$tseries_scales_free,
       facetted = input$tseries_facetted,
-      geo_type = input$tseries_geo_type,
+      geo_level = input$tseries_geo_level,
       regions = input$tseries_regions,
       LA = input$tseries_la))
   }
@@ -152,14 +152,14 @@ server <- function(input, output) {
     whole_country <- input[[glue("{prefix}_whole_country")]]
     whole_country_enabled <- !is.null(whole_country) && whole_country == TRUE
     list(year = input[[glue("{prefix}_year")]],
-         shape = if(input[[glue("{prefix}_level")]] == "LA") {
+         shape = if(input[[glue("{prefix}_geo_level")]] == "LA") {
            england_la()
          } else {
            england_parlcon()
          },
          df_send = df_send(),
          type = input[[glue("{prefix}_type")]],
-         level = input[[glue("{prefix}_level")]],
+         geo_level = input[[glue("{prefix}_geo_level")]],
          sen_type = input$global_type_sen,
          auto_breaks = input[[glue("{prefix}_auto_breaks")]])
   }

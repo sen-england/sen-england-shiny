@@ -1,5 +1,5 @@
 render_tseries_sen <- function(years, df_send, sen_type,
-                               geo_type, LA, regions,
+                               geo_level, LA, regions,
                                scales_free, facetted,
                                palette = "Set1") {
   p <- df_send %>%
@@ -20,7 +20,7 @@ render_tseries_sen <- function(years, df_send, sen_type,
 }
 
 render_tseries_academ <- function(years, df_send,
-                                  geo_type, LA, regions,
+                                  geo_level, LA, regions,
                                   scales_free, facetted,
                                   palette = "Set2") {
   p <- df_send %>%
@@ -42,7 +42,7 @@ render_tseries_academ <- function(years, df_send,
 
 render_tseries <- function(years, df_send,
                            LA,
-                           geo_type = "whole_country",
+                           geo_level = "whole_country",
                            type = c("Academisation", "SEN"),
                            scales_free = FALSE,
                            facetted = FALSE,
@@ -53,11 +53,11 @@ render_tseries <- function(years, df_send,
   type <- match.arg(type)
   df_send <- df_send %>% filter(between(Year, years[1], years[2])) %>%
     (function(df) {
-      if (geo_type == "whole_country") {
+      if (geo_level == "whole_country") {
         df
-      } else if (geo_type == "region") {
+      } else if (geo_level == "region") {
         df %>% filter(RegionCode %in% regions)
-      } else if (geo_type == "la") {
+      } else if (geo_level == "la") {
         df %>% filter(LACode %in% LA)
       }
     }) %>%
@@ -65,13 +65,13 @@ render_tseries <- function(years, df_send,
   if (type == "Academisation") {
     render_tseries_academ(
       years, df_send,
-      geo_type = geo_type, LA = LA, regions = regions,
+      geo_level = geo_level, LA = LA, regions = regions,
       scales_free = scales_free, facetted = facetted)
   } else {
     render_tseries_sen(
       years, df_send,
       sen_type = sen_type,
-      geo_type = geo_type, LA = LA, regions = regions,
+      geo_level = geo_level, LA = LA, regions = regions,
       scales_free = scales_free, facetted = facetted)
   }
 }

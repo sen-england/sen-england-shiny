@@ -113,8 +113,8 @@ controls_tseries <- box(
     inputId = "tseries_scales_free", label = "Flexible scales",
     value = FALSE),
   radioButtons(
-    inputId = "tseries_geo_type",
-    label = "Choose geological level",
+    inputId = "tseries_geo_level",
+    label = "Choose geographical level",
     choices = c("England" = "whole_country",
                 "Region level" = "region",
                 "Local Authority level" = "la"),
@@ -183,9 +183,9 @@ maps_controls <- function(prefix = "maps_a", name = "A",
     inputId = glue("{prefix}_auto_breaks"),
     label = "Optimal scales",
     value = FALSE)
-  widget_level <- radioButtons(
-    inputId = glue("{prefix}_level"),
-    label = "Choose breakdown level",
+  widget_geo_level <- radioButtons(
+    inputId = glue("{prefix}_geo_level"),
+    label = "Choose geographical level",
     choices = c("Local authority level" = "LA",
                 "Parliamentary constituency level" = "ParlCon"),
     selected = "LA")
@@ -195,13 +195,13 @@ maps_controls <- function(prefix = "maps_a", name = "A",
     title = "Settings", width = width, collapsible = TRUE,
     solidHeader = TRUE,
     column(4, widget_button, widget_type),
-    column(4, widget_level),
+    column(4, widget_geo_level),
     column(4, widget_year, widget_breaks))
   layout_long <- box(
     title = "Settings", width = width, collapsible = FALSE,
     solidHeader = TRUE,
     status = "warning",
-    widget_button, widget_type, widget_level,
+    widget_button, widget_type, widget_geo_level,
     widget_year, widget_breaks
   )
 
