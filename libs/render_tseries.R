@@ -1,5 +1,5 @@
 render_tseries_sen <- function(years, df_send, sen_type,
-                               geo_level, LA, regions,
+                               geo_level, LA, region,
                                scales_free, facetted,
                                palette = "Set1") {
   p <- df_send %>%
@@ -20,7 +20,7 @@ render_tseries_sen <- function(years, df_send, sen_type,
 }
 
 render_tseries_academ <- function(years, df_send,
-                                  geo_level, LA, regions,
+                                  geo_level, LA, region,
                                   scales_free, facetted,
                                   palette = "Set2") {
   p <- df_send %>%
@@ -41,7 +41,7 @@ render_tseries_academ <- function(years, df_send,
 
 
 render_tseries <- function(years, df_send,
-                           regions, LA, parlcon,
+                           region, LA, parlcon,
                            geo_level = "whole_country",
                            type = c("Academisation", "SEN"),
                            scales_free = FALSE,
@@ -53,7 +53,7 @@ render_tseries <- function(years, df_send,
       if (geo_level == "whole_country") {
         df
       } else if (geo_level == "region") {
-        df %>% filter(RegionCode %in% regions)
+        df %>% filter(RegionCode %in% region)
       } else if (geo_level == "LA") {
         df %>% filter(LACode %in% LA)
       } else if (geo_level == "parlcon") {
@@ -64,13 +64,13 @@ render_tseries <- function(years, df_send,
   if (type == "Academisation") {
     render_tseries_academ(
       years, df_send,
-      geo_level = geo_level, LA = LA, regions = regions,
+      geo_level = geo_level, LA = LA, region = region,
       scales_free = scales_free, facetted = facetted)
   } else {
     render_tseries_sen(
       years, df_send,
       sen_type = sen_type,
-      geo_level = geo_level, LA = LA, regions = regions,
+      geo_level = geo_level, LA = LA, region = region,
       scales_free = scales_free, facetted = facetted)
   }
 }

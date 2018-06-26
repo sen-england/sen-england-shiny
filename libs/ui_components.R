@@ -120,11 +120,12 @@ controls_tseries <- box(
                 "Local Authority level" = "LA",
                 "Parliamentary Constituency level" = "parlcon"),
     selected = "whole_country"),
-  checkboxGroupInput(
-    inputId = "tseries_regions",
-    label = "Choose region(s)",
+  selectInput(
+    inputId = "tseries_region",
+    label = "Choose region",
     choices = cand_region,
-    selected = cand_region),
+    selected = cand_region,
+    multiple = FALSE),
   selectInput(
     inputId = "tseries_la",
     label = "Choose local authority",

@@ -132,7 +132,7 @@ server <- function(input, output) {
       scales_free = input$tseries_scales_free,
       facetted = input$tseries_facetted,
       geo_level = input$tseries_geo_level,
-      regions = input$tseries_regions,
+      region = input$tseries_region,
       LA = input$tseries_la,
       parlcon = input$tseries_parlcon))
   }
