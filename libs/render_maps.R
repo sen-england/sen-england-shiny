@@ -65,17 +65,11 @@ render_map <- function(year, shape, df_send,
   type <- match.arg(type)
   level <- match.arg(level)
 
-  shape <- withProgress(
-    summarise_map_df(df_send, shape, year, type, level, sen_type),
-    message = "Collecting data...")
+  shape <- summarise_map_df(df_send, shape, year, type, level, sen_type)
 
   if (type == "Academisation") {
-    withProgress(
-      render_map_academ(year, shape, auto_breaks),
-      message = "Rendering maps...")
+    render_map_academ(year, shape, auto_breaks)
   } else {
-    withProgress(
-      render_map_sen(year, shape, sen_type, auto_breaks),
-      message = "Rendering maps...")
+    render_map_sen(year, shape, sen_type, auto_breaks)
   }
 }

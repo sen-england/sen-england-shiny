@@ -166,7 +166,9 @@ server <- function(input, output) {
   spawn_maps <- function(prefix) {
     eventReactive(input[[glue("{prefix}_render")]], {
       if (input[[glue("{prefix}_render")]] > 0) {
-        do.call(render_map, get_params_maps(prefix))
+        withProgress(
+          do.call(render_map, get_params_maps(prefix)),
+          message = "Rendering maps...")
       } else {
         leaflet() %>% addTiles() %>%
           # Q-Step Building
