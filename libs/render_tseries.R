@@ -41,15 +41,12 @@ render_tseries_academ <- function(years, df_send,
 
 
 render_tseries <- function(years, df_send,
-                           LA,
+                           regions, LA, parlcon,
                            geo_level = "whole_country",
                            type = c("Academisation", "SEN"),
                            scales_free = FALSE,
                            facetted = FALSE,
-                           sen_type = c("SEN_Support", "Statement_EHC_Plan"),
-                           regions = c("E12000007", "E12000003", "E12000009",
-                                       "E12000006", "E12000005", "E12000002",
-                                       "E12000008", "E12000001", "E12000004")) {
+                           sen_type = c("SEN_Support", "Statement_EHC_Plan")) {
   type <- match.arg(type)
   df_send <- df_send %>% filter(between(Year, years[1], years[2])) %>%
     (function(df) {
@@ -57,8 +54,10 @@ render_tseries <- function(years, df_send,
         df
       } else if (geo_level == "region") {
         df %>% filter(RegionCode %in% regions)
-      } else if (geo_level == "la") {
+      } else if (geo_level == "LA") {
         df %>% filter(LACode %in% LA)
+      } else if (geo_level == "parlcon") {
+        df %>% filter(ParlConCode %in% parlcon)
       }
     }) %>%
     collect()

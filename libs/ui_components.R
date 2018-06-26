@@ -117,7 +117,8 @@ controls_tseries <- box(
     label = "Choose geographical level",
     choices = c("England" = "whole_country",
                 "Region level" = "region",
-                "Local Authority level" = "la"),
+                "Local Authority level" = "LA",
+                "Parliamentary Constituency level" = "parlcon"),
     selected = "whole_country"),
   checkboxGroupInput(
     inputId = "tseries_regions",
@@ -130,6 +131,13 @@ controls_tseries <- box(
     choices = cand_la,
     # Devon
     selected = "E10000008",
+    multiple = FALSE),
+  selectInput(
+    inputId = "tseries_parlcon",
+    label = "Choose parliamentary constituency",
+    choices = cand_parlcon,
+    # East Devon
+    selected = "E14000678",
     multiple = FALSE),
   sliderInput(
     inputId = "tseries_years", label = "Select Years",

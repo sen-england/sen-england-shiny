@@ -57,6 +57,8 @@ cand_la <- cand_la_tbl %>%
   select(LAName, LACode) %>% distinct() %>% deframe()
 cand_region <- cand_la_tbl %>%
   select(RegionName, RegionCode) %>% distinct() %>% deframe()
+cand_parlcon <- read_csv("data/region-info/parlcon-info.csv",
+                         col_types = c("cc")) %>% deframe()
 
 message(glue("{Sys.time()}, finished loading assets"))
 
@@ -131,7 +133,8 @@ server <- function(input, output) {
       facetted = input$tseries_facetted,
       geo_level = input$tseries_geo_level,
       regions = input$tseries_regions,
-      LA = input$tseries_la))
+      LA = input$tseries_la,
+      parlcon = input$tseries_parlcon))
   }
   output$tseries_a <- renderPlotly(spawn_tseries("tseries_a",
                                                  "Academisation"))
