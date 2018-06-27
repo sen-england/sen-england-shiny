@@ -115,7 +115,7 @@ controls_tseries <- box(
     inputId = "tseries_region",
     label = "Choose region",
     choices = cand_region,
-    selected = cand_region,
+    selected = "E12000009",
     multiple = FALSE),
   selectInput(
     inputId = "tseries_la",
