@@ -24,7 +24,8 @@ dashboardHeaderHack <- function (..., title = NULL, longtitle = NULL,
 }
 dsb_header <- dashboardHeaderHack(
   title = "SEN & academisation",
-  longtitle = "Inclusion of pupils with Special Educational Needs and the academisation of English schools")
+  longtitle = paste0("Inclusion of pupils with Special Educational Needs",
+                     " and the academisation of English schools"))
 
 # ==== Sidebar ====
 
