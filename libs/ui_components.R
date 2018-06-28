@@ -14,7 +14,6 @@ docs_info <- div(
 - [UK Data Service: Boundary Datasets](https://borders.ukdataservice.ac.uk/easy_download.html)
 ")))
 controls_global <- p(
-  fmt_html("Global settings that affect all widgets."),
   checkboxGroupInput(
     inputId = "global_phase", label = "Education phase",
     choices = cand_phases, selected = cand_phases,
