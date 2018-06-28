@@ -8,8 +8,11 @@ docs_info <- div(
   h6("Developed: ", a(href = "https://github.com/YiLiu6240",
                       "Dr Yi Liu")),
   h6("Data sources: ",
-     a(href = "https://www.gov.uk/government/collections/statistics-special-educational-needs-sen", "SEND"),
-     a(href = "https://borders.ukdataservice.ac.uk/easy_download.html", "UK data service")))
+     format_markdown("
+
+- [DfE Statistics: SEND](https://www.gov.uk/government/collections/statistics-special-educational-needs-sen);
+- [UK Data Service: Boundary Datasets](https://borders.ukdataservice.ac.uk/easy_download.html)
+")))
 controls_global <- p(
   fmt_html("Global settings that affect all widgets."),
   checkboxGroupInput(
