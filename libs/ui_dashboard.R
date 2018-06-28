@@ -32,7 +32,10 @@ dsb_header <- dashboardHeaderHack(
 dsb_sidebar <- dashboardSidebar(
   sidebarMenu(
     id = "tabs",
-    h3(icon("list-alt", lib = "glyphicon"), "Topics"),
+    menuItem(
+      "Tutorial",
+      icon = icon("github"),
+      href = "https://sen-england.github.io/post/2018-06-26-shiny-prototype/"),
     menuItem(
       params$tabs$primary, tabName = dsb_id_primary,
       icon = icon("tachometer")),
