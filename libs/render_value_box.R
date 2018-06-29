@@ -47,10 +47,9 @@ render_box_pct_sen <- function(df_send, sen_type) {
     (function(df){
       if (identical(sen_type,
                     c("SEN_Support", "Statement_EHC_Plan"))) {
-        df %>% gather(Type, Value,
-                      SEN_Support,
-                      Statement_EHC_Plan) %>%
-          summarise(pct = sum(Value, na.rm = TRUE) /
+        df %>%
+          summarise(pct = (sum(SEN_Support, na.rm = TRUE) +
+                             sum(Statement_EHC_Plan, na.rm = TRUE)) /
                       sum(TotalPupils, na.rm = TRUE) * 100)
       } else if (sen_type == "Statement_EHC_Plan") {
         df %>%
