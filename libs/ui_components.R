@@ -86,7 +86,7 @@ panel_primary <- fluidRow(
              plotlyOutput("primary_sen")))
 )
 
-# ==== tseries components ===
+# ==== tseries components ====
 docs_tseries <- box(
   title = tagList(icon("line-chart"), params$tabs$tseries),
   collapsible = TRUE, solidHeader = TRUE, collapsed = FALSE,
