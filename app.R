@@ -117,9 +117,11 @@ server <- function(input, output) {
   output$primary_box_total_schools <- renderValueBox(
     render_box_total_schools(df_send()))
   output$primary_box_ca <- renderValueBox(
-    render_box_ca(df_send()))
+    render_box_by_route(df_send(),
+                        "converter academy", "converter academies"))
   output$primary_box_sa <- renderValueBox(
-    render_box_sa(df_send()))
+    render_box_by_route(df_send(),
+                        "sponsored academy", "sponsored academies"))
 
   # ---- tseries components ----
   spawn_tseries <- function(prefix = "tseries_a", type = "Academisation") {

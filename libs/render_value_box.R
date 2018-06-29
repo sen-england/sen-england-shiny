@@ -83,12 +83,19 @@ render_box_total_schools <- function(df_send) {
     color = "red")
 }
 
-render_box_ca <- function(df_send) {
+render_box_by_route <- function(df_send,
+                                route = c("converter academy",
+                                          "sponsored academy"),
+                                label = c("converter academies",
+                                          "sponsored academies")) {
+  route <- match.arg(route)
+  label <- match.arg(label)
+
   value <- df_send %>%
     filter(Year == 2017) %>%
     select(TypeAcademy) %>% collect() %>%
     summarise(
-      n = sum(TypeAcademy == "converter academy"),
+      n = sum(TypeAcademy == route),
       pct = n / n() * 100) %>%
     mutate(value = sprintf("%s (%.1f%%)",
                            format(n, big.mark = ","),
@@ -97,26 +104,7 @@ render_box_ca <- function(df_send) {
 
   valueBox(
     value = value,
-    "Total number of converter academies, 2017",
-    icon = icon("building"),
-    color = "yellow")
-}
-
-render_box_sa <- function(df_send) {
-  value <- df_send %>%
-    filter(Year == 2017) %>%
-    select(TypeAcademy) %>% collect() %>%
-    summarise(
-      n = sum(TypeAcademy == "sponsored academy"),
-      pct = n / n() * 100) %>%
-    mutate(value = sprintf("%s (%.1f%%)",
-                           format(n, big.mark = ","),
-                           pct)) %>%
-    pull(value)
-
-  valueBox(
-    value = value,
-    "Total number of sponsored academies, 2017",
+    glue("Total number of {label}, 2017"),
     icon = icon("building"),
     color = "yellow")
 }
