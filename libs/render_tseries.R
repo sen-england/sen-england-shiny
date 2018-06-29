@@ -3,10 +3,11 @@ render_tseries_sen <- function(years, df_send, sen_type,
                                scales_free, facetted,
                                palette = "Set1") {
   p <- df_send %>%
-    summarise_sen_tseries(
+    summarise_sen(
       sen_type = sen_type,
       by = if (facetted) c("Year", "TypeGeneral") else c("Year"),
-      multiplier = TRUE) %>%
+      multiplier = TRUE,
+      by_sen_type = TRUE) %>%
     ggplot(aes(x = Year, y = SEN,
                group = TypeSEN, color = TypeSEN)) +
     geom_line() + geom_point() +
@@ -24,9 +25,10 @@ render_tseries_academ <- function(years, df_send,
                                   scales_free, facetted,
                                   palette = "Set2") {
   p <- df_send %>%
-    summarise_academ_tseries(
+    summarise_academ(
       by = if (facetted) c("Year", "TypeGeneral") else c("Year"),
-      multiplier = TRUE) %>%
+      multiplier = TRUE,
+      by_academisation_route = TRUE) %>%
     ggplot(aes(x = Year, y = Academies,
                group = TypeAcademy, color = TypeAcademy)) +
     geom_line() + geom_point() +

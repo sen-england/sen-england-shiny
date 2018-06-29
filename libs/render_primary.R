@@ -3,8 +3,9 @@ render_primary_academ <- function(df_send,
   df_send %>%
     select(Year, IsAcademy, TypeAcademy) %>%
     collect() %>%
-    summarise_academ_tseries(
-      by = "Year", TRUE) %>%
+    summarise_academ(
+      by = "Year", multiplier = TRUE,
+      by_academisation_route = TRUE) %>%
     ggplot(aes(x = Year, y = Academies,
                group = TypeAcademy, color = TypeAcademy)) +
     facet_wrap(~ TypeAcademy, scales = "fixed", ncol = 1) +
@@ -21,9 +22,9 @@ render_primary_sen <- function(df_send, sen_type,
     select(Year, TotalPupils,
            SEN_Support, Statement_EHC_Plan) %>%
     collect() %>%
-    summarise_sen_tseries(
-      sen_type = sen_type,
-      by = "Year", TRUE) %>%
+    summarise_sen(
+      sen_type = sen_type, by = "Year",
+      multiplier = TRUE, by_sen_type = TRUE) %>%
     ggplot(aes(x = Year, y = SEN,
                group = TypeSEN, color = TypeSEN)) +
     facet_wrap(~ TypeSEN, scales = "fixed", ncol = 1) +
