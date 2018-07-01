@@ -35,7 +35,7 @@ dsb_sidebar <- dashboardSidebar(
     menuItem(
       "Tutorial",
       icon = icon("github"),
-      href = "https://sen-england.github.io/post/2018-06-26-shiny-prototype/"),
+      href = params$docs$site),
     menuItem(
       params$tabs$primary, tabName = dsb_id_primary,
       icon = icon("tachometer")),

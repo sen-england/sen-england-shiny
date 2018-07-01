@@ -3,8 +3,8 @@ docs_global <- div()
 docs_info <- div(
   h6("Project website: ", a(href = "https://sen-england.github.io",
                             "Github Pages")),
-  h6("Usage tutorials: ", a(href = "https://sen-england.github.io/post/2018-06-26-shiny-prototype/",
-                            "Blog post")),
+  h6("Usage tutorials: ", a(href = params$docs$site,
+                            "Documentation")),
   h6("Developed: ", a(href = "https://github.com/YiLiu6240",
                       "Dr Yi Liu")),
   h6("Data sources: ",
@@ -35,16 +35,16 @@ docs_primary <- box(
   title = tagList(icon("tachometer"), params$tabs$primary),
   collapsible = TRUE, solidHeader = TRUE, collapsed = FALSE,
   status = "success", width = NULL,
-  format_markdown("
+  format_markdown(glue("
 General overview regarding the academisation of English schools
 and the inclusion of pupils of special educational needs.
 
 Change options in `Global settings` in the sidebar to update the charts.
 
-For tutorials please see the [blog post](https://sen-england.github.io/post/2018-06-26-shiny-prototype/).
+For tutorials please see the [documentation]({params$docs$site}).
 
 Press the ` - ` button in the upper right hand to collapse this widget.
-"))
+")))
 panel_primary <- fluidRow(
   column(width = 8,
          box(
