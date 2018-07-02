@@ -71,14 +71,12 @@ source("libs/ui_dashboard.R", local = TRUE)
 server <- function(input, output) {
 
   # ---- Deferred loading of assets ----
-  england_la <- eventReactive(input$tabs == dsb_id_maps, {
-    print(glue("{Sys.time()}, loading shape file for LA"))
+  england_la <- reactive({
     data_conf$england_la %>% rgdal::readOGR(verbose = FALSE)
   })
-  england_parlcon <- eventReactive(input$tabs == dsb_id_maps, {
-      print(glue("{Sys.time()}, loading shape file for ParlCon"))
-      data_conf$england_parlcon %>% rgdal::readOGR(verbose = FALSE)
-    })
+  england_parlcon <- reactive({
+    data_conf$england_parlcon %>% rgdal::readOGR(verbose = FALSE)
+  })
 
   # ---- global params ----
   df_send <- reactive({
