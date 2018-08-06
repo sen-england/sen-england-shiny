@@ -1,4 +1,3 @@
-#### -- Packrat Autoloader (version 0.4.9-2) -- ####
+#### -- Packrat Autoloader (version 0.4.9-3) -- ####
 source("packrat/init.R")
-packrat::set_opts(auto.snapshot = FALSE)
 #### -- End Packrat Autoloader -- ####
