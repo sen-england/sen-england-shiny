@@ -1,8 +1,9 @@
-render_box_total_pupils <- function(df_send, sen_type) {
-  value <- df_send %>%
-    filter(Year == 2017) %>%
-    pull(TotalPupils) %>% sum(na.rm = TRUE) %>%
-    format(big.mark = ",")
+render_box_total_pupils <- function(df) {
+  value <- df %>%
+    filter(TypeSEN == "AllSEN") %>%
+    summarise_at(vars(TotalPupils), sum, na.rm = TRUE) %>%
+    collect() %>%
+    pull(TotalPupils) %>% format(big.mark = ",")
 
   valueBox(
     value = value,
@@ -11,69 +12,43 @@ render_box_total_pupils <- function(df_send, sen_type) {
     color = "blue")
 }
 
-render_box_total_sen <- function(df_send, sen_type) {
-  value <- df_send %>%
-    filter(Year == 2017) %>%
-    select(SEN_Support, Statement_EHC_Plan) %>%
+render_box_sen <- function(df, sen_type,
+                           value_type = c("total_number",
+                                          "percent")) {
+  value_type <- match.arg(value_type)
+  # sen_type can be "SEN_Support", "Statement_EHC_Plan", and both
+  sen_type_in_df <- ifelse(identical(sen_type, c("SEN_Support",
+                                                 "Statement_EHC_Plan")),
+                           "AllSEN", sen_type)
+  value <- df %>% filter(TypeSEN == sen_type_in_df) %>%
+    select(TotalPupils, TotalNumberSEN) %>%
+    summarise_at(vars(TotalPupils, TotalNumberSEN), sum, na.rm = TRUE) %>%
     collect() %>%
-    (function(df){
-      if (identical(sen_type,
-                    c("SEN_Support", "Statement_EHC_Plan"))) {
-        df %>% gather(Type, Value,
-                      SEN_Support,
-                      Statement_EHC_Plan) %>%
-          pull(Value)
-      } else if (sen_type == "Statement_EHC_Plan") {
-        df %>% pull(Statement_EHC_Plan)
+    (function(df) {
+      if (value_type == "total_number") {
+        res <- df %>%
+          pull(TotalNumberSEN) %>% format(big.mark = ",")
       } else {
-        df %>% pull(SEN_Support)
+        res <- df %>%
+          mutate(pct = TotalNumberSEN / TotalPupils * 100) %>%
+          pull(pct) %>% sprintf("%.1f%%", .)
       }
-    }) %>%
-    sum(na.rm = TRUE) %>%
-    format(big.mark = ",")
+      res
+    })
 
+  value_type_str <- if_else(value_type == "total_number",
+                            "Total number", "Percentage")
   valueBox(
     value = value,
-    "Total number of pupils with SEN, 2017",
+    glue("{value_type_str} of pupils with SEN, 2017"),
     icon = icon("users"),
     color = "green")
 }
 
-render_box_pct_sen <- function(df_send, sen_type) {
-  value <- df_send %>%
-    filter(Year == 2017) %>%
-    select(SEN_Support, Statement_EHC_Plan, TotalPupils) %>%
-    collect() %>%
-    (function(df){
-      if (identical(sen_type,
-                    c("SEN_Support", "Statement_EHC_Plan"))) {
-        df %>%
-          summarise(pct = (sum(SEN_Support, na.rm = TRUE) +
-                             sum(Statement_EHC_Plan, na.rm = TRUE)) /
-                      sum(TotalPupils, na.rm = TRUE) * 100)
-      } else if (sen_type == "Statement_EHC_Plan") {
-        df %>%
-          summarise(pct = sum(Statement_EHC_Plan, na.rm = TRUE) /
-                      sum(TotalPupils, na.rm = TRUE) * 100)
-      } else {
-        df %>%
-          summarise(pct = sum(SEN_Support, na.rm = TRUE) /
-                      sum(TotalPupils, na.rm = TRUE) * 100)
-      }
-    }) %>% pull(pct) %>%
-    sprintf("%.1f%%", .)
-
-  valueBox(
-    value = value,
-    "Percentage of pupils with SEN, 2017",
-    icon = icon("users"),
-    color = "green")
-}
-
-render_box_total_schools <- function(df_send) {
-  value <- df_send %>%
-    filter(Year == 2017) %>%
-    summarise(n = n()) %>% pull(n) %>%
+render_box_total_schools <- function(df) {
+  value <- df %>%
+    summarise_at(vars(TotalNumberSchools), sum, na.rm = TRUE) %>%
+    collect() %>% pull(TotalNumberSchools) %>%
     format(big.mark = ",")
 
   valueBox(
@@ -83,24 +58,30 @@ render_box_total_schools <- function(df_send) {
     color = "red")
 }
 
-render_box_by_route <- function(df_send,
+render_box_by_route <- function(df,
                                 route = c("converter academy",
-                                          "sponsored academy"),
-                                label = c("converter academies",
-                                          "sponsored academies")) {
+                                          "sponsored academy")) {
   route <- match.arg(route)
-  label <- match.arg(label)
+  label <- if_else(route == "converter academy",
+                   "converter academies",
+                   "sponsored academies")
 
-  value <- df_send %>%
-    filter(Year == 2017) %>%
-    select(TypeAcademy) %>% collect() %>%
-    summarise(
-      n = sum(TypeAcademy == route),
-      pct = n / n() * 100) %>%
-    mutate(value = sprintf("%s (%.1f%%)",
-                           format(n, big.mark = ","),
+  value <- df %>%
+    summarise_at(vars(TotalNumberSchools,
+                      TotalNumberCA,
+                      TotalNumberSA), sum, na.rm = TRUE) %>%
+    collect() %>% (function(df) {
+    if (route == "converter academy") {
+      df %>% mutate(num = TotalNumberCA)
+    } else {
+      df %>% mutate(num = TotalNumberSA)
+    }
+  }) %>%
+    mutate(pct = num / TotalNumberSchools * 100,
+           label = sprintf("%s (%.1f%%)",
+                           format(num, big.mark = ","),
                            pct)) %>%
-    pull(value)
+    pull(label)
 
   valueBox(
     value = value,

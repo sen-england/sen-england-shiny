@@ -1,4 +1,5 @@
 message(sprintf("%s, start loading packages", Sys.time()))
+library("magrittr")
 library("dplyr")
 library("dbplyr")
 library("purrr")
@@ -25,15 +26,23 @@ source("libs/render_maps.R", local = TRUE)
 message(glue("{Sys.time()}, start loading assets"))
 data_conf <- config::get("data")
 send_db_conf <- data_conf$send_db
+preproc_conf <- data_conf$preprocess
 params <- config::get("params")
 
 # Load the datasets
 send_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
   dbname = send_db_conf$db)
+preproc_db_conn <- DBI::dbConnect(
+  RSQLite::SQLite(),
+  dbname = preproc_conf$db)
 df_send_lazy <- send_db_conn %>%
   tbl(send_db_conf$tbl) %>%
   select(one_of(send_db_conf$vars))
+df_preproc_stats_sen <- preproc_db_conn %>%
+  tbl(preproc_conf$stats_sen)
+df_preproc_stats_schools <- preproc_db_conn %>%
+  tbl(preproc_conf$stats_schools)
 
 # Variables and candidates
 dsb_id_primary <- "primary"
@@ -85,8 +94,31 @@ server <- function(input, output) {
       filter(Phase %in% input$global_phase) %>%
       filter(TypeGeneral %in% input$global_type_schools)
   })
+  df_preproc_stats_sen <- reactive({
+    req(input$global_phase, input$global_type_sen)
+    preproc_db_conn %>%
+      tbl(preproc_conf$stats_sen) %>%
+      filter(Phase %in% input$global_phase) %>%
+      filter(TypeGeneral %in% input$global_type_schools)
+  })
+  df_preproc_stats_schools <- reactive({
+    req(input$global_phase, input$global_type_sen)
+    preproc_db_conn %>%
+      tbl(preproc_conf$stats_schools) %>%
+      filter(Phase %in% input$global_phase) %>%
+      filter(TypeGeneral %in% input$global_type_schools)
+  })
+  df_preproc_composition_schools <- reactive({
+    req(input$global_phase, input$global_type_sen)
+    preproc_db_conn %>%
+      tbl(preproc_conf$composition_schools) %>%
+      filter(Phase %in% input$global_phase) %>%
+      filter(TypeGeneral %in% input$global_type_schools)
+  })
+
 
   # ---- primary components ----
+  # ts plots
   output$primary_academ <- renderPlotly(
     ggplotly(render_primary_academ(
       df_send = df_send(), palette = params$academ$palette)))
@@ -94,32 +126,40 @@ server <- function(input, output) {
     ggplotly(render_primary_sen(
       df_send = df_send(), sen_type = input$global_type_sen,
       palette = params$sen$palette)))
-  output$primary_composition_n <- renderPlotly(
-    ggplotly(render_primary_composition(
-      df_send = df_send(), pct = FALSE,
+  # bar plots
+  output$primary_composition_schools_n <- renderPlotly(
+    ggplotly(render_primary_composition_schools(
+      df = df_preproc_composition_schools(), pct = FALSE,
       palette = params$academ$palette)))
-  output$primary_composition_pct <- renderPlotly(
-    ggplotly(render_primary_composition(
-      df_send = df_send(), pct = TRUE,
+  output$primary_composition_schools_pct <- renderPlotly(
+    ggplotly(render_primary_composition_schools(
+      df = df_preproc_composition_schools(), pct = TRUE,
       palette = params$academ$palette)))
+  # stats
+  # pupils
   output$primary_box_total_pupils <- renderValueBox(
     render_box_total_pupils(
-      df_send(), input$global_type_sen))
+      df = df_preproc_stats_sen()))
   output$primary_box_total_sen <- renderValueBox(
-    render_box_total_sen(
-      df_send(), input$global_type_sen))
+    render_box_sen(
+      df = df_preproc_stats_sen(),
+      sen_type = input$global_type_sen,
+      value_type = "total_number"))
   output$primary_box_pct_sen <- renderValueBox(
-    render_box_pct_sen(
-      df_send(), input$global_type_sen))
-
+    render_box_sen(
+      df = df_preproc_stats_sen(),
+      sen_type = input$global_type_sen,
+      value_type = "percent"))
+  # schools
   output$primary_box_total_schools <- renderValueBox(
-    render_box_total_schools(df_send()))
+    render_box_total_schools(
+      df = df_preproc_stats_schools()))
   output$primary_box_ca <- renderValueBox(
-    render_box_by_route(df_send(),
-                        "converter academy", "converter academies"))
+    render_box_by_route(df = df_preproc_stats_schools(),
+                        route = "converter academy"))
   output$primary_box_sa <- renderValueBox(
-    render_box_by_route(df_send(),
-                        "sponsored academy", "sponsored academies"))
+    render_box_by_route(df = df_preproc_stats_schools(),
+                        route = "sponsored academy"))
 
   # ---- tseries components ----
   spawn_tseries <- function(prefix = "tseries_a", type = "Academisation") {

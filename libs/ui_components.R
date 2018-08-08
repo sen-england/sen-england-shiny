@@ -66,13 +66,12 @@ panel_primary <- fluidRow(
                   valueBoxOutput("primary_box_sa",
                                  width = NULL))),
          tabBox(
-           title = "Composition of schools",
+           title = "Composition",
            tabPanel(
-             title = "Relative percentages",
-             plotlyOutput("primary_composition_pct")),
+             title = "schools: percentages",
+             plotlyOutput("primary_composition_schools_pct")),
            tabPanel(
-             title = "Absolute numbers",
-             plotlyOutput("primary_composition_n")),
+             title = "schools: numbers",
            width = NULL)),
   column(width = 4,
          docs_primary,
