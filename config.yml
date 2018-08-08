@@ -8,6 +8,10 @@ default:
       # driver: "SQLite3"
       db: "data/send-db/send.db"
       tbl: "SEND"
+      # Sample period information for preprocessing
+      periods:
+        first: 2011
+        last: 2017
       vars: [
       # ID vars
       "ID", "Year",
@@ -23,6 +27,12 @@ default:
       # Classification vars
       "TypeGeneral", "TypeAcademy", "Phase"
       ]
+    preprocess:
+      db: "data/preprocess.db"
+      stats_sen: "stats_SEN"
+      stats_schools: "stats_schools"
+      composition_sen: "composition_sen"
+      composition_schools: "composition_schools"
   params:
     docs:
       # Place of documentation
