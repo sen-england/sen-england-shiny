@@ -72,6 +72,13 @@ panel_primary <- fluidRow(
              plotlyOutput("primary_composition_schools_pct")),
            tabPanel(
              title = "schools: numbers",
+             plotlyOutput("primary_composition_schools_n")),
+           tabPanel(
+             title = "SEN: percentages",
+             plotlyOutput("primary_composition_sen_pct")),
+           tabPanel(
+             title = "SEN: numbers",
+             plotlyOutput("primary_composition_sen_n")),
            width = NULL)),
   column(width = 4,
          docs_primary,

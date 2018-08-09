@@ -51,7 +51,13 @@ preprocess_composition_schools <- function(df_main, data_conf) {
     collect()
 }
 
-preprocess_dashboard_ts_sen <- function(df_main) {
+preprocess_composition_sen <- function(df_main, data_conf) {
+  df_main %>%
+    filter(Year == data_conf$send_db$periods$last) %>%
+    select(TypeGeneral, Phase, TypeAcademy,
+           SEN_Support, Statement_EHC_Plan) %>%
+    collect() %>%
+    gather(TypeSEN, NumPupils, SEN_Support, Statement_EHC_Plan)
 }
 
 main <- function() {
@@ -89,6 +95,12 @@ main <- function() {
   df_main %>% preprocess_composition_schools(data_conf = data_conf) %T>%
     glimpse() %>%
     DBI::dbWriteTable(conn = conn, name = preproc_conf$composition_schools,
+                      value = ., overwrite = TRUE)
+  # composition_sen
+  cat(glue("Preprocessing `{preproc_conf$composition_sen}`"), "\n")
+  df_main %>% preprocess_composition_sen(data_conf = data_conf) %T>%
+    glimpse() %>%
+    DBI::dbWriteTable(conn = conn, name = preproc_conf$composition_sen,
                       value = ., overwrite = TRUE)
   # NOTE: the gains from preprocessing time-series summarisation are
   #       very minimal, and we do not preproc them ATM.

@@ -115,6 +115,13 @@ server <- function(input, output) {
       filter(Phase %in% input$global_phase) %>%
       filter(TypeGeneral %in% input$global_type_schools)
   })
+  df_preproc_composition_sen <- reactive({
+    req(input$global_phase, input$global_type_sen)
+    preproc_db_conn %>%
+      tbl(preproc_conf$composition_sen) %>%
+      filter(Phase %in% input$global_phase) %>%
+      filter(TypeGeneral %in% input$global_type_schools)
+  })
 
 
   # ---- primary components ----
@@ -135,6 +142,14 @@ server <- function(input, output) {
     ggplotly(render_primary_composition_schools(
       df = df_preproc_composition_schools(), pct = TRUE,
       palette = params$academ$palette)))
+  output$primary_composition_sen_n <- renderPlotly(
+    ggplotly(render_primary_composition_sen(
+      df = df_preproc_composition_sen(), pct = FALSE,
+      palette = params$sen$palette)))
+  output$primary_composition_sen_pct <- renderPlotly(
+    ggplotly(render_primary_composition_sen(
+      df = df_preproc_composition_sen(), pct = TRUE,
+      palette = params$sen$palette)))
   # stats
   # pupils
   output$primary_box_total_pupils <- renderValueBox(
