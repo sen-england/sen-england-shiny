@@ -282,6 +282,12 @@ Source: CRAN
 Version: 0.8-71
 Hash: ab59ff4cad00d4621acb535dae2c6410
 
+Package: future
+Source: CRAN
+Version: 1.9.0
+Hash: ac421904c51df04a1fbefbc59d97bdfb
+Requires: digest, globals, listenv
+
 Package: gdalUtils
 Source: CRAN
 Version: 2.0.1.14
@@ -337,6 +343,12 @@ Source: CRAN
 Version: 0.23.0
 Hash: f7190a7a4b5c5f0983b4b6ee29ed7bc3
 
+Package: globals
+Source: CRAN
+Version: 0.12.1
+Hash: 72e5984abc99a3411fb172404eecd580
+Requires: codetools
+
 Package: glue
 Source: CRAN
 Version: 1.3.0
@@ -382,10 +394,18 @@ Hash: 87bd72cdfc46f686bbd46b180cb5f0b5
 Requires: Rcpp, digest
 
 Package: htmlwidgets
-Source: CRAN
-Version: 1.2
-Hash: de18b75f31630089b22e30d4b188cfbe
+Source: github
+Version: 1.2.1
+Hash: ffdb0cc246a4a3b0bf6fb4b2b0f03f31
 Requires: htmltools, jsonlite, yaml
+GithubRepo: htmlwidgets
+GithubUsername: ramnathv
+GithubRef: master
+GithubSha1: 29ca4f7a81a34d934e2158294b7084192be763ce
+RemoteHost: https://api.github.com
+RemoteRepo: htmlwidgets
+RemoteUsername: ramnathv
+RemoteSha: 29ca4f7a81a34d934e2158294b7084192be763ce
 
 Package: httpuv
 Source: CRAN
@@ -443,6 +463,11 @@ Version: 2.0.1
 Hash: 68a9427d9ed7a1b724c23698278d51e1
 Requires: RColorBrewer, base64enc, crosstalk, htmltools, htmlwidgets,
     magrittr, markdown, png, raster, scales, sp, viridis
+
+Package: listenv
+Source: CRAN
+Version: 0.7.0
+Hash: f5e0d09f4e42d749ae0f893cff1817b6
 
 Package: lwgeom
 Source: CRAN
@@ -571,6 +596,12 @@ Source: CRAN
 Version: 3.1.0
 Hash: 3f3cd7b280ca226a53513cb41f5aab3d
 Requires: R6, assertthat, crayon, testthat
+
+Package: profvis
+Source: CRAN
+Version: 0.3.5
+Hash: 68abff8877b3d436602a124262b83efe
+Requires: htmlwidgets, stringr
 
 Package: promises
 Source: CRAN
