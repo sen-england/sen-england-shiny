@@ -56,6 +56,36 @@ render_map_sen <- function(year, shape, sen_type, auto_breaks = FALSE) {
   tmap::tmap_leaflet(map_sen_plot, mode = "view", show = TRUE)
 }
 
+render_map_academ_async <- function(year, shape, auto_breaks = FALSE) {
+  future({
+    tmap::tm_shape(shape[!is.na(shape$Academies), ]) +
+      tmap::tm_polygons("Academies", id = "name",
+                        palette = params$maps_academ$palette,
+                        breaks = if (auto_breaks) {
+                          NULL
+                        } else {
+                          params$maps_academ$breaks
+                        }) +
+        tmap::tm_legend(legend.format = list(fun = prop_to_pct))
+  }) %...>%
+    tmap::tmap_leaflet(mode = "view", show = TRUE)
+}
+
+render_map_sen_async <- function(year, shape, sen_type, auto_breaks = FALSE) {
+  future({
+    tmap::tm_shape(shape[!is.na(shape$SEN), ]) +
+      tmap::tm_polygons("SEN", id = "name",
+                        palette = params$maps_sen$palette,
+                        breaks = if (auto_breaks) {
+                          NULL
+                        } else {
+                          params$maps_sen$breaks
+                        }) +
+        tmap::tm_legend(legend.format = list(fun = prop_to_pct))
+  }) %...>%
+    tmap::tmap_leaflet(mode = "view", show = TRUE)
+}
+
 render_map <- function(year, shape, df_send,
                        type = c("Academisation", "SEN"),
                        geo_level = c("LA", "ParlCon"),
@@ -68,8 +98,8 @@ render_map <- function(year, shape, df_send,
   shape <- summarise_map_df(df_send, shape, year, type, geo_level, sen_type)
 
   if (type == "Academisation") {
-    render_map_academ(year, shape, auto_breaks)
+    render_map_academ_async(year, shape, auto_breaks)
   } else {
-    render_map_sen(year, shape, sen_type, auto_breaks)
+    render_map_sen_async(year, shape, sen_type, auto_breaks)
   }
 }
