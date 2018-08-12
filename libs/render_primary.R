@@ -1,38 +1,40 @@
-render_primary_academ <- function(df_send,
-                                  palette = "Set2") {
-  df_send %>%
+render_primary_academ <- function(df, palette = "Set2") {
+  df %>%
     select(Year, IsAcademy, TypeAcademy) %>%
     collect() %>%
     summarise_academ(
       by = "Year", multiplier = TRUE,
-      by_academisation_route = TRUE) %>%
-    ggplot(aes(x = Year, y = Academies,
-               group = TypeAcademy, color = TypeAcademy)) +
-    facet_wrap(~ TypeAcademy, scales = "fixed", ncol = 1) +
-    geom_line() + geom_point() +
-    scale_color_brewer(palette = palette) +
-    theme(legend.position = "none",
-          axis.title.y = element_blank(),
-          axis.title.x = element_blank())
+      by_academisation_route = TRUE) %>% {
+        ggplot(., aes(x = Year, y = Academies,
+                      group = TypeAcademy, color = TypeAcademy)) +
+          facet_wrap(~ TypeAcademy, scales = "fixed", ncol = 1) +
+          geom_line() + geom_point() +
+          scale_color_brewer(palette = palette) +
+          theme(legend.position = "none",
+                axis.title.y = element_blank(),
+                axis.title.x = element_blank())
+      } %>%
+    ggplotly()
 }
 
-render_primary_sen <- function(df_send, sen_type,
-                               palette = "Set1") {
-  df_send %>%
+render_primary_sen <- function(df, sen_type, palette = "Set1") {
+  df %>%
     select(Year, TotalPupils,
            SEN_Support, Statement_EHC_Plan) %>%
     collect() %>%
     summarise_sen(
       sen_type = sen_type, by = "Year",
-      multiplier = TRUE, by_sen_type = TRUE) %>%
-    ggplot(aes(x = Year, y = SEN,
-               group = TypeSEN, color = TypeSEN)) +
-    facet_wrap(~ TypeSEN, scales = "fixed", ncol = 1) +
-    geom_line() + geom_point() +
-    scale_color_brewer(palette = palette) +
-    theme(legend.position = "none",
-          axis.title.y = element_blank(),
-          axis.title.x = element_blank())
+      multiplier = TRUE, by_sen_type = TRUE) %>% {
+        ggplot(., aes(x = Year, y = SEN,
+                      group = TypeSEN, color = TypeSEN)) +
+          facet_wrap(~ TypeSEN, scales = "fixed", ncol = 1) +
+          geom_line() + geom_point() +
+          scale_color_brewer(palette = palette) +
+          theme(legend.position = "none",
+                axis.title.y = element_blank(),
+                axis.title.x = element_blank())
+      } %>%
+    ggplotly()
 }
 
 render_primary_composition_schools <- function(df, pct = FALSE,
@@ -77,7 +79,7 @@ render_primary_composition_schools <- function(df, pct = FALSE,
       axis.text.y = element_text(angle = 270)) +
     scale_fill_brewer(palette = palette) +
     labs(title = "Composition of schools, academic year 2016/2017")
-  p
+  ggplotly(p)
 }
 
 render_primary_composition_sen <- function(df, pct = FALSE,
@@ -124,5 +126,5 @@ render_primary_composition_sen <- function(df, pct = FALSE,
       axis.text.y = element_text(angle = 270)) +
     scale_fill_brewer(palette = palette) +
     labs(title = "Composition of SEN pupils, academic year 2016/2017")
-  p
+  ggplotly(p)
 }

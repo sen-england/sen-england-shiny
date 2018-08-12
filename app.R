@@ -123,33 +123,7 @@ server <- function(input, output) {
       filter(TypeGeneral %in% input$global_type_schools)
   })
 
-
   # ---- primary components ----
-  # ts plots
-  output$primary_academ <- renderPlotly(
-    ggplotly(render_primary_academ(
-      df_send = df_send(), palette = params$academ$palette)))
-  output$primary_sen <- renderPlotly(
-    ggplotly(render_primary_sen(
-      df_send = df_send(), sen_type = input$global_type_sen,
-      palette = params$sen$palette)))
-  # bar plots
-  output$primary_composition_schools_n <- renderPlotly(
-    ggplotly(render_primary_composition_schools(
-      df = df_preproc_composition_schools(), pct = FALSE,
-      palette = params$academ$palette)))
-  output$primary_composition_schools_pct <- renderPlotly(
-    ggplotly(render_primary_composition_schools(
-      df = df_preproc_composition_schools(), pct = TRUE,
-      palette = params$academ$palette)))
-  output$primary_composition_sen_n <- renderPlotly(
-    ggplotly(render_primary_composition_sen(
-      df = df_preproc_composition_sen(), pct = FALSE,
-      palette = params$sen$palette)))
-  output$primary_composition_sen_pct <- renderPlotly(
-    ggplotly(render_primary_composition_sen(
-      df = df_preproc_composition_sen(), pct = TRUE,
-      palette = params$sen$palette)))
   # stats
   # pupils
   output$primary_box_total_pupils <- renderValueBox(
@@ -175,6 +149,37 @@ server <- function(input, output) {
   output$primary_box_sa <- renderValueBox(
     render_box_by_route(df = df_preproc_stats_schools(),
                         route = "sponsored academy"))
+  # ts plots
+  output$primary_academ <- renderPlotly({
+    df_send() %>%
+      render_primary_academ(palette = params$academ$palette)
+  })
+  output$primary_sen <- renderPlotly({
+    df_send() %>%
+      render_primary_sen(sen_type = input$global_type_sen,
+                               palette = params$sen$palette)
+  })
+  # bar plots
+  output$primary_composition_schools_n <- renderPlotly({
+    df_preproc_composition_schools() %>%
+      render_primary_composition_schools(
+        pct = FALSE, palette = params$academ$palette)
+  })
+  output$primary_composition_schools_pct <- renderPlotly({
+    df_preproc_composition_schools() %>%
+      render_primary_composition_schools(
+        pct = TRUE, palette = params$academ$palette)
+  })
+  output$primary_composition_sen_n <- renderPlotly({
+    df_preproc_composition_sen() %>%
+      render_primary_composition_sen(
+        pct = FALSE, palette = params$sen$palette)
+  })
+  output$primary_composition_sen_pct <- renderPlotly({
+    df_preproc_composition_sen() %>%
+      render_primary_composition_sen(
+        pct = TRUE, palette = params$sen$palette)
+  })
 
   # ---- tseries components ----
   spawn_tseries <- function(prefix = "tseries_a", type = "Academisation") {
