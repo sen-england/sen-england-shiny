@@ -12,8 +12,6 @@ library("stringr")
 library("glue")
 library("shiny")
 library("shinydashboard")
-library("leaflet")
-library("plotly")
 options(stringsAsFactors = FALSE)
 
 source("libs/common.R", local = TRUE)
@@ -150,32 +148,32 @@ server <- function(input, output) {
     render_box_by_route(df = df_preproc_stats_schools(),
                         route = "sponsored academy"))
   # ts plots
-  output$primary_academ <- renderPlotly({
+  output$primary_academ <- plotly::renderPlotly({
     df_send() %>%
       render_primary_academ(palette = params$academ$palette)
   })
-  output$primary_sen <- renderPlotly({
+  output$primary_sen <- plotly::renderPlotly({
     df_send() %>%
       render_primary_sen(sen_type = input$global_type_sen,
                                palette = params$sen$palette)
   })
   # bar plots
-  output$primary_composition_schools_n <- renderPlotly({
+  output$primary_composition_schools_n <- plotly::renderPlotly({
     df_preproc_composition_schools() %>%
       render_primary_composition_schools(
         pct = FALSE, palette = params$academ$palette)
   })
-  output$primary_composition_schools_pct <- renderPlotly({
+  output$primary_composition_schools_pct <- plotly::renderPlotly({
     df_preproc_composition_schools() %>%
       render_primary_composition_schools(
         pct = TRUE, palette = params$academ$palette)
   })
-  output$primary_composition_sen_n <- renderPlotly({
+  output$primary_composition_sen_n <- plotly::renderPlotly({
     df_preproc_composition_sen() %>%
       render_primary_composition_sen(
         pct = FALSE, palette = params$sen$palette)
   })
-  output$primary_composition_sen_pct <- renderPlotly({
+  output$primary_composition_sen_pct <- plotly::renderPlotly({
     df_preproc_composition_sen() %>%
       render_primary_composition_sen(
         pct = TRUE, palette = params$sen$palette)
@@ -183,7 +181,7 @@ server <- function(input, output) {
 
   # ---- tseries components ----
   spawn_tseries <- function(prefix = "tseries_a", type = "Academisation") {
-    ggplotly(render_tseries(
+    plotly::ggplotly(render_tseries(
       # years = input[[glue("{prefix}_years")]],
       years = input$tseries_years,
       df_send = df_send(),
@@ -196,9 +194,9 @@ server <- function(input, output) {
       LA = input$tseries_la,
       parlcon = input$tseries_parlcon))
   }
-  output$tseries_a <- renderPlotly(spawn_tseries("tseries_a",
+  output$tseries_a <- plotly::renderPlotly(spawn_tseries("tseries_a",
                                                  "Academisation"))
-  output$tseries_b <- renderPlotly(spawn_tseries("tseries_b",
+  output$tseries_b <- plotly::renderPlotly(spawn_tseries("tseries_b",
                                                  "SEN"))
 
   # ---- maps components ----
@@ -233,11 +231,12 @@ server <- function(input, output) {
           do.call(render_map, get_params_maps(prefix)),
           message = "Rendering maps...")
       } else {
-        leaflet() %>% addTiles() %>%
+        leaflet::leaflet() %>%
+          leaflet::addTiles() %>%
           # Q-Step Building
-          setView(lng = params$maps_gen$default_lng,
-                  lat = params$maps_gen$default_lat,
-                  zoom = params$maps_gen$default_zoom)
+          leaflet::setView(lng = params$maps_gen$default_lng,
+                           lat = params$maps_gen$default_lat,
+                           zoom = params$maps_gen$default_zoom)
       }
     },
     ignoreNULL = FALSE)
@@ -245,8 +244,8 @@ server <- function(input, output) {
 
   maps_a_ui_status <- reactiveVal("primary")
   maps_b_ui_status <- reactiveVal("primary")
-  output$maps_a <- renderLeaflet(spawn_maps("maps_a")())
-  output$maps_b <- renderLeaflet(spawn_maps("maps_b")())
+  output$maps_a <- leaflet::renderLeaflet(spawn_maps("maps_a")())
+  output$maps_b <- leaflet::renderLeaflet(spawn_maps("maps_b")())
   output$maps_a_ui <- renderUI(maps_ui_single(
     "maps_a", "A", "Academisation",
     box_status = maps_a_ui_status(),

@@ -14,7 +14,7 @@ render_primary_academ <- function(df, palette = "Set2") {
                 axis.title.y = element_blank(),
                 axis.title.x = element_blank())
       } %>%
-    ggplotly()
+    plotly::ggplotly()
 }
 
 render_primary_sen <- function(df, sen_type, palette = "Set1") {
@@ -34,7 +34,7 @@ render_primary_sen <- function(df, sen_type, palette = "Set1") {
                 axis.title.y = element_blank(),
                 axis.title.x = element_blank())
       } %>%
-    ggplotly()
+    plotly::ggplotly()
 }
 
 render_primary_composition_schools <- function(df, pct = FALSE,
@@ -79,7 +79,7 @@ render_primary_composition_schools <- function(df, pct = FALSE,
       axis.text.y = element_text(angle = 270)) +
     scale_fill_brewer(palette = palette) +
     labs(title = "Composition of schools, academic year 2016/2017")
-  ggplotly(p)
+  plotly::ggplotly(p)
 }
 
 render_primary_composition_sen <- function(df, pct = FALSE,
@@ -126,5 +126,5 @@ render_primary_composition_sen <- function(df, pct = FALSE,
       axis.text.y = element_text(angle = 270)) +
     scale_fill_brewer(palette = palette) +
     labs(title = "Composition of SEN pupils, academic year 2016/2017")
-  ggplotly(p)
+  plotly::ggplotly(p)
 }

@@ -69,27 +69,27 @@ panel_primary <- fluidRow(
            title = "Composition",
            tabPanel(
              title = "schools: percentages",
-             plotlyOutput("primary_composition_schools_pct")),
+             plotly::plotlyOutput("primary_composition_schools_pct")),
            tabPanel(
              title = "schools: numbers",
-             plotlyOutput("primary_composition_schools_n")),
+             plotly::plotlyOutput("primary_composition_schools_n")),
            tabPanel(
              title = "SEN: percentages",
-             plotlyOutput("primary_composition_sen_pct")),
+             plotly::plotlyOutput("primary_composition_sen_pct")),
            tabPanel(
              title = "SEN: numbers",
-             plotlyOutput("primary_composition_sen_n")),
+             plotly::plotlyOutput("primary_composition_sen_n")),
            width = NULL)),
   column(width = 4,
          docs_primary,
          box(width = NULL, collapsible = TRUE,
              solidHeader = TRUE, status = "primary",
              title = "Percentage of academised schools",
-             plotlyOutput("primary_academ")),
+             plotly::plotlyOutput("primary_academ")),
          box(width = NULL, collapsible = TRUE,
              solidHeader = TRUE, status = "primary",
              title = "Percentage of pupils with SEN",
-             plotlyOutput("primary_sen")))
+             plotly::plotlyOutput("primary_sen")))
 )
 
 # ==== tseries components ====
@@ -146,8 +146,8 @@ controls_tseries <- box(
     value = c(min(cand_years), max(cand_years))))
 panel_tseries <- fluidRow(
   column(width = 8,
-         box(plotlyOutput("tseries_a"),
-             plotlyOutput("tseries_b"),
+         box(plotly::plotlyOutput("tseries_a"),
+             plotly::plotlyOutput("tseries_b"),
              width = NULL)),
   column(width = 4,
          docs_tseries,
@@ -232,12 +232,12 @@ maps_ui_single <- function(prefix = "maps_a", name = "A",
             maps_controls(prefix, name,
                           selected_type = selected_type,
                           dual_map = TRUE),
-            leafletOutput(prefix, height = params$maps_gen$height)))
+            leaflet::leafletOutput(prefix, height = params$maps_gen$height)))
   } else {
     fluidRow(
       column(
         width = 8,
-        leafletOutput(prefix, height = params$maps_gen$height)),
+        leaflet::leafletOutput(prefix, height = params$maps_gen$height)),
       column(
         width = 4,
         docs_maps,
