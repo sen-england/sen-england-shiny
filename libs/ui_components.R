@@ -45,6 +45,31 @@ For tutorials please see the [documentation]({params$docs$site}).
 
 Press the ` - ` button in the upper right hand to collapse this widget.
 ")))
+panel_intro <- fluidPage(
+  fluidRow(h1("Topics:"),
+           "Select which topic you would like to view:"),
+  fluidRow(
+    column(5, offset = 1,
+           box(width = NULL,
+               "box1",
+               actionButton(inputId='ab1', label="Learn More",
+                            icon = icon("tachometer"),
+                            onclick ="openTab('primary')"))),
+    column(5, offset = 0,
+           box(width = NULL,
+               "box2"))),
+  fluidRow(
+    column(5, offset = 1,
+           box(width = NULL,
+               "box3")),
+
+    column(5, offset = 0,
+           box(width = NULL,
+               "box4"))),
+  fluidRow(
+    column(10, offset = 1,
+           box(width = NULL,
+               "Here goes text"))))
 panel_primary <- fluidRow(
   column(width = 8,
          box(

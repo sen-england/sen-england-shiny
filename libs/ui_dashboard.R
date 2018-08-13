@@ -37,6 +37,9 @@ dsb_sidebar <- dashboardSidebar(
       icon = icon("github"),
       href = params$docs$site),
     menuItem(
+      params$tabs$intro, tabName = dsb_id_intro,
+      icon = icon("home")),
+    menuItem(
       params$tabs$primary, tabName = dsb_id_primary,
       icon = icon("tachometer")),
     menuItem(
@@ -55,9 +58,20 @@ dsb_sidebar <- dashboardSidebar(
 # ==== Main tabs ====
 
 dsb_main <- dashboardBody(
+  tags$script(HTML("
+        var openTab = function(tabName){
+          $('a', $('.sidebar')).each(function() {
+            if(this.getAttribute('data-value') == tabName) {
+              this.click()
+            };
+          });
+        }
+      ")),
   tags$head(tags$link(rel = "stylesheet",
                       type = "text/css", href = "custom.css")),
-  tabItems(tabItem(tabName = dsb_id_primary,
+  tabItems(tabItem(tabName = dsb_id_intro,
+                   panel_intro),
+           tabItem(tabName = dsb_id_primary,
                    panel_primary),
            tabItem(tabName = dsb_id_tseries,
                    panel_tseries),

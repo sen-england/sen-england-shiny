@@ -36,6 +36,7 @@ df_preproc_stats_schools <- preproc_db_conn %>%
   tbl(preproc_conf$stats_schools)
 
 # Variables and candidates
+dsb_id_intro <- "intro"
 dsb_id_primary <- "primary"
 dsb_id_tseries <- "tseries"
 dsb_id_maps <- "maps"
