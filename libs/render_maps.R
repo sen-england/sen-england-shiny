@@ -98,8 +98,8 @@ render_map <- function(year, shape, df_send,
   shape <- summarise_map_df(df_send, shape, year, type, geo_level, sen_type)
 
   if (type == "Academisation") {
-    render_map_academ_async(year, shape, auto_breaks)
+    render_map_academ(year, shape, auto_breaks)
   } else {
-    render_map_sen_async(year, shape, sen_type, auto_breaks)
+    render_map_sen(year, shape, sen_type, auto_breaks)
   }
 }
