@@ -39,8 +39,8 @@ default:
       site: "https://sen-england.github.io/post/2018-06-26-shiny-documentation/"
     tabs:
       # titles
-      primary: "Primary dashboard"
-      tseries: "TIme series trends"
+      primary: "2017 dashboard"
+      tseries: "Time series trends"
       maps: "Breakdown by region"
       global: "Global settings"
     sen:
