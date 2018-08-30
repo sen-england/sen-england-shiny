@@ -10,6 +10,7 @@ library("ggplot2")
 library("forcats")
 library("stringr")
 library("glue")
+library("here")
 library("shiny")
 library("shinydashboard")
 options(stringsAsFactors = FALSE)
@@ -30,10 +31,10 @@ params <- config::get("params")
 # Load the datasets
 send_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
-  dbname = send_db_conf$db)
+  dbname = here(send_db_conf$db))
 preproc_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
-  dbname = preproc_conf$db)
+  dbname = here(preproc_conf$db))
 df_send_lazy <- send_db_conn %>%
   tbl(send_db_conf$tbl) %>%
   select(one_of(send_db_conf$vars))
