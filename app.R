@@ -51,13 +51,13 @@ cand_type_schools <- c("Mainstream School" = "mainstream school",
                        "Pupil Referral Unit" = "pupil referral unit",
                        "Special School" = "special school",
                        "Others (e.g. independent school)" = "others")
-cand_la_tbl <- read_csv("data/region-info/region-info.csv",
+cand_la_tbl <- read_csv(here("data/region-info/region-info.csv"),
                         col_types = c("cccc"))
 cand_la <- cand_la_tbl %>%
   select(LAName, LACode) %>% distinct() %>% deframe()
 cand_region <- cand_la_tbl %>%
   select(RegionName, RegionCode) %>% distinct() %>% deframe()
-cand_parlcon <- read_csv("data/region-info/parlcon-info.csv",
+cand_parlcon <- read_csv(here("data/region-info/parlcon-info.csv"),
                          col_types = c("cc")) %>% deframe()
 
 message(glue("{Sys.time()}, finished loading assets"))
