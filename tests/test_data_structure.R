@@ -1,6 +1,7 @@
 suppressMessages(suppressWarnings({
   library("testthat")
   library("tidyverse")
+  library("magrittr")
   library("here")
 }))
 
