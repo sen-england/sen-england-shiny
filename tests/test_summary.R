@@ -18,7 +18,7 @@ send_db_conn <- DBI::dbConnect(
 preproc_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
   dbname = here(preproc_conf$db))
-df_send_lazy <- send_db_conn %>%
+df_main_table <- send_db_conn %>%
   tbl(send_db_conf$tbl) %>%
   select(one_of(send_db_conf$vars))
 df_preproc_stats_sen <- preproc_db_conn %>%
@@ -50,7 +50,7 @@ cand_region <- cand_la_tbl %>%
 cand_parlcon <- read_csv(here("data/region-info/parlcon-info.csv"),
                          col_types = c("cc")) %>% deframe()
 
-df_send <- df_send_lazy %>%
+df_main <- df_main_table %>%
   filter(Phase %in% cand_phases) %>%
   filter(TypeGeneral %in% cand_type_schools) %>%
   collect()
@@ -59,7 +59,7 @@ context("libs/common.R: `summarise_academ`")
 
 test_that("`summarise_academ`: structure", {
   expected_names <- c("Year", "Phase", "Academies")
-  names <- df_send %>%
+  names <- df_main %>%
     summarise_academ(by = c("Year", "Phase"),
                      by_academisation_route = FALSE) %>%
     names()
@@ -68,7 +68,7 @@ test_that("`summarise_academ`: structure", {
 
 test_that("`summarise_academ`: structure with `by_academisation_route`", {
   expected_names <- c("Year", "RegionCode", "TypeAcademy", "Academies")
-  names <- df_send %>%
+  names <- df_main %>%
     summarise_academ(by = c("Year", "RegionCode"),
                      by_academisation_route = TRUE) %>%
     names()
@@ -76,11 +76,11 @@ test_that("`summarise_academ`: structure with `by_academisation_route`", {
 })
 
 test_that("`summarise_academ`: multiplier", {
-  prop_value <- df_send %>%
+  prop_value <- df_main %>%
     summarise_academ(by = c("RegionCode"),
                      multiplier = FALSE) %$%
     Academies
-  pct_value <- df_send %>%
+  pct_value <- df_main %>%
     summarise_academ(by = c("RegionCode"),
                      multiplier = TRUE) %$%
     Academies

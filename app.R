@@ -27,7 +27,7 @@ send_db_conn <- DBI::dbConnect(
 preproc_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
   dbname = here(preproc_conf$db))
-df_send_lazy <- send_db_conn %>%
+df_main_table <- send_db_conn %>%
   tbl(send_db_conf$tbl) %>%
   select(one_of(send_db_conf$vars))
 df_preproc_stats_sen <- preproc_db_conn %>%
@@ -79,9 +79,9 @@ server <- function(input, output) {
   })
 
   # ---- global params ----
-  df_send <- reactive({
+  df_main <- reactive({
     req(input$global_phase, input$global_type_sen)
-    df_send_lazy %>%
+    df_main_table %>%
       filter(Phase %in% input$global_phase) %>%
       filter(TypeGeneral %in% input$global_type_schools)
   })
@@ -142,11 +142,11 @@ server <- function(input, output) {
                         route = "sponsored academy"))
   # ts plots
   output$primary_academ <- plotly::renderPlotly({
-    df_send() %>%
+    df_main() %>%
       render_primary_academ(palette = params$academ$palette)
   })
   output$primary_sen <- plotly::renderPlotly({
-    df_send() %>%
+    df_main() %>%
       render_primary_sen(sen_type = input$global_type_sen,
                                palette = params$sen$palette)
   })
@@ -177,7 +177,7 @@ server <- function(input, output) {
     plotly::ggplotly(render_tseries(
       # years = input[[glue("{prefix}_years")]],
       years = input$tseries_years,
-      df_send = df_send(),
+      df_main = df_main(),
       type = type,
       sen_type = input$global_type_sen,
       scales_free = input$tseries_scales_free,
@@ -211,7 +211,7 @@ server <- function(input, output) {
          } else {
            england_parlcon()
          },
-         df_send = df_send(),
+         df_main = df_main(),
          type = input[[glue("{prefix}_type")]],
          geo_level = input[[glue("{prefix}_geo_level")]],
          sen_type = input$global_type_sen,

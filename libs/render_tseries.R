@@ -1,8 +1,8 @@
-render_tseries_sen <- function(years, df_send, sen_type,
+render_tseries_sen <- function(years, df, sen_type,
                                geo_level, LA, region,
                                scales_free, facetted,
                                palette = "Set1") {
-  p <- df_send %>%
+  p <- df %>%
     summarise_sen(
       sen_type = sen_type,
       by = if (facetted) c("Year", "TypeGeneral") else c("Year"),
@@ -20,11 +20,11 @@ render_tseries_sen <- function(years, df_send, sen_type,
   p
 }
 
-render_tseries_academ <- function(years, df_send,
+render_tseries_academ <- function(years, df,
                                   geo_level, LA, region,
                                   scales_free, facetted,
                                   palette = "Set2") {
-  p <- df_send %>%
+  p <- df %>%
     summarise_academ(
       by = if (facetted) c("Year", "TypeGeneral") else c("Year"),
       multiplier = TRUE,
@@ -42,7 +42,7 @@ render_tseries_academ <- function(years, df_send,
 }
 
 
-render_tseries <- function(years, df_send,
+render_tseries <- function(years, df,
                            region, LA, parlcon,
                            geo_level = "whole_country",
                            type = c("Academisation", "SEN"),
@@ -50,7 +50,7 @@ render_tseries <- function(years, df_send,
                            facetted = FALSE,
                            sen_type = c("SEN_Support", "Statement_EHC_Plan")) {
   type <- match.arg(type)
-  df_send <- df_send %>% filter(between(Year, years[1], years[2])) %>%
+  df <- df %>% filter(between(Year, years[1], years[2])) %>%
     (function(df) {
       if (geo_level == "whole_country") {
         df
@@ -65,12 +65,12 @@ render_tseries <- function(years, df_send,
     collect()
   if (type == "Academisation") {
     render_tseries_academ(
-      years, df_send,
+      years, df,
       geo_level = geo_level, LA = LA, region = region,
       scales_free = scales_free, facetted = facetted)
   } else {
     render_tseries_sen(
-      years, df_send,
+      years, df,
       sen_type = sen_type,
       geo_level = geo_level, LA = LA, region = region,
       scales_free = scales_free, facetted = facetted)

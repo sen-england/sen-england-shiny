@@ -39,7 +39,7 @@ send_db_conn <- DBI::dbConnect(
 preproc_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
   dbname = here(preproc_conf$db))
-df_send_lazy <- send_db_conn %>%
+df_main_table <- send_db_conn %>%
   tbl(send_db_conf$tbl) %>%
   select(one_of(send_db_conf$vars))
 df_preproc_stats_sen <- preproc_db_conn %>%
@@ -47,8 +47,8 @@ df_preproc_stats_sen <- preproc_db_conn %>%
 df_preproc_stats_schools <- preproc_db_conn %>%
   tbl(preproc_conf$stats_schools)
 
-test_that("Structure of `df_send_lazy`", {
-  df <- df_send_lazy %>% head() %>% collect()
+test_that("Structure of `df_main_table`", {
+  df <- df_main_table %>% head() %>% collect()
   df_struct <- df %>% summarise_all(class) %>% gather()
   struct <- tribble(
     ~key,                 ~value,

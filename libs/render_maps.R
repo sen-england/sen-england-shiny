@@ -1,5 +1,5 @@
-summarise_map_df <- function(df_send, shape, year, type, geo_level, sen_type) {
-  df <- df_send %>%
+summarise_map_df <- function(df, shape, year, type, geo_level, sen_type) {
+  df <- df %>%
     filter(Year == year)
   if (geo_level == "LA") {
     by_var = "LACode"
@@ -86,7 +86,7 @@ render_map_sen_async <- function(year, shape, sen_type, auto_breaks = FALSE) {
     tmap::tmap_leaflet(mode = "view", show = TRUE)
 }
 
-render_map <- function(year, shape, df_send,
+render_map <- function(year, shape, df,
                        type = c("Academisation", "SEN"),
                        geo_level = c("LA", "ParlCon"),
                        sen_type = c("SEN_Support",
@@ -95,7 +95,7 @@ render_map <- function(year, shape, df_send,
   type <- match.arg(type)
   geo_level <- match.arg(geo_level)
 
-  shape <- summarise_map_df(df_send, shape, year, type, geo_level, sen_type)
+  shape <- summarise_map_df(df, shape, year, type, geo_level, sen_type)
 
   if (type == "Academisation") {
     render_map_academ(year, shape, auto_breaks)
