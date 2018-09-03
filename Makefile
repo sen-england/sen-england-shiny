@@ -11,9 +11,11 @@ preprocess: preprocess.R  ## preprocess data
 test:  ## execute unit-testing routines
 	@files=tests/test_*.R; \
 	echo Files to be tested:; \
-	echo $$files; \
 	for file in $${files}; do \
-		echo "file: $${file}"; \
+	  echo "    - $${file}"; \
+	done; \
+	for file in $${files}; do \
+		echo "File: $${file}"; \
 		Rscript $${file}; \
 	done
 
