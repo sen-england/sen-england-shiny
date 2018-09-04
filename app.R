@@ -177,7 +177,7 @@ server <- function(input, output) {
     plotly::ggplotly(render_tseries(
       # years = input[[glue("{prefix}_years")]],
       years = input$tseries_years,
-      df_main = df_main(),
+      df = df_main(),
       type = type,
       sen_type = input$global_type_sen,
       scales_free = input$tseries_scales_free,
@@ -211,7 +211,7 @@ server <- function(input, output) {
          } else {
            england_parlcon()
          },
-         df_main = df_main(),
+         df = df_main(),
          type = input[[glue("{prefix}_type")]],
          geo_level = input[[glue("{prefix}_geo_level")]],
          sen_type = input$global_type_sen,
