@@ -5,8 +5,8 @@ docs_info <- div(
                             "Github Pages")),
   h6("Usage tutorials: ", a(href = params$docs$site,
                             "Documentation")),
-  h6("Developed: ", a(href = "https://github.com/YiLiu6240",
-                      "Dr Yi Liu")),
+  h6("Developer: ", a(href = "https://github.com/YiLiu6240",
+                      "Yi Liu")),
   h6("Data sources: ",
      format_markdown("
 
@@ -105,8 +105,6 @@ General overview regarding the academisation of English schools
 and the inclusion of pupils of special educational needs.
 
 Change options in `Global settings` in the sidebar to update the charts.
-
-For tutorials please see the [documentation]({params$docs$site}).
 
 Press the ` - ` button in the upper right hand to collapse this widget.
 ")))
@@ -228,8 +226,6 @@ Press the `Render map` button to (re-)generate a map.
 
 Option `Optimal scales` will select scales best suited for the individual map,
 otherwise common scales will be set to better track changes between maps.
-
-By default the only one region is displayed (override with `Show all England`).
 "))
 maps_controls <- function(prefix = "maps_a", name = "A",
                           selected_type = "Academisation",
