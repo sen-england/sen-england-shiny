@@ -30,6 +30,71 @@ controls_global <- p(
     inputId = "global_maps_dual", label = "Render a second map",
     value = FALSE))
 
+# ===== Introduction components ====
+intro_box_primary <- box(
+  width = NULL, status = "primary", solidHeader = TRUE,
+  title = params$tabs$primary,
+  footer = div(
+    div(align = "center",
+        actionButton(inputId = 'ab1', label = "View",
+                     onclick = glue("openTab('{dsb_id_primary}')")))),
+  div(img(src = "assets/topic-primary.png",
+          width = "80%"),
+      align = "center"))
+intro_box_information <- box(
+  width = NULL, status = "primary", solidHeader = TRUE,
+  title = "Information about this web app",
+  div(align = "justify",
+      div(img(src = "assets/shiny-app-banner.png",
+              width = "100%"),
+          align = "center"),
+      format_markdown(glue("
+This Shiny web app is part of the research output from the ESRC funded project
+\"Inclusion and the academisation of English secondary schools:
+trends in the placement of pupils with significant SEN
+and those permanently excluded\".
+
+This Shiny app aims to provide a comprehensive view regarding
+academisation of English schools and their inclusion of pupils with
+special educational needs, including the time trends and the the breakdowns
+at national / regional / local authority level.
+
+Visit the [documentation]({params$docs$site}) to see the features of this app.
+
+Further information is provided on the
+[project website](https://sen-england.github.io).
+"))),
+div(align = "center",
+    img(src = "assets/affiliations.png",
+        width = "60%")))
+intro_box_tseries <- box(
+  width = NULL, status = "primary", solidHeader = TRUE,
+  title = params$tabs$tseries,
+  footer = div(
+    div(align = "center",
+        actionButton(inputId = 'ab2', label = "View",
+                     onclick = glue("openTab('{dsb_id_tseries}')")))),
+  div(img(src = "assets/topic-tseries.png",
+          width = "80%"),
+      align = "center"))
+intro_box_maps <- box(
+  width = NULL, status = "primary", solidHeader = TRUE,
+  title = params$tabs$maps,
+  footer = div(
+    div(align = "center",
+        actionButton(inputId = 'ab3', label = "View",
+                     onclick = glue("openTab('{dsb_id_maps}')")))),
+  div(img(src = "assets/topic-maps.png",
+          width = "80%"),
+      align = "center"))
+panel_intro <- fluidPage(
+  fluidRow(h3("Select topic you would like to view:",
+              align = "center")),
+  fluidRow(column(5, offset = 1, intro_box_primary),
+           column(5, offset = 0, intro_box_information)),
+  fluidRow(column(5, offset = 1, intro_box_tseries),
+           column(5, offset = 0, intro_box_maps)))
+
 # ==== Primary components ====
 docs_primary <- box(
   title = tagList(icon("tachometer"), params$tabs$primary),
@@ -45,31 +110,6 @@ For tutorials please see the [documentation]({params$docs$site}).
 
 Press the ` - ` button in the upper right hand to collapse this widget.
 ")))
-panel_intro <- fluidPage(
-  fluidRow(h1("Topics:"),
-           "Select which topic you would like to view:"),
-  fluidRow(
-    column(5, offset = 1,
-           box(width = NULL,
-               "box1",
-               actionButton(inputId='ab1', label="Learn More",
-                            icon = icon("tachometer"),
-                            onclick ="openTab('primary')"))),
-    column(5, offset = 0,
-           box(width = NULL,
-               "box2"))),
-  fluidRow(
-    column(5, offset = 1,
-           box(width = NULL,
-               "box3")),
-
-    column(5, offset = 0,
-           box(width = NULL,
-               "box4"))),
-  fluidRow(
-    column(10, offset = 1,
-           box(width = NULL,
-               "Here goes text"))))
 panel_primary <- fluidRow(
   column(width = 8,
          box(
