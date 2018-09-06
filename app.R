@@ -30,10 +30,6 @@ preproc_db_conn <- DBI::dbConnect(
 df_main_table <- send_db_conn %>%
   tbl(send_db_conf$tbl) %>%
   select(one_of(send_db_conf$vars))
-df_preproc_stats_sen <- preproc_db_conn %>%
-  tbl(preproc_conf$stats_sen)
-df_preproc_stats_schools <- preproc_db_conn %>%
-  tbl(preproc_conf$stats_schools)
 
 # Variables and candidates
 dsb_id_intro <- "intro"
