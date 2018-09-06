@@ -42,7 +42,9 @@ render_primary_sen <- function(df, sen_type, palette = "Set1") {
 render_primary_composition_schools <- function(df, pct = FALSE,
                                                palette = "Set2") {
   df_schools <- df %>% group_by(TypeAcademy, TypeGeneral) %>%
-    summarise_at(vars(n), sum, na.rm = TRUE) %>% ungroup() %>% collect()
+    summarise_at(vars(n), sum, na.rm = TRUE) %>% ungroup() %>% collect() %>%
+    # NULLability check
+    mutate_at(vars(n), as.double)
   if (pct) {
     df_schools <- df_schools %>% group_by(TypeGeneral) %>%
       mutate(n_group = sum(n, na.rm = TRUE)) %>%
@@ -71,8 +73,11 @@ render_primary_composition_schools <- function(df, pct = FALSE,
   } else {
     p <- df_schools %>% ggplot(aes(x = TypeGeneral, y = n))
   }
+  # NULLability check
+  if (!identical(character(0), df_schools$Group)) {
+    p <- p + facet_wrap(~ Group, scales = "free", nrow = 1)
+  }
   p <- p +
-    facet_wrap(~ Group, scales = "free", nrow = 1) +
     geom_col(aes(fill = TypeAcademy)) +
     coord_flip() +
     theme(
@@ -88,8 +93,10 @@ render_primary_composition_sen <- function(df, pct = FALSE,
                                            palette = "Set1") {
   df_sen <- df %>%
     group_by(TypeGeneral, TypeAcademy) %>%
-    summarise_at(vars(NumPupils), sum, na.rm = TRUE) %>% ungroup() %>% collect()
-
+    summarise_at(vars(NumPupils), sum, na.rm = TRUE) %>% ungroup() %>%
+    collect() %>%
+    # NULLability check
+    mutate_at(vars(NumPupils), as.double)
   if (pct) {
     df_sen <- df_sen %>% group_by(TypeGeneral) %>%
       mutate(n_group = sum(NumPupils, na.rm = TRUE)) %>%
@@ -118,8 +125,11 @@ render_primary_composition_sen <- function(df, pct = FALSE,
   } else {
     p <- df_sen %>% ggplot(aes(x = TypeGeneral, y = NumPupils))
   }
+  # NULLability check
+  if (!identical(character(0), df_sen$Group)) {
+    p <- p + facet_wrap(~ Group, scales = "free", nrow = 1)
+  }
   p <- p +
-    facet_wrap(~ Group, scales = "free", nrow = 1) +
     geom_col(aes(fill = TypeAcademy)) +
     coord_flip() +
     theme(

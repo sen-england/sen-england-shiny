@@ -34,6 +34,8 @@ summarise_academ <- function(df, by = "Year", multiplier = TRUE,
              `Sponsored Academy`, `Converter Academy`) %>%
       ungroup()
   }
+  # NULLability: Academies must be type double
+  res <- res %>% mutate_at(vars(Academies), as.double)
   if (multiplier) {
     res <- res %>% mutate(Academies = Academies * 100)
   }
@@ -98,6 +100,8 @@ summarise_sen <- function(df,
     }
   }
 
+  # NULLability: SEN must be type double
+  res <- res %>% mutate_at(vars(SEN), as.double)
   if (multiplier) {
     res <- res %>% mutate(SEN = SEN * 100)
   }

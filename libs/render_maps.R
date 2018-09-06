@@ -25,7 +25,7 @@ summarise_map_df <- function(df, shape, year, type, geo_level, sen_type) {
 
 render_map_academ <- function(year, shape, auto_breaks = FALSE) {
   message(glue("{Sys.time()}, start rendering `map_academ`"))
-  map_academ_plot <- tmap::tm_shape(shape[!is.na(shape$Academies), ]) +
+  map_academ_plot <- tmap::tm_shape(shape) +
     tmap::tm_polygons("Academies", id = "name",
                       palette = params$maps_academ$palette,
                       breaks = if (auto_breaks) {
@@ -42,7 +42,7 @@ render_map_academ <- function(year, shape, auto_breaks = FALSE) {
 render_map_sen <- function(year, shape, sen_type, auto_breaks = FALSE) {
 
   message(glue("{Sys.time()}, start rendering `map_sen`"))
-  map_sen_plot <- tmap::tm_shape(shape[!is.na(shape$SEN), ]) +
+  map_sen_plot <- tmap::tm_shape(shape) +
     tmap::tm_polygons("SEN", id = "name",
                       palette = params$maps_sen$palette,
                       breaks = if (auto_breaks) {
@@ -58,7 +58,7 @@ render_map_sen <- function(year, shape, sen_type, auto_breaks = FALSE) {
 
 render_map_academ_async <- function(year, shape, auto_breaks = FALSE) {
   future({
-    tmap::tm_shape(shape[!is.na(shape$Academies), ]) +
+    tmap::tm_shape(shape) +
       tmap::tm_polygons("Academies", id = "name",
                         palette = params$maps_academ$palette,
                         breaks = if (auto_breaks) {
@@ -73,7 +73,7 @@ render_map_academ_async <- function(year, shape, auto_breaks = FALSE) {
 
 render_map_sen_async <- function(year, shape, sen_type, auto_breaks = FALSE) {
   future({
-    tmap::tm_shape(shape[!is.na(shape$SEN), ]) +
+    tmap::tm_shape(shape) +
       tmap::tm_polygons("SEN", id = "name",
                         palette = params$maps_sen$palette,
                         breaks = if (auto_breaks) {
