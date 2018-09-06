@@ -8,6 +8,7 @@ render_tseries_sen <- function(years, df, sen_type,
       by = if (facetted) c("Year", "TypeGeneral") else c("Year"),
       multiplier = TRUE,
       by_sen_type = TRUE) %>%
+    mutate_at(vars(Year), as.factor) %>%
     ggplot(aes(x = Year, y = SEN,
                group = TypeSEN, color = TypeSEN)) +
     geom_line() + geom_point() +
@@ -29,6 +30,7 @@ render_tseries_academ <- function(years, df,
       by = if (facetted) c("Year", "TypeGeneral") else c("Year"),
       multiplier = TRUE,
       by_academisation_route = TRUE) %>%
+    mutate_at(vars(Year), as.factor) %>%
     ggplot(aes(x = Year, y = Academies,
                group = TypeAcademy, color = TypeAcademy)) +
     geom_line() + geom_point() +

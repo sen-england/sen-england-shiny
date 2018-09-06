@@ -4,16 +4,17 @@ render_primary_academ <- function(df, palette = "Set2") {
     collect() %>%
     summarise_academ(
       by = "Year", multiplier = TRUE,
-      by_academisation_route = TRUE) %>% {
-        ggplot(., aes(x = Year, y = Academies,
-                      group = TypeAcademy, color = TypeAcademy)) +
-          facet_wrap(~ TypeAcademy, scales = "fixed", ncol = 1) +
-          geom_line() + geom_point() +
-          scale_color_brewer(palette = palette) +
-          theme(legend.position = "none",
-                axis.title.y = element_blank(),
-                axis.title.x = element_blank())
-      } %>%
+      by_academisation_route = TRUE) %>%
+    mutate_at(vars(Year), as.factor) %>% {
+      ggplot(., aes(x = Year, y = Academies,
+                    group = TypeAcademy, color = TypeAcademy)) +
+        facet_wrap(~ TypeAcademy, scales = "fixed", ncol = 1) +
+        geom_line() + geom_point() +
+        scale_color_brewer(palette = palette) +
+        theme(legend.position = "none",
+              axis.title.y = element_blank(),
+              axis.title.x = element_blank())
+    } %>%
     plotly::ggplotly()
 }
 
@@ -24,16 +25,17 @@ render_primary_sen <- function(df, sen_type, palette = "Set1") {
     collect() %>%
     summarise_sen(
       sen_type = sen_type, by = "Year",
-      multiplier = TRUE, by_sen_type = TRUE) %>% {
-        ggplot(., aes(x = Year, y = SEN,
-                      group = TypeSEN, color = TypeSEN)) +
-          facet_wrap(~ TypeSEN, scales = "fixed", ncol = 1) +
-          geom_line() + geom_point() +
-          scale_color_brewer(palette = palette) +
-          theme(legend.position = "none",
-                axis.title.y = element_blank(),
-                axis.title.x = element_blank())
-      } %>%
+      multiplier = TRUE, by_sen_type = TRUE) %>%
+    mutate_at(vars(Year), as.factor) %>% {
+      ggplot(., aes(x = Year, y = SEN,
+                    group = TypeSEN, color = TypeSEN)) +
+        facet_wrap(~ TypeSEN, scales = "fixed", ncol = 1) +
+        geom_line() + geom_point() +
+        scale_color_brewer(palette = palette) +
+        theme(legend.position = "none",
+              axis.title.y = element_blank(),
+              axis.title.x = element_blank())
+    } %>%
     plotly::ggplotly()
 }
 
