@@ -96,17 +96,17 @@ server <- function(input, output) {
       filter(Phase %in% input$global_phase) %>%
       filter(TypeGeneral %in% input$global_type_schools)
   })
-  df_preproc_composition_schools <- reactive({
-    req(input$global_phase, input$global_type_sen)
-    preproc_db_conn %>%
-      tbl(preproc_conf$composition_schools) %>%
-      filter(Phase %in% input$global_phase) %>%
-      filter(TypeGeneral %in% input$global_type_schools)
-  })
   df_preproc_composition_sen <- reactive({
     req(input$global_phase, input$global_type_sen)
     preproc_db_conn %>%
       tbl(preproc_conf$composition_sen) %>%
+      filter(Phase %in% input$global_phase) %>%
+      filter(TypeGeneral %in% input$global_type_schools)
+  })
+  df_preproc_composition_schools <- reactive({
+    req(input$global_phase, input$global_type_sen)
+    preproc_db_conn %>%
+      tbl(preproc_conf$composition_schools) %>%
       filter(Phase %in% input$global_phase) %>%
       filter(TypeGeneral %in% input$global_type_schools)
   })
