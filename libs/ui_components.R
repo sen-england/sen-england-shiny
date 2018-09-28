@@ -36,11 +36,12 @@ intro_box_primary <- box(
   title = params$tabs$primary,
   footer = div(
     div(align = "center",
-        actionButton(inputId = 'ab1', label = "View",
+        actionButton(inputId = 'ab1', label = strong("View"),
                      onclick = glue("openTab('{dsb_id_primary}')")))),
   div(img(src = "assets/topic-primary.png",
           width = "80%"),
-      align = "center"))
+      align = "center",
+      onclick = glue("openTab('{dsb_id_primary}')")))
 intro_box_information <- box(
   width = NULL, status = "primary", solidHeader = TRUE,
   title = "Information about this web app",
@@ -72,21 +73,23 @@ intro_box_tseries <- box(
   title = params$tabs$tseries,
   footer = div(
     div(align = "center",
-        actionButton(inputId = 'ab2', label = "View",
+        actionButton(inputId = 'ab2', label = strong("View"),
                      onclick = glue("openTab('{dsb_id_tseries}')")))),
   div(img(src = "assets/topic-tseries.png",
           width = "80%"),
-      align = "center"))
+      align = "center",
+      onclick = glue("openTab('{dsb_id_tseries}')")))
 intro_box_maps <- box(
   width = NULL, status = "primary", solidHeader = TRUE,
   title = params$tabs$maps,
   footer = div(
     div(align = "center",
-        actionButton(inputId = 'ab3', label = "View",
+        actionButton(inputId = 'ab3', label = strong("View"),
                      onclick = glue("openTab('{dsb_id_maps}')")))),
   div(img(src = "assets/topic-maps.png",
           width = "80%"),
-      align = "center"))
+      align = "center",
+      onclick = glue("openTab('{dsb_id_maps}')")))
 panel_intro <- fluidPage(
   fluidRow(h3("Select topic you would like to view:",
               align = "center")),
