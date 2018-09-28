@@ -1,6 +1,5 @@
 message(sprintf("%s, start loading packages", Sys.time()))
 library("tidyverse")
-library("magrittr")
 library("glue")
 library("here")
 library("shiny")
