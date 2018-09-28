@@ -67,14 +67,6 @@ source("libs/ui_dashboard.R", local = TRUE)
 server <- function(input, output) {
 
   # ---- Deferred loading of assets ----
-  england_la <- reactive({
-    data_conf$england_la %>% rgdal::readOGR(verbose = FALSE)
-  })
-  england_parlcon <- reactive({
-    data_conf$england_parlcon %>% rgdal::readOGR(verbose = FALSE)
-  })
-
-  # ---- global params ----
   df_main <- reactive({
     req(input$global_phase, input$global_type_sen)
     df_main_table %>%
@@ -108,6 +100,12 @@ server <- function(input, output) {
       tbl(preproc_conf$composition_schools) %>%
       filter(Phase %in% input$global_phase) %>%
       filter(TypeGeneral %in% input$global_type_schools)
+  })
+  england_la <- reactive({
+    data_conf$england_la %>% rgdal::readOGR(verbose = FALSE)
+  })
+  england_parlcon <- reactive({
+    data_conf$england_parlcon %>% rgdal::readOGR(verbose = FALSE)
   })
 
   # ---- primary components ----
@@ -171,7 +169,6 @@ server <- function(input, output) {
   # ---- tseries components ----
   spawn_tseries <- function(prefix = "tseries_a", type = "Academisation") {
     plotly::ggplotly(render_tseries(
-      # years = input[[glue("{prefix}_years")]],
       years = input$tseries_years,
       df = df_main(),
       type = type,
