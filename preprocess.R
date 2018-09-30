@@ -1,12 +1,8 @@
 # Prepares various auxiliary preprocessed datasets from the main dataset
-library("dplyr")
-library("dbplyr")
-library("purrr")
-library("readr")
-library("tidyr")
-library("tibble")
-library("stringr")
+library("tidyverse")
+library("magrittr")
 library("glue")
+library("here")
 options(stringsAsFactors = FALSE)
 
 preprocess_stats_sen <- function(df_main, data_conf) {
@@ -66,37 +62,37 @@ main <- function() {
   send_db_conf <- data_conf$send_db
   params <- config::get("params")
 
-  # Main data set
+  # Main dataset
   send_db_conn <- DBI::dbConnect(
     RSQLite::SQLite(),
-    dbname = send_db_conf$db)
+    dbname = here(send_db_conf$db))
   df_main <- send_db_conn %>%
     tbl(send_db_conf$tbl) %>%
     select(one_of(send_db_conf$vars))
 
-  # Preprocess
+  # ==== Preprocess ====
   preproc_conf <- data_conf$preprocess
   conn <- DBI::dbConnect(RSQLite::SQLite(),
-                         dbname = preproc_conf$db)
-  # stats_SEN
+                         dbname = here(preproc_conf$db))
+  # ---- stats_SEN ----
   cat(glue("Preprocessing `{preproc_conf$stats_sen}`"), "\n")
   df_main %>% preprocess_stats_sen(data_conf = data_conf) %T>%
     glimpse() %>%
     DBI::dbWriteTable(conn = conn, name = preproc_conf$stats_sen,
                       value = ., overwrite = TRUE)
-  # stats_schools
+  # ---- stats_schools ----
   cat(glue("Preprocessing `{preproc_conf$stats_schools}`"), "\n")
   df_main %>% preprocess_stats_schools(data_conf = data_conf) %T>%
     glimpse() %>%
     DBI::dbWriteTable(conn = conn, name = preproc_conf$stats_schools,
                       value = ., overwrite = TRUE)
-  # composition_schools
+  # ---- composition_schools ----
   cat(glue("Preprocessing `{preproc_conf$composition_schools}`"), "\n")
   df_main %>% preprocess_composition_schools(data_conf = data_conf) %T>%
     glimpse() %>%
     DBI::dbWriteTable(conn = conn, name = preproc_conf$composition_schools,
                       value = ., overwrite = TRUE)
-  # composition_sen
+  # ---- composition_sen ----
   cat(glue("Preprocessing `{preproc_conf$composition_sen}`"), "\n")
   df_main %>% preprocess_composition_sen(data_conf = data_conf) %T>%
     glimpse() %>%
