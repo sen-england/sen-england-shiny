@@ -33,6 +33,9 @@ default:
       stats_schools: "stats_schools"
       composition_sen: "composition_sen"
       composition_schools: "composition_schools"
+      cand_region: "regions"
+      cand_la: "local_authorities"
+      cand_parlcon: "parliamentary_constituencies"
   params:
     docs:
       # Place of documentation

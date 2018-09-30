@@ -41,20 +41,18 @@ cand_types <- c("% academised schools" = "Academisation",
 cand_phases <- c("Primary schools" = "primary",
                  "Secondary schools" = "secondary",
                  "Others (e.g. nursery, 16 Plus, etc)" = "others")
-cand_type_sen <- c("SEN_Support", "Statement_EHC_Plan") %>%
-  set_names(str_replace_all(., "_", " "))
+cand_type_sen <- c("SEN Support" = "SEN_Support",
+                   "Statement EHC Plan" = "Statement_EHC_Plan")
 cand_type_schools <- c("Mainstream School" = "mainstream school",
                        "Pupil Referral Unit" = "pupil referral unit",
                        "Special School" = "special school",
                        "Others (e.g. independent school)" = "others")
-cand_la_tbl <- read_csv(here("data/region-info/region-info.csv"),
-                        col_types = c("cccc"))
-cand_la <- cand_la_tbl %>%
-  select(LAName, LACode) %>% distinct() %>% deframe()
-cand_region <- cand_la_tbl %>%
-  select(RegionName, RegionCode) %>% distinct() %>% deframe()
-cand_parlcon <- read_csv(here("data/region-info/parlcon-info.csv"),
-                         col_types = c("cc")) %>% deframe()
+cand_region <- preproc_db_conn %>% tbl(preproc_conf$cand_region) %>%
+  collect() %>% deframe()
+cand_la <- preproc_db_conn %>% tbl(preproc_conf$cand_la) %>%
+  collect() %>% deframe()
+cand_parlcon <- preproc_db_conn %>% tbl(preproc_conf$cand_parlcon) %>%
+  collect() %>% deframe()
 
 message(glue("{Sys.time()}, finished loading assets"))
 

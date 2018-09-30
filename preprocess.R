@@ -70,6 +70,12 @@ main <- function() {
     tbl(send_db_conf$tbl) %>%
     select(one_of(send_db_conf$vars))
 
+  # Auxiliary datasets
+  la_tbl <- read_csv(here("data/region-info/region-info.csv"),
+                     col_types = c("cccc"))
+  parlcon_tbl <- read_csv(here("data/region-info/parlcon-info.csv"),
+                          col_types = c("cc"))
+
   # ==== Preprocess ====
   preproc_conf <- data_conf$preprocess
   conn <- DBI::dbConnect(RSQLite::SQLite(),
@@ -100,6 +106,19 @@ main <- function() {
                       value = ., overwrite = TRUE)
   # NOTE: the gains from preprocessing time-series summarisation are
   #       very minimal, and we do not preproc them ATM.
+  # ---- geographical information ----
+  cat(glue("Preprocessing `{preproc_conf$cand_region}`"), "\n")
+  la_tbl %>% select(RegionName, RegionCode) %>% distinct() %>%
+    DBI::dbWriteTable(conn = conn, name = preproc_conf$cand_region,
+                      value = ., overwrite = TRUE)
+  cat(glue("Preprocessing `{preproc_conf$cand_la}`"), "\n")
+  la_tbl %>% select(LAName, LACode) %>% distinct() %>%
+    DBI::dbWriteTable(conn = conn, name = preproc_conf$cand_la,
+                      value = ., overwrite = TRUE)
+  cat(glue("Preprocessing `{preproc_conf$cand_parlcon}`"), "\n")
+  parlcon_tbl %>% distinct() %>%
+    DBI::dbWriteTable(conn = conn, name = preproc_conf$cand_parlcon,
+                      value = ., overwrite = TRUE)
 }
 
 main()
