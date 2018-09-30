@@ -4,7 +4,9 @@ library("glue")
 library("here")
 library("shiny")
 library("shinydashboard")
-options(stringsAsFactors = FALSE)
+library("shinycssloaders")
+options(stringsAsFactors = FALSE,
+        spinner.color = "#282828")
 
 source("libs/common.R", local = TRUE)
 source("libs/render_value_box.R", local = TRUE)
@@ -211,9 +213,7 @@ server <- function(input, output) {
   spawn_maps <- function(prefix) {
     eventReactive(input[[glue("{prefix}_render")]], {
       if (input[[glue("{prefix}_render")]] > 0) {
-        withProgress(
-          do.call(render_map, get_params_maps(prefix)),
-          message = "Rendering maps...")
+        do.call(render_map, get_params_maps(prefix))
       } else {
         leaflet::leaflet() %>%
           leaflet::addTiles() %>%

@@ -119,43 +119,49 @@ panel_primary <- fluidRow(
            solidHeader = TRUE, status = "primary",
            column(width = 6,
                   valueBoxOutput("primary_box_total_pupils",
-                                 width = NULL),
+                                 width = NULL) %>% withSpinner(),
                   valueBoxOutput("primary_box_total_sen",
-                                 width = NULL),
+                                 width = NULL) %>% withSpinner(),
                   valueBoxOutput("primary_box_pct_sen",
-                                 width = NULL)) ,
+                                 width = NULL) %>% withSpinner()),
            column(width = 6,
                   valueBoxOutput("primary_box_total_schools",
-                                 width = NULL),
+                                 width = NULL) %>% withSpinner(),
                   valueBoxOutput("primary_box_ca",
-                                 width = NULL),
+                                 width = NULL) %>% withSpinner(),
                   valueBoxOutput("primary_box_sa",
-                                 width = NULL))),
+                                 width = NULL) %>% withSpinner())),
          tabBox(
            title = "Composition",
            tabPanel(
              title = "schools: percentages",
-             plotly::plotlyOutput("primary_composition_schools_pct")),
+             plotly::plotlyOutput("primary_composition_schools_pct") %>%
+               withSpinner()),
            tabPanel(
              title = "schools: numbers",
-             plotly::plotlyOutput("primary_composition_schools_n")),
+             plotly::plotlyOutput("primary_composition_schools_n") %>%
+               withSpinner()),
            tabPanel(
              title = "SEN: percentages",
-             plotly::plotlyOutput("primary_composition_sen_pct")),
+             plotly::plotlyOutput("primary_composition_sen_pct") %>%
+               withSpinner()),
            tabPanel(
              title = "SEN: numbers",
-             plotly::plotlyOutput("primary_composition_sen_n")),
+             plotly::plotlyOutput("primary_composition_sen_n") %>%
+               withSpinner()),
            width = NULL)),
   column(width = 4,
          docs_primary,
          box(width = NULL, collapsible = TRUE,
              solidHeader = TRUE, status = "primary",
              title = "Percentage of academised schools",
-             plotly::plotlyOutput("primary_academ")),
+             plotly::plotlyOutput("primary_academ") %>%
+               withSpinner()),
          box(width = NULL, collapsible = TRUE,
              solidHeader = TRUE, status = "primary",
              title = "Percentage of pupils with SEN",
-             plotly::plotlyOutput("primary_sen")))
+             plotly::plotlyOutput("primary_sen") %>%
+               withSpinner()))
 )
 
 # ==== tseries components ====
@@ -212,8 +218,8 @@ controls_tseries <- box(
     value = c(min(cand_years), max(cand_years))))
 panel_tseries <- fluidRow(
   column(width = 8,
-         box(plotly::plotlyOutput("tseries_a"),
-             plotly::plotlyOutput("tseries_b"),
+         box(plotly::plotlyOutput("tseries_a") %>% withSpinner(),
+             plotly::plotlyOutput("tseries_b") %>% withSpinner(),
              width = NULL)),
   column(width = 4,
          docs_tseries,
@@ -296,12 +302,14 @@ maps_ui_single <- function(prefix = "maps_a", name = "A",
             maps_controls(prefix, name,
                           selected_type = selected_type,
                           dual_map = TRUE),
-            leaflet::leafletOutput(prefix, height = params$maps_gen$height)))
+            leaflet::leafletOutput(prefix, height = params$maps_gen$height) %>%
+              withSpinner()))
   } else {
     fluidRow(
       column(
         width = 8,
-        leaflet::leafletOutput(prefix, height = params$maps_gen$height)),
+        leaflet::leafletOutput(prefix, height = params$maps_gen$height) %>%
+          withSpinner()),
       column(
         width = 4,
         docs_maps,
@@ -314,11 +322,14 @@ maps_ui_single <- function(prefix = "maps_a", name = "A",
 
 maps_ui <- function(dual_map = TRUE) {
   if (dual_map) {
-    fluidPage(uiOutput("maps_a_ui"),
-              uiOutput("maps_b_ui"))
+    fluidPage(uiOutput("maps_a_ui") %>%
+             withSpinner(),
+             uiOutput("maps_b_ui") %>%
+               withSpinner())
   } else {
-    fluidPage(uiOutput("maps_a_ui"))
+    fluidPage(uiOutput("maps_a_ui") %>%
+                withSpinner())
   }
 }
 
-panel_maps <- uiOutput("maps")
+panel_maps <- uiOutput("maps") %>% withSpinner()
