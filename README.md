@@ -1,13 +1,6 @@
-# SEN England `shiny` apps
+# Shiny web app "SEN & Academisation"
 
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
-**Table of Contents**
-
-- [SEN England `shiny` apps](#sen-england-shiny-apps)
-- [Technical specifications](#technical-specifications)
-
-<!-- markdown-toc end -->
-
+Please visit [our project website](https://sen-england.github.io/) for more details.
 
 # Technical specifications
 
