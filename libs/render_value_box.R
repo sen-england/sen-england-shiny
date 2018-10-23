@@ -7,7 +7,7 @@ render_box_total_pupils <- function(df) {
 
   valueBox(
     value = value,
-    "Total number of pupils, 2017",
+    "Total number of pupils, 2018",
     icon = icon("users"),
     color = "blue")
 }
@@ -40,7 +40,7 @@ render_box_sen <- function(df, sen_type,
                             "Total number", "Percentage")
   valueBox(
     value = value,
-    glue("{value_type_str} of pupils with SEN, 2017"),
+    glue("{value_type_str} of pupils with SEN, 2018"),
     icon = icon("users"),
     color = "green")
 }
@@ -53,7 +53,7 @@ render_box_total_schools <- function(df) {
 
   valueBox(
     value = value,
-    "Total number of schools, 2017",
+    "Total number of schools, 2018",
     icon = icon("building"),
     color = "red")
 }
@@ -85,7 +85,7 @@ render_box_by_route <- function(df,
 
   valueBox(
     value = value,
-    glue("Total number of {label}, 2017"),
+    glue("Total number of {label}, 2018"),
     icon = icon("building"),
     color = "yellow")
 }

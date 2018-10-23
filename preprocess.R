@@ -3,14 +3,17 @@ library("tidyverse")
 library("magrittr")
 library("glue")
 library("here")
+library("sf")
 options(stringsAsFactors = FALSE)
 
 preprocess_stats_sen <- function(df_main, data_conf) {
   df_main %>%
-    filter(Year == data_conf$send_db$periods$last) %>%
+    filter(Year == data_conf$sen_db$periods$last) %>%
     select(TypeGeneral, Phase,
            TotalPupils, SEN_Support, Statement_EHC_Plan) %>%
     collect() %>%
+    mutate_at(vars(SEN_Support, Statement_EHC_Plan, TotalPupils),
+              coalesce, 0L) %>%
     group_by(TypeGeneral, Phase) %>%
     mutate(AllSEN = SEN_Support + Statement_EHC_Plan) %>%
     gather("TypeSEN", "TotalNumberSEN",
@@ -23,7 +26,7 @@ preprocess_stats_sen <- function(df_main, data_conf) {
 
 preprocess_stats_schools <- function(df_main, data_conf) {
   df_main %>%
-    filter(Year == data_conf$send_db$periods$last) %>%
+    filter(Year == data_conf$sen_db$periods$last) %>%
     count(TypeGeneral, Phase, TypeAcademy) %>%
     collect() %>%
     group_by(TypeGeneral, Phase) %>% nest() %>%
@@ -42,14 +45,14 @@ preprocess_stats_schools <- function(df_main, data_conf) {
 
 preprocess_composition_schools <- function(df_main, data_conf) {
   df_main %>%
-    filter(Year == data_conf$send_db$periods$last) %>%
+    filter(Year == data_conf$sen_db$periods$last) %>%
     count(TypeGeneral, Phase, TypeAcademy) %>%
     collect()
 }
 
 preprocess_composition_sen <- function(df_main, data_conf) {
   df_main %>%
-    filter(Year == data_conf$send_db$periods$last) %>%
+    filter(Year == data_conf$sen_db$periods$last) %>%
     select(TypeGeneral, Phase, TypeAcademy,
            SEN_Support, Statement_EHC_Plan) %>%
     collect() %>%
@@ -59,27 +62,41 @@ preprocess_composition_sen <- function(df_main, data_conf) {
 main <- function() {
   # Params
   data_conf <- config::get("data")
-  send_db_conf <- data_conf$send_db
+  sen_db_conf <- data_conf$sen_db
   params <- config::get("params")
 
   # Main dataset
-  send_db_conn <- DBI::dbConnect(
+  sen_db_conn <- DBI::dbConnect(
     RSQLite::SQLite(),
-    dbname = here(send_db_conf$db))
-  df_main <- send_db_conn %>%
-    tbl(send_db_conf$tbl) %>%
-    select(one_of(send_db_conf$vars))
+    dbname = here(sen_db_conf$db))
+  df_main <- sen_db_conn %>%
+    tbl(sen_db_conf$tbl) %>%
+    select(one_of(sen_db_conf$vars))
 
   # Auxiliary datasets
-  la_tbl <- read_csv(here("data/region-info/region-info.csv"),
+  la_tbl <- read_csv(here("data/data-dictionaries/region-info.csv"),
                      col_types = c("cccc"))
-  parlcon_tbl <- read_csv(here("data/region-info/parlcon-info.csv"),
+  parlcon_tbl <- read_csv(here("data/data-dictionaries/parlcon-info.csv"),
                           col_types = c("cc"))
 
   # ==== Preprocess ====
   preproc_conf <- data_conf$preprocess
   conn <- DBI::dbConnect(RSQLite::SQLite(),
                          dbname = here(preproc_conf$db))
+
+  # ---- boundary file ----
+  england_la_2011 <- read_sf(here("data", "England_ct_2011",
+                                  "england_ct_2011.shp"))
+
+  england_la_2011_simplified <- england_la_2011 %>%
+    st_simplify(dTolerance = 10)
+  england_la_2011_simplified %T>%
+    {
+      dir.create(here("output", "england_ct_2011"), showWarnings = FALSE)
+    } %>%
+    write_sf(here("output", "england_ct_2011",
+                  "england_ct_2011.shp"))
+
   # ---- stats_SEN ----
   cat(glue("Preprocessing `{preproc_conf$stats_sen}`"), "\n")
   df_main %>% preprocess_stats_sen(data_conf = data_conf) %T>%

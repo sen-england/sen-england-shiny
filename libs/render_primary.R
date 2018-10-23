@@ -85,7 +85,7 @@ render_primary_composition_schools <- function(df, pct = FALSE,
       axis.title.x = element_blank(),
       axis.text.y = element_text(angle = 270)) +
     scale_fill_brewer(palette = palette) +
-    labs(title = "Composition of schools, academic year 2016/2017")
+    labs(title = "Composition of schools, academic year 2017/2018")
   plotly::ggplotly(p)
 }
 
@@ -137,6 +137,6 @@ render_primary_composition_sen <- function(df, pct = FALSE,
       axis.title.x = element_blank(),
       axis.text.y = element_text(angle = 270)) +
     scale_fill_brewer(palette = palette) +
-    labs(title = "Composition of SEN pupils, academic year 2016/2017")
+    labs(title = "Composition of SEN pupils, academic year 2017/2018")
   plotly::ggplotly(p)
 }

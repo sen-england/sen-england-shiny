@@ -17,38 +17,33 @@ source("libs/render_maps.R", local = TRUE)
 # ==== Assets ====
 message(glue("{Sys.time()}, start loading assets"))
 data_conf <- config::get("data")
-send_db_conf <- data_conf$send_db
+sen_db_conf <- data_conf$sen_db
 preproc_conf <- data_conf$preprocess
 params <- config::get("params")
+candidates <- params$candidates
 
 # Load the datasets
-send_db_conn <- DBI::dbConnect(
+sen_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
-  dbname = here(send_db_conf$db))
+  dbname = here(sen_db_conf$db))
 preproc_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
   dbname = here(preproc_conf$db))
-df_main_table <- send_db_conn %>%
-  tbl(send_db_conf$tbl) %>%
-  select(one_of(send_db_conf$vars))
+df_main_table <- sen_db_conn %>%
+  tbl(sen_db_conf$tbl) %>%
+  select(one_of(sen_db_conf$vars))
 
 # Variables and candidates
 dsb_id_intro <- "intro"
 dsb_id_primary <- "primary"
 dsb_id_tseries <- "tseries"
 dsb_id_maps <- "maps"
-cand_years <- 2011L:2017L
-cand_types <- c("% academised schools" = "Academisation",
-                "% pupils with SEN" = "SEN")
-cand_phases <- c("Primary schools" = "primary",
-                 "Secondary schools" = "secondary",
-                 "Others (e.g. nursery, 16 Plus, etc)" = "others")
-cand_type_sen <- c("SEN Support" = "SEN_Support",
-                   "Statement EHC Plan" = "Statement_EHC_Plan")
-cand_type_schools <- c("Mainstream School" = "mainstream school",
-                       "Pupil Referral Unit" = "pupil referral unit",
-                       "Special School" = "special school",
-                       "Others (e.g. independent school)" = "others")
+cand_year <- candidates$year
+cand_type <- candidates$type$value %>% set_names(candidates$type$name)
+cand_phase <- candidates$phase$value %>% set_names(candidates$phase$name)
+cand_type_sen <- candidates$type_sen$value %>% set_names(candidates$type_sen$name)
+cand_type_school <- candidates$type_school$value %>%
+  set_names(candidates$type_school$name)
 cand_region <- preproc_db_conn %>% tbl(preproc_conf$cand_region) %>%
   collect() %>% deframe()
 cand_la <- preproc_db_conn %>% tbl(preproc_conf$cand_la) %>%

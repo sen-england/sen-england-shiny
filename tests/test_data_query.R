@@ -8,42 +8,37 @@ suppressMessages(suppressWarnings({
 source(here("libs/common.R"), local = TRUE)
 
 data_conf <- config::get("data")
-send_db_conf <- data_conf$send_db
+sen_db_conf <- data_conf$sen_db
 preproc_conf <- data_conf$preprocess
 params <- config::get("params")
+candidates <- params$candidates
 
-send_db_conn <- DBI::dbConnect(
+sen_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
-  dbname = here(send_db_conf$db))
+  dbname = here(sen_db_conf$db))
 preproc_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
   dbname = here(preproc_conf$db))
-df_main_table <- send_db_conn %>%
-  tbl(send_db_conf$tbl) %>%
-  select(one_of(send_db_conf$vars))
+df_main_table <- sen_db_conn %>%
+  tbl(sen_db_conf$tbl) %>%
+  select(one_of(sen_db_conf$vars))
 
 dsb_id_primary <- "primary"
 dsb_id_tseries <- "tseries"
 dsb_id_maps <- "maps"
-cand_years <- 2011L:2017L
-cand_types <- c("% academised schools" = "Academisation",
-                "% pupils with SEN" = "SEN")
-cand_phases <- c("Primary schools" = "primary",
-                 "Secondary schools" = "secondary",
-                 "Others (e.g. nursery, 16 Plus, etc)" = "others")
-cand_type_sen <- c("SEN_Support", "Statement_EHC_Plan") %>%
-  set_names(str_replace_all(., "_", " "))
-cand_type_schools <- c("Mainstream School" = "mainstream school",
-                       "Pupil Referral Unit" = "pupil referral unit",
-                       "Special School" = "special school",
-                       "Others (e.g. independent school)" = "others")
-cand_la_tbl <- read_csv(here("data/region-info/region-info.csv"),
+cand_year <- candidates$year
+cand_type <- candidates$type$value %>% set_names(candidates$type$name)
+cand_phase <- candidates$phase$value %>% set_names(candidates$phase$name)
+cand_type_sen <- candidates$type_sen$value %>% set_names(candidates$type_sen$name)
+cand_type_school <- candidates$type_school$value %>%
+  set_names(candidates$type_school$name)
+cand_la_tbl <- read_csv(here("data/data-dictionaries/region-info.csv"),
                         col_types = c("cccc"))
 cand_la <- cand_la_tbl %>%
   select(LAName, LACode) %>% distinct() %>% deframe()
 cand_region <- cand_la_tbl %>%
   select(RegionName, RegionCode) %>% distinct() %>% deframe()
-cand_parlcon <- read_csv(here("data/region-info/parlcon-info.csv"),
+cand_parlcon <- read_csv(here("data/data-dictionaries/parlcon-info.csv"),
                          col_types = c("cc")) %>% deframe()
 
 context("Combination of candidates")
@@ -71,8 +66,8 @@ context(paste0("Global arguments: reactive loadings of dataframes ",
                "under all argument candidates"))
 
 args <- cross(list(
-  Phase = cand_phases %>% combine_candidates(),
-  TypeGeneral = cand_type_schools %>% combine_candidates()
+  Phase = cand_phase %>% combine_candidates(),
+  TypeGeneral = cand_type_school %>% combine_candidates()
 ))
 
 test_that("`df_main`", {

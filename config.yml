@@ -1,20 +1,19 @@
 default:
   data:
-    england_la: "data/England_ct_2011/england_ct_2011_simple.shp"
+    england_la: "output/england_ct_2011/england_ct_2011.shp"
     england_region: "data/England_gor_2011_gen_clipped/england_gor_2011_gen_clipped.shp"
     england_parlcon: "data/England_parl_2011_gen_clipped/england_parl_2011_gen_clipped.shp"
-    send_db:
+    sen_db:
       # NOTE: currently we could not use odbc SQLite3 driver
       # driver: "SQLite3"
-      db: "data/send-db/send.db"
-      tbl: "SEND"
+      db: "output/sen.db"
+      tbl: "SEN"
       # Sample period information for preprocessing
       periods:
         first: 2011
-        last: 2017
+        last: 2018
       vars: [
-      # ID vars
-      "ID", "Year",
+      "Year",
       # Info vars
       "URN", "SchoolName",
       "LACode", "LAName",
@@ -28,7 +27,7 @@ default:
       "TypeGeneral", "TypeAcademy", "Phase"
       ]
     preprocess:
-      db: "data/preprocess.db"
+      db: "output/preprocess.db"
       stats_sen: "stats_SEN"
       stats_schools: "stats_schools"
       composition_sen: "composition_sen"
@@ -37,13 +36,30 @@ default:
       cand_la: "local_authorities"
       cand_parlcon: "parliamentary_constituencies"
   params:
+    candidates:
+      year: [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018]
+      type:
+        value: ["Academisation", "SEN"]
+        name: ["% academised schools", "% pupils with SEN"]
+      phase:
+        value: ["primary", "secondary", "others"]
+        name: ["Primary schools", "Secondary schools",
+               "Others (e.g. nursery, 16 Plus, all through, etc)"]
+      type_sen:
+        value: ["SEN_Support", "Statement_EHC_Plan"]
+        name: ["SEN Support", "Statement EHC Plan"]
+      type_school:
+        value: ["mainstream school", "pupil referral unit", "special school",
+                "others"]
+        name: ["Mainstream School", "Pupil Referral Unit",
+               "Special School", "Others (e.g. independent school)"]
     docs:
       # Place of documentation
       site: "https://sen-england.github.io/post/2018-06-26-shiny-documentation/"
     tabs:
       # titles
       intro: "Introduction"
-      primary: "2017 dashboard"
+      primary: "2018 dashboard"
       tseries: "Time series trends"
       maps: "Breakdown by region"
       global: "Global settings"

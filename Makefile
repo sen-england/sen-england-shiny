@@ -5,6 +5,9 @@
 run:  ## run shiny app
 	Rscript -e 'shiny::runApp(port = 12345)'
 
+data-prep: data-prep.R ## prepraring data
+	Rscript $<
+
 preprocess: preprocess.R  ## preprocess data
 	Rscript $<
 

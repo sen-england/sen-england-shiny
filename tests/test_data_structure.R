@@ -6,25 +6,25 @@ suppressMessages(suppressWarnings({
 }))
 
 data_conf <- config::get("data")
-send_db_conf <- data_conf$send_db
+sen_db_conf <- data_conf$sen_db
 preproc_conf <- data_conf$preprocess
 params <- config::get("params")
 
 context("Test dataset loading")
 
 test_that("DB exists", {
-  expect_true(file.exists(here(send_db_conf$db)))
+  expect_true(file.exists(here(sen_db_conf$db)))
   expect_true(file.exists(here(preproc_conf$db)))
 })
 
 test_that("Table exists", {
-  send_db_conn <- DBI::dbConnect(
+  sen_db_conn <- DBI::dbConnect(
     RSQLite::SQLite(),
-    dbname = here(send_db_conf$db))
+    dbname = here(sen_db_conf$db))
   preproc_db_conn <- DBI::dbConnect(
     RSQLite::SQLite(),
     dbname = here(preproc_conf$db))
-  expect_true(send_db_conf$tbl %in% DBI::dbListTables(send_db_conn))
+  expect_true(sen_db_conf$tbl %in% DBI::dbListTables(sen_db_conn))
   expect_true(preproc_conf$stats_sen %in%
                 DBI::dbListTables(preproc_db_conn))
   expect_true(preproc_conf$stats_schools %in%
@@ -33,15 +33,15 @@ test_that("Table exists", {
 
 context("Test dataset structure")
 
-send_db_conn <- DBI::dbConnect(
+sen_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
-  dbname = here(send_db_conf$db))
+  dbname = here(sen_db_conf$db))
 preproc_db_conn <- DBI::dbConnect(
   RSQLite::SQLite(),
   dbname = here(preproc_conf$db))
-df_main_table <- send_db_conn %>%
-  tbl(send_db_conf$tbl) %>%
-  select(one_of(send_db_conf$vars))
+df_main_table <- sen_db_conn %>%
+  tbl(sen_db_conf$tbl) %>%
+  select(one_of(sen_db_conf$vars))
 df_preproc_stats_sen <- preproc_db_conn %>%
   tbl(preproc_conf$stats_sen)
 df_preproc_stats_schools <- preproc_db_conn %>%
@@ -52,9 +52,8 @@ test_that("Structure of `df_main_table`", {
   df_struct <- df %>% summarise_all(class) %>% gather()
   struct <- tribble(
     ~key,                 ~value,
-    "ID",                 "character",
     "Year",               "integer",
-    "URN",                "character",
+    "URN",                "integer",
     "SchoolName",         "character",
     "LACode",             "character",
     "LAName",             "character",
@@ -63,9 +62,9 @@ test_that("Structure of `df_main_table`", {
     "ParlConCode",        "character",
     "ParlConName",        "character",
     "IsAcademy",          "integer",
-    "TotalPupils",        "numeric",
-    "SEN_Support",        "numeric",
-    "Statement_EHC_Plan", "numeric",
+    "TotalPupils",        "integer",
+    "SEN_Support",        "integer",
+    "Statement_EHC_Plan", "integer",
     "TypeGeneral",        "character",
     "TypeAcademy",        "character",
     "Phase",              "character")
@@ -80,8 +79,8 @@ test_that("Structure of `df_preproc_stats_sen`", {
     "TypeGeneral",    "character",
     "Phase",          "character",
     "TypeSEN",        "character",
-    "TotalPupils",    "numeric",
-    "TotalNumberSEN", "numeric")
+    "TotalPupils",    "integer",
+    "TotalNumberSEN", "integer")
   expect_equal(df_struct, struct)
 })
 

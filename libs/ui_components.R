@@ -16,11 +16,11 @@ docs_info <- div(
 controls_global <- p(
   checkboxGroupInput(
     inputId = "global_phase", label = "Education phase",
-    choices = cand_phases, selected = cand_phases,
+    choices = cand_phase, selected = cand_phase,
     width = "100%"),
   checkboxGroupInput(
     inputId = "global_type_schools", label = "Type of schools",
-    choices = cand_type_schools, selected = cand_type_schools,
+    choices = cand_type_school, selected = cand_type_school,
     width = "100%"),
   checkboxGroupInput(
     inputId = "global_type_sen", label = "Type of SEN",
@@ -114,7 +114,7 @@ Press the ` - ` button in the upper right hand to collapse this widget.
 panel_primary <- fluidRow(
   column(width = 8,
          box(
-           title = "Statistics as of year 2017",
+           title = "Statistics as of year 2018",
            width = NULL, collapsible = TRUE,
            solidHeader = TRUE, status = "primary",
            column(width = 6,
@@ -214,8 +214,8 @@ controls_tseries <- box(
   sliderInput(
     inputId = "tseries_years", label = "Select Years",
     round = TRUE, step = 1L,
-    min = min(cand_years), max = max(cand_years),
-    value = c(min(cand_years), max(cand_years))))
+    min = min(cand_year), max = max(cand_year),
+    value = c(min(cand_year), max(cand_year))))
 panel_tseries <- fluidRow(
   column(width = 8,
          box(plotly::plotlyOutput("tseries_a") %>% withSpinner(),
@@ -239,7 +239,7 @@ otherwise common scales will be set to better track changes between maps.
 maps_controls <- function(prefix = "maps_a", name = "A",
                           selected_type = "Academisation",
                           selected_region = "E12000009",
-                          selected_year = 2017L,
+                          selected_year = 2018,
                           dual_map = TRUE,
                           width = 12) {
   # Widgets
@@ -250,12 +250,12 @@ maps_controls <- function(prefix = "maps_a", name = "A",
   widget_type <- radioButtons(
     inputId = glue("{prefix}_type"),
     label = "Choose map type",
-    choices = cand_types,
+    choices = cand_type,
     selected = selected_type)
   widget_year <- selectInput(
     inputId = glue("{prefix}_year"),
     label = "Select year to show",
-    choices = cand_years,
+    choices = cand_year,
     selected = selected_year)
   widget_breaks <- checkboxInput(
     inputId = glue("{prefix}_auto_breaks"),
