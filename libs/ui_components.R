@@ -2,16 +2,18 @@
 docs_global <- div()
 docs_info <- div(
   h6("Project website: ", a(href = "https://sen-england.github.io",
+                            target = "_blank",
                             "Github Pages")),
   h6("Usage tutorials: ", a(href = params$docs$site,
+                            target = "_blank",
                             "Documentation")),
   h6("Developer: ", a(href = "https://github.com/YiLiu6240",
+                      target = "_blank",
                       "Yi Liu")),
   h6("Data sources: ",
      format_markdown("
-
-- [DfE Statistics: SEND](https://www.gov.uk/government/collections/statistics-special-educational-needs-sen);
-- [UK Data Service: Boundary Datasets](https://borders.ukdataservice.ac.uk/easy_download.html)
+- <a href='https://www.gov.uk/government/collections/statistics-special-educational-needs-sen' target='_blank'>DfE Statistics: SEND</a>;
+- <a href='https://borders.ukdataservice.ac.uk/easy_download.html' target='_blank'>UK Data Service: Boundary Datasets</a>
 ")))
 controls_global <- p(
   checkboxGroupInput(
@@ -60,10 +62,13 @@ academisation of English schools and their inclusion of pupils with
 special educational needs, including the time trends and the the breakdowns
 at national / regional / local authority level.
 
-Visit the [documentation]({params$docs$site}) to see the features of this app.
+Visit the
+<a href='{params$docs$site}' target='_blank'>documentation</a>
+to see the features of this app.
 
 Further information is provided on the
-[project website](https://sen-england.github.io).
+<a href='https://sen-england.github.io' target='_blank'>project website</a>
+.
 "))),
 div(align = "center",
     img(src = "assets/affiliations.png",
