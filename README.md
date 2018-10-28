@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://sen-england.shinyapps.io/sen-england-shiny">
+  <a href="https://sen-england.shinyapps.io/sen-england-shiny" target="_blank">
   <img src="./www/assets/shiny-app-banner.png" width="950"/>
   </a>
 </p>
