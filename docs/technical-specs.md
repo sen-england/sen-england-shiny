@@ -1,5 +1,14 @@
 # Technical specification
 
+This project is built with (major ecosystems):
+
+- R, 3.4.2 (under `packrat`)
+- tidyverse
+- shiny
+- shinydashboard
+- plotly
+- leafletjs
+
 # Data collection
 
 ## Special educational needs
